@@ -1,0 +1,31 @@
+﻿<div class="page-twofactor">
+    <div class="main-body">
+        <div class="container vertical-center">
+            <div class="form-container" style="max-width: 500px;">
+                <h1 class="text-center" style="margin-bottom:25px; color: white;"><i class="fa fa-legal"></i> &nbspStarterKit</h1>
+                <div class="well" style="padding: 10px 50px;">
+                    <div class="login_panel">
+                        <h2 class="text-center" style="margin-bottom: 20px;">Two factor authentication</h2>
+                        <hr>
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-envelope"></span>
+                                        </span>
+                                        <input type="text" ng-model="vm.user.code" class="form-control" placeholder="Code">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <a href="" ng-click="vm.resend()" class="btn btn-primary btn-lg btn-block">Send me a new code</a>
+                                    <a href="" ng-click="vm.submit()" class="btn btn-primary btn-lg btn-block">Confirm</a>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

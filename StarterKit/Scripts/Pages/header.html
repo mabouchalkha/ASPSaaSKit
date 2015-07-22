@@ -1,0 +1,45 @@
+﻿<header class="clearfix">
+    <!--Logo-->
+    <div class="logo">
+        <a href="#/"><i class="fa fa-legal"></i> &nbsp{{vm.brand}} </a>
+    </div>
+    <div class="menu-button" toggle-off-canvas="">
+        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+    </div>
+    <div class="top-nav">
+        <ul class="nav-left list-unstyled">
+            <li>
+                <a class="toggle-min" data-toggle-min-nav="" href="#/"><i class="fa fa-bars"></i></a>
+            </li>
+            <li class="dropdown text-normal nav-profile" ng-class="{'open': vm.isProfileOpen==true}" ng-click="vm.isProfileOpen=!vm.isProfileOpen">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
+                    <img alt="" class="img-circle img30_30" src="Content/Images/avatar2.png" /><span style="padding-left: 5px;"><span ng-bind="vm.user.FullName"></span></span>
+                </a>
+                <ul class="dropdown-menu dropdown-dark with-arrow">
+                    <li>
+                        <a href="#" ng-click="vm.logout()"><i class="fa fa-sign-out"></i><span>Log Out</span></a>
+                    </li>
+                </ul>
+            </li>
+            <!--<li class="dropdown langs text-normal">
+                <a class="dropdown-toggle active-flag" data-toggle="dropdown" href="javascript:;">
+                    <div class="flag {{getFlag()}}"></div>
+                </a>
+                <ul class="dropdown-menu dropdown-dark with-arrow list-langs" role="menu">
+                    <li data-ng-show="lang !== &#39;English&#39; ">
+                        <a data-ng-click="setLang(&#39;English&#39;)" href="javascript:;">
+                            <div class="flag flags-american"></div>
+                            English
+                        </a>
+                    </li>
+                    <li data-ng-show="lang !== &#39;Français&#39; ">
+                        <a data-ng-click="setLang(&#39;Français&#39;)" href="javascript:;">
+                            <div class="flag flags-france"></div>
+                            Français
+                        </a>
+                    </li>
+                </ul>
+            </li>-->
+        </ul>
+    </div>
+</header>

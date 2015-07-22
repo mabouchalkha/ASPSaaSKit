@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html ng-controller="appController as vm">
+<head>
+    <title ng-bind="vm.title"></title>
+        @Styles.Render("~/Content/css")
+</head>
+<body id="app" data-custom-background data-toggle-off-canvas>
+    <div id="overlay">
+        <svg fill="#000" width="140" height="64" xmlns="http://www.w3.org/2000/svg">
+            <img id="loading" src="/Content/Images/grid.svg" />
+        </svg>
+    </div>
+    <div>
+        <div id="navigation_container" data-ng-hide="isSpecificPage()" data-ng-cloak class="no-print">
+            <section data-ng-include="'Scripts/Pages/header.html'"
+                     id="header" class="top-header"></section>
+            <aside data-ng-include="'Scripts/Pages/nav.html'"
+                   id="nav-container"></aside>
+        </div>
+        <div class="view-container">
+            <section data-ng-view id="content" class="animate-fade-up"></section>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.3.15/angular-route.min.js"></script>
+    <script src="https://code.angularjs.org/1.3.15/angular-resource.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.min.js"></script>
+    @Scripts.Render("~/bundles/app")
+</body>
+</html>

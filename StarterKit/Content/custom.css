@@ -1,0 +1,40 @@
+﻿/* LOADING ------------------------------------------------------- */
+#loading {
+    width: 70px;
+    height: 77px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -28px 0 0 -25px;
+}
+
+#overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: black;
+    opacity: 0.60;
+    filter: alpha(opacity=60);
+    z-index: 9999;
+}
+
+/* USED IN LOGIN PAGE TO CENTER PANEL --------------------------------------------------------*/
+.vertical-center {
+  min-height: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.danger, danger:hover {
+    color: #c9302c !important;
+}
+
+
+.info, info:hover {
+    color: #31b0d5 !important;
+}

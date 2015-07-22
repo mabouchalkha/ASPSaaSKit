@@ -1,0 +1,19 @@
+﻿<div class="page page-index">
+    <div class="page-dashboard panel panel-default">
+        <div class="panel-heading">
+            <strong>
+                <i class="{{::vm.iconClass}}"></i> Index - <span ng-bind="::vm.config.name"></span>
+            </strong>
+        </div>
+        <div class="panel-body">
+            <div class="grid_panel">
+                <div id="index_grid"
+                     data-ui-grid="vm.gridOptions"
+                     data-ui-grid-edit
+                     data-ui-grid-cellnav
+                     class="grid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
