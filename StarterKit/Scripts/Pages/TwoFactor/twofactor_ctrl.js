@@ -1,4 +1,4 @@
-﻿angular.module('starterKit').controller('twofactorController', ['Authentication', '$location', function (Authentication, $location) {
+﻿angular.module('starterKit').controller('twofactorController', ['Authentication', '$location', 'notif', function (Authentication, $location, notif) {
     var vm = this;
 
     var _init = function () {
@@ -18,13 +18,7 @@
     };
 
     vm.resend = function () {
-        var result = Authentication.resendTwoFactor();
-
-        result.then(function (resp) {
-            if (resp.success == true) {
-                alert('new code sent');
-            }
-        });
+        Authentication.resendTwoFactor();
     };
 
     _init();

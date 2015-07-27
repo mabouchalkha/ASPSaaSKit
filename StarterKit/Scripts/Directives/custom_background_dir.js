@@ -17,9 +17,13 @@ angular.module("starterKit").directive('customBackground', ['$location', functio
                 case '/twofactor':
                 case '/lock-screen':
                     $('#navigation_container').hide();
+                    $('#nav-container').hide();
+                    $('#content').removeClass('col-md-10');
                     return element.addClass('body-special body-lock');
                 default:
                     $('#navigation_container').show();
+                    $('#nav-container').show();
+                    $('#content').addClass('col-md-10');
                     return element.addClass('body-home');
               }
             };

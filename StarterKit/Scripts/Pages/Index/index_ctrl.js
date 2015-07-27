@@ -1,14 +1,13 @@
-﻿angular.module('starterKit').controller('indexController', ['viewModel', 'config', '$scope', 'notif', function (viewModel, config, $scope, notif) {
+﻿angular.module('starterKit').controller('indexController', ['viewModel', 'config', '$scope', 'notif', '$location', '$modal', function (viewModel, config, $scope, notif, $location, $modal) {
     var vm = this;
 
     var _init = function () {
         vm.viewModel = viewModel.data;
         vm.config = config;
         vm.gridOptions = _generateGridOptions();
+        _registerGridApi();
 
         vm.iconClass = _generateIconClass(vm.config.icon);
-
-        _registerGridApi();
 
         _validateRequiredConfig(vm.config);
     };
@@ -27,54 +26,71 @@
             appScopeProvider: vm,
             data: vm.viewModel.entities,
             columnDefs: [
-                { field: 'Id', enableCellEdit: false },
+                { field: 'Id' },
                 { field: 'FirstName' },
                 { field: 'LastName' },
-                { field: 'Email' },
-                { name: ' ', width: '5%', enableCellEdit: false, enableColumnMenu: false, enableSorting: false, cellTemplate: '<button sng-show="false" ng-click="grid.appScope.saveEntity(row.entity)" class="btn btn-link info"><i class="fa fa-save"></i></button><button ng-click="grid.appScope.deleteEntity(row.entity)" class="btn btn-link danger pull-right"><i class="fa fa-remove"></i></button>' }]
+                { field: 'Email' }],
+            enableRowSelection: true,
+            enableRowHeaderSelection: false,
+            multiSelect: false,
         }
     };
 
     var _registerGridApi = function () {
         vm.gridOptions.onRegisterApi = function (api) {
-            api.edit.on.afterCellEdit($scope, function (rowEntity, col, newValue, oldValue) {
-                console.log(rowEntity);
+            api.selection.on.rowSelectionChanged($scope, function (row) {
+                vm.selectedLine = row.isSelected == true ? row : null;
             });
         };
     };
+
+    var _getPrimaryKey = function (entity) {
+        return entity ? entity[config.id] : null;
+    }
+
+    var _getSelectedEntity = function () {
+        return vm.selectedLine ? vm.selectedLine.entity : null;
+    }
 
     var _validateRequiredConfig = function (config) {
         if (!config.resource) {
             throw 'Cannot print index page without a resource passed to config object';
         }
-    };
 
-    vm.saveEntity = function (entity) {
-        if (entity != null) {
-            if (entity._isNew == true) {
-                vm.config.resource.create({entity: entity});
-            }
-            else {
-                vm.config.resource.update({ entity: entity }).$promise.then(function (resp) {
-                    console.log('updated');
-                });
-            }
+        if (!config.id) {
+            throw 'Cannot print index page without the entity id';
         }
     };
 
-    vm.deleteEntity = function (entity) {
-        var index = -1;
+    var _doDeleteEntity = function (id) {
+        config.resource.delete({id: id}).$promise.then(function (resp) {
+            alert('ok');
+        });
+    }
 
-        for (var i = 0; i < vm.viewModel.entities.length; i++) {
-            if (vm.viewModel.entities[i].Id == entity.Id) {
-                index = i;
-            }
-        }
+    vm.addEntity = function () {
+        $location.path($location.path() + '/create');
+    }
 
-        if (index > -1) {
-            vm.viewModel.entities.splice(index, 1);
+    vm.editSelectedEntity = function () {
+        var entityId = _getPrimaryKey(_getSelectedEntity());
+
+        if (entityId) {
+
         }
     }
+
+    vm.deleteSelectedEntity = function () {
+        var entityId = _getPrimaryKey(_getSelectedEntity());
+
+        if (entityId) {
+            var instance = $modal.open({ templateUrl: '/Scripts/Pages/Index/deletemodal.html', $scope: vm });
+            instance.result.then(function () {
+                _doDeleteEntity(entityId);
+            });
+        }
+    };
+
 
     _init();
 }]);

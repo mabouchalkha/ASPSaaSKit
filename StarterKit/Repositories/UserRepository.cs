@@ -3,6 +3,7 @@ using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace StarterKit.Repositories
 {
@@ -34,6 +35,19 @@ namespace StarterKit.Repositories
         public bool HasPendingChange(ApplicationUser entity)
         {
             return context.ChangeTracker.HasChanges();
+        }
+
+        public bool Delete(string id)
+        {
+            ApplicationUser userToDelete = context.Users.FirstOrDefault(u => u.Id == id);
+
+            if (userToDelete != null)
+            {
+                context.Users.Remove(userToDelete);
+                return context.SaveChanges() > 0;
+            }
+
+            return false;
         }
     }
 }

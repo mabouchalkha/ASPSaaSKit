@@ -4,8 +4,8 @@
     var _init = function () {
         vm.user = {};
         vm.service = Authentication;
-        vm.title = 'starterKit',
-        vm.brand = 'starterKit'
+        vm.title = 'StarterKit',
+        vm.brand = 'StarterKit'
         vm.isProfileOpen = false;
     };
 

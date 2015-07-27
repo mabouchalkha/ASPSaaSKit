@@ -20,6 +20,7 @@ namespace StarterKit
                 .Include("~/Lib/angular-toastr.tpls.js")
                 .Include("~/Lib/slim_scroll.js")
                 .Include("~/Lib/ui-grid.min.js")
+                 .Include("~/Lib/bootstrap.min.js")
                 .IncludeDirectory("~/Scripts/Factories", "*.js", true)
                 .IncludeDirectory("~/Scripts/Directives", "*.js", true)
                 .IncludeDirectory("~/Scripts/Pages/One", "*.js", true)

@@ -7,7 +7,7 @@
             return {
                 name: 'User',
                 icon: 'users',
-                id: 'id',
+                id: 'Id',
                 inline: true,
                 resource: userResource
             }

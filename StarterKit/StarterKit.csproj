@@ -240,7 +240,6 @@
     <Content Include="Content\Images\grid.svg" />
     <Content Include="Content\Images\meteorshower2.jpg" />
     <Content Include="Content\Images\rings.svg" />
-    <Content Include="Content\style.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Lib\angular-toastr.css" />
@@ -261,6 +260,7 @@
     <Content Include="Scripts\Factories\notification.js" />
     <Content Include="Scripts\home_ctrl.js" />
     <Content Include="Scripts\Pages\404.html" />
+    <Content Include="Scripts\Pages\Index\deletemodal.html" />
     <Content Include="Scripts\Pages\Index\index.html" />
     <Content Include="Scripts\Pages\Index\index_ctrl.js" />
     <Content Include="Scripts\Pages\Dashboard\dashboard.html" />
@@ -292,6 +292,7 @@
     <Content Include="Lib\ui-grid.eot" />
     <Content Include="Lib\ui-grid.ttf" />
     <Content Include="Lib\ui-grid.woff" />
+    <Content Include="Lib\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <None Include="Properties\PublishProfiles\sarwa.pubxml" />
     <None Include="Web.Debug.appharbor.config">

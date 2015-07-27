@@ -1,4 +1,4 @@
-﻿var app = angular.module('starterKit', ['ngRoute', 'ui.bootstrap', 'toastr', 'ngResource', 'ui.grid', 'ui.grid.edit', 'ui.grid.cellNav', 'ui.grid.pinning']);
+﻿var app = angular.module('starterKit', ['ngRoute', 'ui.bootstrap', 'toastr', 'ngResource', 'ui.grid', 'ui.grid.selection', 'ui.grid.pinning']);
 
 angular.module('starterKit').config(['$routeProvider', '$httpProvider', '$locationProvider', '$injector', function ($routeProvider, $httpProvider, $locationProvider, $injector) {
     $routeProvider
@@ -10,7 +10,10 @@ angular.module('starterKit').config(['$routeProvider', '$httpProvider', '$locati
         .when('/confirmpassword', { templateUrl: '/Scripts/Pages/ConfirmPassword/confirm_password.html', controller: 'confirmPasswordController as vm' })
         .when('/twofactor', { templateUrl: '/Scripts/Pages/TwoFactor/twofactor.html', controller: 'twofactorController as vm' })
         .when('/404', { templateUrl: '/Scripts/Pages/404.html', })
+
         .when('/user', { templateUrl: '/Scripts/Pages/index/index.html', controller: 'indexController as vm', resolve: $injector.get('userResolver').resolveIndex })
+        .when('/user/create', { templateUrl: '/Scripts/Pages/User/edit.html', controller: 'userController as vm', resolve: $injector.get('userResolver').resolve })
+
         .otherwise({ redirectTo: '/404' });
 
     $httpProvider.interceptors.push('HttpResponseInterceptor');

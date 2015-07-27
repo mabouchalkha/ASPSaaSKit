@@ -22,7 +22,6 @@
         
         result.then(function (resp) {
             if (resp.success == true) {
-               notif.log('Password reseted', 'Your new password has been sent through email.');
                $location.search({userid: null, code: null});
                $location.path('/login');
             }

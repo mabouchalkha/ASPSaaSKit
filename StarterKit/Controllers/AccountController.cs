@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace StarterKit.Controllers
 {
@@ -73,7 +74,7 @@ namespace StarterKit.Controllers
             {
                 var result = await UserManager.ResetPasswordAsync(viewModel.Id, viewModel.Code, viewModel.Password);
 
-                return result.Succeeded == true ? success(string.Empty) : unsuccess(string.Empty);
+                return result.Succeeded == true ? success("Your password has been changed") : unsuccess(result.Errors.First());
             }
 
             return unsuccess(string.Empty);
@@ -92,6 +93,8 @@ namespace StarterKit.Controllers
                     string token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                     token = HttpUtility.UrlEncode(token);
                     await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password following this link : " + Request.UrlReferrer + "#/resetPassword?userid=" + user.Id + "&code=" + token);
+
+                    return success("Password successfully reset. Please check you email");
                 }
 
                 return unsuccess(ErrorUtil.DefaultError);
@@ -122,10 +125,10 @@ namespace StarterKit.Controllers
             if (await SignInManager.HasBeenVerifiedAsync())
             {
                 var result = await SignInManager.SendTwoFactorCodeAsync("Email Code");
-                return Json(new { success = true });
+                return success("A new code has been sent to you. Please check your email");
             }
 
-            return Json(new { success = false });
+            return unsuccess(ErrorUtil.DefaultError);
         }
 
         [HttpPost]
@@ -148,7 +151,7 @@ namespace StarterKit.Controllers
                             return unsuccess(string.Empty);
                         case SignInStatus.RequiresVerification: //two factor auth... (not activated for now)
                             await SignInManager.SendTwoFactorCodeAsync("Email Code");
-                            return unsuccess(string.Empty, null, new { needTwoFactor = true });
+                            return success("2 factor authentification is enabled. Please check your email", null, new { needTwoFactor = true });
                         default:
                             return unsuccess(string.Empty);
                     }
@@ -200,11 +203,11 @@ namespace StarterKit.Controllers
                         token = HttpUtility.UrlEncode(token);
                         await UserManager.SendEmailAsync(user.Id, "Confirm Password", "Please confirm your password following this link : " + Request.UrlReferrer + "#/confirmpassword?userid=" + user.Id + "&code=" + token);
 
-                        return success("Account successfully created");
+                        return success("Account successfully created. Please check your inbox to confirm your email");
                     }
                 }
 
-                return Json(new { success = false });
+                return unsuccess(ErrorUtil.DefaultError);
             }
 
             return unsuccess(string.Empty);

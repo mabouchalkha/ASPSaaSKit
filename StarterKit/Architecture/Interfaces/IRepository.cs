@@ -8,5 +8,6 @@ namespace StarterKit.Architecture.Interfaces
         T Read(TKey id);
         T Create(T entity);
         bool Update(T entity);
+        bool Delete(TKey id);
     }
 }

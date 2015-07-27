@@ -3,6 +3,7 @@ using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace StarterKit.Repositories
 {
@@ -29,6 +30,11 @@ namespace StarterKit.Repositories
         public bool Update(Client entity)
         {
             throw new System.NotImplementedException();
+        }
+
+        public bool Delete(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

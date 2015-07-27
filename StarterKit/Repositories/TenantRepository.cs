@@ -31,5 +31,10 @@ namespace StarterKit.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public bool Delete(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

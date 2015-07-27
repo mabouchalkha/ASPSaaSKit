@@ -4,21 +4,24 @@ using StarterKit.Mappers;
 using System;
 using StarterKit.ViewModels;
 using StarterKit.DOM;
+using System.Threading.Tasks;
+using StarterKit.Utils;
 
 namespace StarterKit.Controllers
 {
+    [Authorize]
     public class UserController : BaseController
     {
         private UserRepository _userRepo = new UserRepository();
 
         [HttpGet]
-        public JsonResult Index ()
+        public JsonResult Index()
         {
             return success("Users retrieved successfully", new { entities = _userRepo.Index().MapToIndexUserViewModels() });
         }
 
         [HttpPost]
-        public JsonResult Update (IndexUserViewModel entity)
+        public JsonResult Update(IndexUserViewModel entity)
         {
             if (ModelState.IsValid)
             {
@@ -52,7 +55,27 @@ namespace StarterKit.Controllers
                 }
             }
 
-            return unsuccess("Something went wrong...");
+            return unsuccess(ErrorUtil.DefaultError);
+        }
+
+        [HttpDelete]
+        public JsonResult Delete (string id)
+        {
+            if (ModelState.IsValid)
+            {
+                bool isDeleted = _userRepo.Delete(id);
+
+                if (isDeleted)
+                {
+                    return success("User successfully deleted");
+                }
+                else
+                {
+                    return unsuccess("User delete unsuccessfully. Please try again");
+                }
+            }
+
+            return unsuccess(ErrorUtil.DefaultError);
         }
     }
 }
