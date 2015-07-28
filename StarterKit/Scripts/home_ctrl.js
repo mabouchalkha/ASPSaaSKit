@@ -21,6 +21,10 @@
         });
     };
 
+    vm.resetPassword = function () {
+        var result = Authentication.resetPassword(vm.user.Email);
+    }
+
     _init();
 
 }]);

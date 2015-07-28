@@ -1,4 +1,4 @@
-﻿angular.module('starterKit').controller('indexController', ['viewModel', 'config', '$scope', 'notif', '$location', '$modal', function (viewModel, config, $scope, notif, $location, $modal) {
+﻿angular.module('starterKit').controller('indexController', ['viewModel', 'config', '$scope', 'notif', '$location', '$modal', '$route', function (viewModel, config, $scope, notif, $location, $modal, $route) {
     var vm = this;
 
     var _init = function () {
@@ -25,11 +25,7 @@
         return {
             appScopeProvider: vm,
             data: vm.viewModel.entities,
-            columnDefs: [
-                { field: 'Id' },
-                { field: 'FirstName' },
-                { field: 'LastName' },
-                { field: 'Email' }],
+            columnDefs: vm.config.columnDefs,
             enableRowSelection: true,
             enableRowHeaderSelection: false,
             multiSelect: false,
@@ -60,11 +56,19 @@
         if (!config.id) {
             throw 'Cannot print index page without the entity id';
         }
+
+        if (!config.columnDefs) {
+            throw 'Cannot print index page without the columns definition';
+        }
     };
 
     var _doDeleteEntity = function (id) {
+        notif.wait();
+
         config.resource.delete({id: id}).$promise.then(function (resp) {
-            alert('ok');
+            $route.reload();
+        }).finally(function () {
+            notif.clear();
         });
     }
 
@@ -76,7 +80,7 @@
         var entityId = _getPrimaryKey(_getSelectedEntity());
 
         if (entityId) {
-
+            $location.path($location.path() + '/' + entityId);
         }
     }
 

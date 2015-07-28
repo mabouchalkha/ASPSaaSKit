@@ -89,7 +89,7 @@ namespace StarterKit.ViewModels
         public string LastName { get; set; }
     }
 
-    public class ConfirmPasswordModel
+    public class ConfirmEmail
     {
         [Required]
         public string id { get; set; }

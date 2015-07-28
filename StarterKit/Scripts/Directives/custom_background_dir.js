@@ -12,7 +12,7 @@ angular.module("starterKit").directive('customBackground', ['$location', functio
                 case '/404':
                 case '/500':
                 case '/login':
-                case '/confirmpassword':
+                case '/confirmemail':
                 case '/resetPassword':
                 case '/twofactor':
                 case '/lock-screen':

@@ -10,7 +10,7 @@
             method: 'GET', url: '/user/read/:id'
         },
         update: {
-            method: 'POST', url: '/user/update'
+            method: 'PUT', url: '/user/update'
         },
         delete: {
             method: 'DELETE', url: '/user/delete/:id'

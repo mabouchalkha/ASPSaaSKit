@@ -200,7 +200,6 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Controllers\RoutesDemoController.cs" />
     <Compile Include="DOM\ApplicationUser.cs" />
     <Compile Include="DOM\Client.cs" />
     <Compile Include="DOM\Contact.cs" />
@@ -208,12 +207,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="Helpers\TenantHelper.cs" />
     <Compile Include="Mappers\UserMapper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\TenantRepository.cs" />
-    <Compile Include="Repositories\ClientRepository.cs" />
     <Compile Include="Utils\ErrorUtil.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="DAL\ApplicationDbContext.cs" />
@@ -222,7 +221,7 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\JsonStatus.cs" />
-    <Compile Include="ViewModels\IndexViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -265,8 +264,8 @@
     <Content Include="Scripts\Pages\Index\index_ctrl.js" />
     <Content Include="Scripts\Pages\Dashboard\dashboard.html" />
     <Content Include="Scripts\Pages\Dashboard\dashboard_ctrl.js" />
-    <Content Include="Scripts\Pages\ConfirmPassword\confirm_password.html" />
-    <Content Include="Scripts\Pages\ConfirmPassword\confirm_password_ctrl.js" />
+    <Content Include="Scripts\Pages\ConfirmEmail\confirm_email.html" />
+    <Content Include="Scripts\Pages\ConfirmEmail\confirm_email_ctrl.js" />
     <Content Include="Scripts\Pages\nav.html" />
     <Content Include="Scripts\Pages\header.html" />
     <Content Include="Scripts\Pages\TwoFactor\twofactor.html" />
@@ -279,6 +278,8 @@
     <Content Include="Scripts\Pages\One\one.html" />
     <Content Include="Scripts\Pages\Two\two_ctrl.js" />
     <Content Include="Scripts\Pages\Two\two.html" />
+    <Content Include="Scripts\Pages\User\user.html" />
+    <Content Include="Scripts\Pages\User\user_ctrl.js" />
     <Content Include="Scripts\Pages\User\user_resource.js" />
     <Content Include="Scripts\Pages\User\user_resolver.js" />
     <Content Include="Views\Home\index.cshtml" />

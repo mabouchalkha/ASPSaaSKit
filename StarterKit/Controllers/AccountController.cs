@@ -57,13 +57,13 @@ namespace StarterKit.Controllers
                     }
                     else
                     {
-                        return unsuccess(string.Empty);
+                        return unsuccess(ErrorUtil.DefaultError);
                     }
 
                 }
             }
 
-            return unsuccess(string.Empty);
+            return unsuccess(ErrorUtil.DefaultError);
         }
 
         [HttpPost]
@@ -74,10 +74,10 @@ namespace StarterKit.Controllers
             {
                 var result = await UserManager.ResetPasswordAsync(viewModel.Id, viewModel.Code, viewModel.Password);
 
-                return result.Succeeded == true ? success("Your password has been changed") : unsuccess(result.Errors.First());
+                return result.Succeeded == true ? success("Your password has been changed") : unsuccess(string.Join("<br />", result.Errors));
             }
 
-            return unsuccess(string.Empty);
+            return unsuccess(ErrorUtil.DefaultError);
         }
 
         [HttpPost]
@@ -148,31 +148,46 @@ namespace StarterKit.Controllers
                         case SignInStatus.Success:
                             return success("You are now logged in StarterKit!", user);
                         case SignInStatus.LockedOut:
-                            return unsuccess(string.Empty);
+                            return unsuccess(ErrorUtil.DefaultError);
                         case SignInStatus.RequiresVerification: //two factor auth... (not activated for now)
                             await SignInManager.SendTwoFactorCodeAsync("Email Code");
                             return success("2 factor authentification is enabled. Please check your email", null, new { needTwoFactor = true });
                         default:
-                            return unsuccess(string.Empty);
+                            return unsuccess(ErrorUtil.DefaultError);
                     }
                 }
             }
 
-            return unsuccess(string.Empty, JsonStatus.s_401);
+            return unsuccess(ErrorUtil.DefaultError, JsonStatus.s_401);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<JsonResult> ConfirmPassword (ConfirmPasswordModel model)
+        public async Task<JsonResult> ConfirmEmail (ConfirmEmail model)
         {
             if (ModelState.IsValid)
             {
                 var result = await UserManager.ConfirmEmailAsync(model.id, model.Code);
+                var user = await UserManager.FindByIdAsync(model.id);
+                
+                if (result.Succeeded)
+                {
+                    if (string.IsNullOrEmpty(user.PasswordHash))
+                    {
+                        string token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                        token = HttpUtility.UrlEncode(token);
+                        await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password following this link : " + Request.UrlReferrer + "#/resetPassword?userid=" + user.Id + "&code=" + token);
 
-                return result.Succeeded == true ? success(string.Empty) : unsuccess(string.Empty);
+                        return success("Email confirmed successfully. We sent you an email to reset your password");
+                    }
+
+                    return success("Email confirmed successfully. Please now login");
+                }
+
+                return unsuccess(string.Join("<br />", result.Errors));
             }
 
-            return unsuccess(string.Empty);
+            return unsuccess(ErrorUtil.DefaultError);
         }
 
         [HttpPost]
@@ -187,8 +202,9 @@ namespace StarterKit.Controllers
 
                 if (userIsValid.Succeeded == true)
                 {
-                    var tenant = _tenantRepo.Create(new DOM.Tenant() { IsTrial = true });
-                    user.TenantId = tenant.Id;
+                    Tenant newTenant = new DOM.Tenant() { IsTrial = true };
+                    _tenantRepo.Create(newTenant);
+                    user.TenantId = newTenant.Id;
 
                     IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -201,16 +217,16 @@ namespace StarterKit.Controllers
                     {
                         string token = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                         token = HttpUtility.UrlEncode(token);
-                        await UserManager.SendEmailAsync(user.Id, "Confirm Password", "Please confirm your password following this link : " + Request.UrlReferrer + "#/confirmpassword?userid=" + user.Id + "&code=" + token);
+                        await UserManager.SendEmailAsync(user.Id, "Confirm Email", "Please confirm your email following this link : " + Request.UrlReferrer + "#/confirmemail?userid=" + user.Id + "&code=" + token);
 
                         return success("Account successfully created. Please check your inbox to confirm your email");
                     }
                 }
 
-                return unsuccess(ErrorUtil.DefaultError);
+                return unsuccess(string.Join("<br />", userIsValid.Errors));
             }
 
-            return unsuccess(string.Empty);
+            return unsuccess(ErrorUtil.DefaultError);
         }
 	}
 }

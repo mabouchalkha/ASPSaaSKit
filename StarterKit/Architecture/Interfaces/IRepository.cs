@@ -6,7 +6,7 @@ namespace StarterKit.Architecture.Interfaces
     {
         List<T> Index();
         T Read(TKey id);
-        T Create(T entity);
+        bool Create(T entity);
         bool Update(T entity);
         bool Delete(TKey id);
     }

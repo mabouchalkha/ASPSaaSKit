@@ -3,16 +3,17 @@
 angular.module('starterKit').config(['$routeProvider', '$httpProvider', '$locationProvider', '$injector', function ($routeProvider, $httpProvider, $locationProvider, $injector) {
     $routeProvider
         .when('/', { templateUrl: '/Scripts/Pages/Dashboard/dashboard.html', controller: 'dashboardController as vm' })
-        .when('/one', { templateUrl: '/Scripts/Pages/One/one.html', controller: 'oneController as vm' })
-        .when('/two', { templateUrl: '/Scripts/Pages/Two/two.html', controller: 'twoController as vm' })
+        
         .when('/login', { templateUrl: '/Scripts/Pages/Login/login.html', controller: 'loginController as vm' })
         .when('/resetPassword', { templateUrl: '/Scripts/Pages/ResetPassword/reset_password.html', controller: 'resetPasswordController as vm' })
-        .when('/confirmpassword', { templateUrl: '/Scripts/Pages/ConfirmPassword/confirm_password.html', controller: 'confirmPasswordController as vm' })
+        .when('/confirmemail', { templateUrl: '/Scripts/Pages/ConfirmEmail/confirm_email.html', controller: 'confirmEmailController as vm' })
         .when('/twofactor', { templateUrl: '/Scripts/Pages/TwoFactor/twofactor.html', controller: 'twofactorController as vm' })
+
         .when('/404', { templateUrl: '/Scripts/Pages/404.html', })
 
         .when('/user', { templateUrl: '/Scripts/Pages/index/index.html', controller: 'indexController as vm', resolve: $injector.get('userResolver').resolveIndex })
-        .when('/user/create', { templateUrl: '/Scripts/Pages/User/edit.html', controller: 'userController as vm', resolve: $injector.get('userResolver').resolve })
+        .when('/user/create', { templateUrl: '/Scripts/Pages/User/user.html', controller: 'userController as vm', resolve: $injector.get('userResolver').resolve })
+        .when('/user/:id', { templateUrl: '/Scripts/Pages/User/user.html', controller: 'userController as vm', resolve: $injector.get('userResolver').resolve })
 
         .otherwise({ redirectTo: '/404' });
 
@@ -32,7 +33,7 @@ angular.element(document).ready(function () {
         auth.user = resp.data.user;
         root.$broadcast('user:change', auth.user);
         var anonRoutes = ['/login', '/register', '/404', '/resetPassword', '/twofactor', '/confirmpassword'];
-        var authRoutes = ['/two', '/one', '/user'];
+        var authRoutes = ['/user'];
 
         root.$on('$routeChangeStart', function (event, next, current) {
             notif.wait();

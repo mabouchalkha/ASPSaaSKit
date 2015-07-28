@@ -6,6 +6,9 @@ using StarterKit.ViewModels;
 using StarterKit.DOM;
 using System.Threading.Tasks;
 using StarterKit.Utils;
+using StarterKit.Helpers;
+using Microsoft.AspNet.Identity;
+using System.Linq;
 
 namespace StarterKit.Controllers
 {
@@ -17,19 +20,19 @@ namespace StarterKit.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            return success("Users retrieved successfully", new { entities = _userRepo.Index().MapToIndexUserViewModels() });
+            return success(string.Empty, new { entities = _userRepo.Index().MapToIndexUserViewModels() });
         }
 
-        [HttpPost]
-        public JsonResult Update(IndexUserViewModel entity)
+        [HttpPut]
+        public JsonResult Update(DetailUserViewModel userToUpdate)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = _userRepo.Read(entity.Id);
+                ApplicationUser user = _userRepo.Read(userToUpdate.Id);
 
                 if (user != null)
                 {
-                    ApplicationUser updatedUser = entity.MapToApplicationUser(user);
+                    ApplicationUser updatedUser = userToUpdate.MapToApplicationUser(user);
 
                     if (_userRepo.HasPendingChange(updatedUser))
                     {
@@ -51,7 +54,7 @@ namespace StarterKit.Controllers
                 }
                 else
                 {
-                    return unsuccess(string.Format("Cannot read User with Id : {0}", entity.Id));
+                    return unsuccess(string.Format("Cannot find user with Id : {0}", userToUpdate.Id));
                 }
             }
 
@@ -63,16 +66,74 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool isDeleted = _userRepo.Delete(id);
+                var currentUser = UserHelper.GetCurrentUser();
 
-                if (isDeleted)
+                if (currentUser.Id != id)
                 {
-                    return success("User successfully deleted");
+                    bool isDeleted = _userRepo.Delete(id);
+
+                    if (isDeleted)
+                    {
+                        return success("User successfully deleted");
+                    }
+                    else
+                    {
+                        return unsuccess("User delete unsuccessfully. Please try again");
+                    }
                 }
                 else
                 {
-                    return unsuccess("User delete unsuccessfully. Please try again");
+                    return unsuccess("You cannot delete your own user");
                 }
+            }
+
+            return unsuccess(ErrorUtil.DefaultError);
+        }
+
+        [HttpGet]
+        public JsonResult Read (string id)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = _userRepo.Read(id);
+
+                if (user != null)
+                {
+                    return success(string.Empty, user.MapToDetailUserViewModel());
+                }
+                else
+                {
+                    return unsuccess(string.Format("Cannot retrieve user with id {0}", id));
+                }
+            }
+
+            return unsuccess(ErrorUtil.DefaultError);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Create (DetailUserViewModel newUser)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = newUser.MapToApplicationUser();
+
+                var result = await _userRepo.ValidateUser(user);
+
+                if (result.Succeeded)
+                {
+                    bool hasCreated = _userRepo.Create(user);
+
+                    if (hasCreated)
+                    {
+                        return success("User created successfully", null, new { id = user.Id });
+                    }
+                    else
+                    {
+                        return unsuccess("User creation failed");
+                    }
+                }
+
+                return unsuccess(string.Join("<br />", result.Errors));
             }
 
             return unsuccess(ErrorUtil.DefaultError);

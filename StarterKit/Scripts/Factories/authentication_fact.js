@@ -110,10 +110,10 @@
 
             return deffered.promise;
         },
-        confirmPassword: function (userId, token) {
+        confirmEmail: function (userId, token) {
             var deffered = $q.defer();
 
-            $http.post('/Account/ConfirmPassword', { id: userId, code: token })
+            $http.post('/Account/ConfirmEmail', { id: userId, code: token })
                 .success(function (resp) {
                     deffered.resolve(resp)
                 })

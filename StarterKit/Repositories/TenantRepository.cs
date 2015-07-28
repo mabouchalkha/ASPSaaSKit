@@ -19,12 +19,12 @@ namespace StarterKit.Repositories
             return context.Tenants.FirstOrDefault(c => c.Id == id);
         }
 
-        public Tenant Create(Tenant entity)
+        public bool Create(Tenant entity)
         {
             context.Tenants.Add(entity);
-            context.SaveChanges();
+            int changeCount = context.SaveChanges();
 
-            return entity;
+            return changeCount > 0;
         }
 
         public bool Update(Tenant entity)

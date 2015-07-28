@@ -9,19 +9,24 @@
                 icon: 'users',
                 id: 'Id',
                 inline: true,
-                resource: userResource
+                resource: userResource,
+                columnDefs: [
+                { field: 'FirstName' },
+                { field: 'LastName' },
+                { field: 'Email' },
+                { field: 'EmailConfirmed'}]
             }
         }]
     },
     resolve: {
-        viewModel: ['entityResource', '$route', function (entityResource, $route) {
+        viewModel: ['userResource', '$route', function (userResource, $route) {
             var id = $route.current.params.id;
 
-            if (id == null) {
-                return {};
+            if (id == null || id == 'create') {
+                return { data: {} };
             }
             else {
-                return entityResource.read({ id: id }).$promise.then();
+                return userResource.read({ id: id }).$promise.then();
             }
         }]
     }

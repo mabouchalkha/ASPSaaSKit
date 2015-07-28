@@ -4,11 +4,24 @@ using StarterKit.DOM;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Web;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
+using System.Web.Security;
 
 namespace StarterKit.Repositories
 {
     public class UserRepository : RepositoryTenantable<ApplicationUser>, IRepository<ApplicationUser, string>
     {
+        private ApplicationUserManager _userManager;
+
+        public ApplicationUserManager UserManager
+        {
+            get { return _userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
+        }
+
         public List<ApplicationUser> Index()
         {
             return context.Users.ToList();
@@ -19,12 +32,27 @@ namespace StarterKit.Repositories
             return context.Users.FirstOrDefault(u => u.Id == id);
         }
 
-        public ApplicationUser Create(ApplicationUser entity)
+        public bool Create(ApplicationUser entity)
         {
             context.Users.Add(entity);
-            context.SaveChanges();
+            var changeCount = context.SaveChanges();
 
-            return entity;
+            if (changeCount > 0)
+            {
+                string token = UserManager.GenerateEmailConfirmationToken(entity.Id);
+                token = HttpUtility.UrlEncode(token);
+                UserManager.SendEmail(entity.Id, "Confirm Email", "Please confirm your email following this link : " + HttpContext.Current.Request.UrlReferrer + "#/confirmemail?userid=" + entity.Id + "&code=" + token);
+                UserManager.AddToRole(entity.Id, "User");
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<IdentityResult> ValidateUser(ApplicationUser entity)
+        {
+            return await UserManager.UserValidator.ValidateAsync(entity);
         }
 
         public bool Update(ApplicationUser entity)

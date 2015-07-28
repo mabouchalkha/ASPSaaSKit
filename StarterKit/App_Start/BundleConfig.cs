@@ -27,7 +27,7 @@ namespace StarterKit
                 .IncludeDirectory("~/Scripts/Pages/Two", "*.js", true)
                 .IncludeDirectory("~/Scripts/Pages/Login", "*.js", true)
                 .IncludeDirectory("~/Scripts/Pages/ResetPassword", "*.js", true)
-                .IncludeDirectory("~/Scripts/Pages/ConfirmPassword", "*.js", true)
+                .IncludeDirectory("~/Scripts/Pages/ConfirmEmail", "*.js", true)
                 .IncludeDirectory("~/Scripts/Pages/TwoFactor", "*.js", true)
                 .IncludeDirectory("~/Scripts/Pages/Dashboard", "*.js", true)
                 .IncludeDirectory("~/Scripts/Pages/User", "*.js", true)
