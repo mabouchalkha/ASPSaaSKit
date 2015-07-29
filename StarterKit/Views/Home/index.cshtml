@@ -4,21 +4,19 @@
     <title ng-bind="vm.title"></title>
         @Styles.Render("~/Content/css")
 </head>
-<body id="app" data-custom-background data-toggle-off-canvas>
+<body id="app" data-custom-background data-toggle-off-canvas style="padding-top: 70px;">
     <div id="overlay">
         <svg fill="#000" width="140" height="64" xmlns="http://www.w3.org/2000/svg">
             <img id="loading" src="/Content/Images/grid.svg" />
         </svg>
     </div>
     <div>
-        <div id="navigation_container" data-ng-hide="isSpecificPage()" data-ng-cloak class="no-print">
-            <section data-ng-include="'Scripts/Pages/header.html'"
-                     id="header" class="top-header"></section>
-            <aside data-ng-include="'Scripts/Pages/nav.html'"
-                   id="nav-container"></aside>
+        <div id="navigation_container" data-ng-cloak class="no-print">
+            <section data-ng-include="'Scripts/Pages/header.html'" id="header" class="top-header"></section>
         </div>
-        <div class="view-container">
-            <section data-ng-view id="content" class="animate-fade-up"></section>
+        <div id="page-container row" class="container-fluid">
+            <div id="nav-container"><aside class="col-md-2" data-ng-include="'Scripts/Pages/nav.html'"></aside></div>
+            <div id="content" class="col-md-10"><section data-ng-view></section></div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>

@@ -35,7 +35,10 @@
 
         result.then(function (resp) {
             if (resp.success == true) {
-                if (vm.user.returnUrl != null) {
+                if (resp.meta != null && resp.meta.needTwoFactor == true) {
+                    $location.path('/twofactor');
+                }
+                else if (vm.user.returnUrl != null) {
                     var returnUrl = vm.user.returnUrl;
                     $location.search('returnUrl', null);
                     $location.path(returnUrl);
@@ -43,9 +46,6 @@
                 else {
                     $location.path('/');
                 }
-            }
-            else if (resp.success == false && resp.meta != null && resp.meta.needTwoFactor == true) {
-                $location.path('/twofactor');
             }
         }).finally(function () {
             notif.clear();

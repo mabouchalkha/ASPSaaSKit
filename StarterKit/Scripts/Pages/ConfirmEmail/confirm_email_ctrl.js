@@ -1,4 +1,4 @@
-﻿angular.module('starterKit').controller('confirmPasswordController', ['Authentication', '$location', function (Authentication, $location) {
+﻿angular.module('starterKit').controller('confirmEmailController', ['Authentication', '$location', function (Authentication, $location) {
     var vm = this;
 
     var _init = function () {
@@ -10,7 +10,7 @@
         var success = _retrieveUserParams();
 
         if (success == true) {
-            _confirmPassword();
+            _confirmEmail();
         }
         else {
             // need a notif here
@@ -18,8 +18,8 @@
         }
     };
     
-    var _confirmPassword = function () {
-        var result = Authentication.confirmPassword(vm.user.id, vm.user.code);
+    var _confirmEmail = function () {
+        var result = Authentication.confirmEmail(vm.user.id, vm.user.code);
         
         result.then(function (resp) {
             if (resp.success == true) {

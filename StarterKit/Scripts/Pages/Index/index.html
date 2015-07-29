@@ -7,12 +7,12 @@
         </div>
         <div class="panel-body">
             <div class="grid_panel">
-                <div id="index_grid"
-                     data-ui-grid="vm.gridOptions"
-                     data-ui-grid-edit
-                     data-ui-grid-cellnav
-                     class="grid">
-                </div>
+                <div id="index_grid" ui-grid="vm.gridOptions" ui-grid-selection class="grid"></div>
+            </div>
+            <div class="action_buttons pull-right" style="margin-top: 15px;">
+                <button ng-disabled="vm.selectedLine==null" class="btn btn-danger" ng-click="vm.deleteSelectedEntity()"><i class="fa fa-remove"></i> Delete</button>
+                <button ng-disabled="vm.selectedLine==null" class="btn btn-info" ng-click="vm.editSelectedEntity()"><i class="fa fa-edit"></i> Edit</button>
+                <button class="btn btn-success" ng-click="vm.addEntity()"><i class="fa fa-plus-square"></i> Add</button>
             </div>
         </div>
     </div>

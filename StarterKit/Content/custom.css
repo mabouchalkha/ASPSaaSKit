@@ -1,4 +1,39 @@
-﻿/* LOADING ------------------------------------------------------- */
+﻿.vertical-center {
+  min-height: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* SIDEBAR ------------------------------------------------------- */
+@media (min-width: 768px) {
+  .sidebar-nav {
+      
+  }
+
+  .sidebar-nav .navbar .navbar-collapse {
+    padding: 0;
+    max-height: none;
+  }
+  .sidebar-nav .navbar ul {
+    float: none;
+  }
+  .sidebar-nav .navbar ul:not {
+    display: block;
+  }
+  .sidebar-nav .navbar li {
+    float: none;
+    display: block;
+  }
+  .sidebar-nav .navbar li a {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+/* LOADING ------------------------------------------------------- */
 #loading {
     width: 70px;
     height: 77px;
@@ -18,23 +53,4 @@
     opacity: 0.60;
     filter: alpha(opacity=60);
     z-index: 9999;
-}
-
-/* USED IN LOGIN PAGE TO CENTER PANEL --------------------------------------------------------*/
-.vertical-center {
-  min-height: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.danger, danger:hover {
-    color: #c9302c !important;
-}
-
-
-.info, info:hover {
-    color: #31b0d5 !important;
 }

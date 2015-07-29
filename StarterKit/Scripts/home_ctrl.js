@@ -4,8 +4,8 @@
     var _init = function () {
         vm.user = {};
         vm.service = Authentication;
-        vm.title = 'starterKit',
-        vm.brand = 'starterKit'
+        vm.title = 'StarterKit',
+        vm.brand = 'StarterKit'
         vm.isProfileOpen = false;
     };
 
@@ -20,6 +20,10 @@
             $location.path('#/login');
         });
     };
+
+    vm.resetPassword = function () {
+        var result = Authentication.resetPassword(vm.user.Email);
+    }
 
     _init();
 

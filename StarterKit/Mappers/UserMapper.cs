@@ -29,21 +29,47 @@ namespace StarterKit.Mappers
                 LastName = user.LastName,
                 Email = user.Email,
                 Id = user.Id,
+                EmailConfirmed = user.EmailConfirmed
             };
         }
 
-        public static ApplicationUser MapToApplicationUser(this IndexUserViewModel viewModel, ApplicationUser user)
+        public static DetailUserViewModel MapToDetailUserViewModel(this ApplicationUser user)
         {
-            if (user.Email.Equals(viewModel.Email, StringComparison.OrdinalIgnoreCase))
+            return new DetailUserViewModel()
             {
-                user.EmailConfirmed = false;
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Id = user.Id,
+                TwoFactorEnabled = user.TwoFactorEnabled
+            };
+        }
+
+        public static ApplicationUser MapToApplicationUser(this DetailUserViewModel viewModel, ApplicationUser user = null)
+        {
+            if (user != null)
+            {
+                if (user.Email.Equals(viewModel.Email, StringComparison.OrdinalIgnoreCase))
+                {
+                    user.EmailConfirmed = false;
+                    user.UserName = viewModel.Email;
+                }
+
+                //send new confirm email
+                user.LastName = viewModel.LastName;
+                user.FirstName = viewModel.FirstName;
+                user.Email = viewModel.Email;
             }
-
-            // send confirm email to new email
-
-            user.LastName = viewModel.LastName;
-            user.FirstName = viewModel.FirstName;
-            user.Email = viewModel.Email;
+            else
+            {
+                user = new ApplicationUser();
+                user.EmailConfirmed = false;
+                user.LastName = viewModel.LastName;
+                user.FirstName = viewModel.FirstName;
+                user.Email = viewModel.Email;
+                user.UserName = viewModel.Email;
+                user.TwoFactorEnabled = viewModel.TwoFactorEnabled;
+            }
 
             return user;
         }
