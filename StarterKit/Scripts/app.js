@@ -11,6 +11,8 @@ angular.module('starterKit').config(['$routeProvider', '$httpProvider', '$locati
 
         .when('/404', { templateUrl: '/Scripts/Pages/404.html', })
 
+        .when('/setup', { templateUrl: '/Scripts/Pages/setup/index.html', controller: 'setupController as vm' })
+
         .when('/user', { templateUrl: '/Scripts/Pages/index/index.html', controller: 'indexController as vm', resolve: $injector.get('userResolver').resolveIndex })
         .when('/user/create', { templateUrl: '/Scripts/Pages/User/user.html', controller: 'userController as vm', resolve: $injector.get('userResolver').resolve })
         .when('/user/:id', { templateUrl: '/Scripts/Pages/User/user.html', controller: 'userController as vm', resolve: $injector.get('userResolver').resolve })
