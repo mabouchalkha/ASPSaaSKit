@@ -40,14 +40,21 @@ namespace StarterKit.Controllers
                     if (databaseTenant != null)
                     {
                         databaseTenant.UpdateUiTenantToDatabase(tenant);
-                        _tenantRepo.Update(databaseTenant);
+                        bool isUpdated = _tenantRepo.Update(databaseTenant);
+
+                        if (isUpdated)
+                        {
+                            return success("Account successfully updated");
+                        }
+                        else
+                        {
+                            return unsuccess("Cannot save this account. Please refresh and try again");
+                        }
                     }
                     else
                     {
                         return unsuccess(string.Format("Tenant with ID {0} cannot be found in database", tenant.Id));
                     }
-
-                    _tenantRepo.Update(tenant);
                 }
                 else
                 {
