@@ -29,7 +29,7 @@ namespace StarterKit.Repositories
 
         public bool Update(Tenant entity)
         {
-            throw new NotImplementedException();
+            return context.SaveChanges() > 0;
         }
 
         public bool Delete(Guid id)

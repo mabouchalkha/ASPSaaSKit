@@ -11,7 +11,7 @@ angular.module('starterKit').config(['$routeProvider', '$httpProvider', '$locati
 
         .when('/404', { templateUrl: '/Scripts/Pages/404.html', })
 
-        .when('/setup', { templateUrl: '/Scripts/Pages/setup/index.html', controller: 'setupController as vm' })
+        .when('/account', { templateUrl: '/Scripts/Pages/Account/account.html', controller: 'accountController as vm', resolve: $injector.get('accountResolver').resolve })
 
         .when('/user', { templateUrl: '/Scripts/Pages/index/index.html', controller: 'indexController as vm', resolve: $injector.get('userResolver').resolveIndex })
         .when('/user/create', { templateUrl: '/Scripts/Pages/User/user.html', controller: 'userController as vm', resolve: $injector.get('userResolver').resolve })
@@ -35,7 +35,7 @@ angular.element(document).ready(function () {
         auth.user = resp.data.user;
         root.$broadcast('user:change', auth.user);
         var anonRoutes = ['/login', '/register', '/404', '/resetPassword', '/twofactor', '/confirmpassword'];
-        var authRoutes = ['/user'];
+        var authRoutes = ['/user', '/account'];
 
         root.$on('$routeChangeStart', function (event, next, current) {
             notif.wait();

@@ -1,8 +1,5 @@
-﻿using StarterKit.DAL;
-using StarterKit.Migrations;
-using StarterKit.Utils;
+﻿using StarterKit.Utils;
 using System;
-using System.Data.Entity;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;

@@ -139,8 +139,13 @@ namespace StarterKit.Controllers
             {
                 var user = await UserManager.FindByEmailAsync(model.Email);
 
-                if (user != null && user.EmailConfirmed == true)
+                if (user != null)
                 {
+                    if (user.EmailConfirmed == false)
+                    {
+                        return info("You need to confirm your email before you can login", null, new { needEmailConfirmation = true });
+                    }
+
                     var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, true);
 
                     switch (result)
