@@ -269,6 +269,8 @@
     <Content Include="Scripts\Pages\Account\account_ctrl.js" />
     <Content Include="Scripts\Pages\Account\account_resolver.js" />
     <Content Include="Scripts\Pages\Account\account_resource.js" />
+    <Content Include="Scripts\Pages\Invite\invite.html" />
+    <Content Include="Scripts\Pages\Invite\invite_ctrl.js" />
     <Content Include="Scripts\Pages\Index\deletemodal.html" />
     <Content Include="Scripts\Pages\Index\index.html" />
     <Content Include="Scripts\Pages\Index\index_ctrl.js" />

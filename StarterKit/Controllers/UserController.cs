@@ -9,6 +9,7 @@ using StarterKit.Utils;
 using StarterKit.Helpers;
 using Microsoft.AspNet.Identity;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace StarterKit.Controllers
 {
@@ -137,6 +138,27 @@ namespace StarterKit.Controllers
             }
 
             return unsuccess(ErrorUtil.DefaultError);
+        }
+
+        [HttpPost]
+        public JsonResult Invite (string emails)
+        {
+            if (!string.IsNullOrEmpty(emails))
+            {
+                List<string> emailCollection = emails.Split(';').ToList();
+
+                foreach (string email in emailCollection)
+                {
+                    if (!_userRepo.EmailExit(email))
+                    {
+                        _userRepo.Create(new ApplicationUser() { Email = email, UserName = email });
+                    }
+                }
+
+                return success("Users has been invited. They will receive an email to confirm their account");
+            }
+
+            return unsuccess("You need to put some emails adresses");
         }
     }
 }

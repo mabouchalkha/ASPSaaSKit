@@ -24,7 +24,7 @@ namespace StarterKit.Repositories
 
         public List<ApplicationUser> Index()
         {
-            return context.Users.ToList();
+            return context.Users.Where(u => u.EmailConfirmed == true).ToList();
         }
 
         public ApplicationUser Read(string id)
@@ -76,6 +76,13 @@ namespace StarterKit.Repositories
             }
 
             return false;
+        }
+
+        public bool EmailExit(string email)
+        {
+            ApplicationUser user = context.Users.FirstOrDefault(u => u.Email == email);
+
+            return user != null;
         }
     }
 }
