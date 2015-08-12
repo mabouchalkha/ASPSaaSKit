@@ -35,8 +35,13 @@
 
         result.then(function (resp) {
             if (resp.success == true) {
-                if (resp.meta != null && resp.meta.needTwoFactor == true) {
-                    $location.path('/twofactor');
+                if (resp.meta != null) {
+                    if (resp.meta.needTwoFactor == true) {
+                        $location.path('/twofactor');
+                    }
+                    else if (resp.meta.needEmailConfirmation == true) {
+                        return;
+                    }
                 }
                 else if (vm.user.returnUrl != null) {
                     var returnUrl = vm.user.returnUrl;

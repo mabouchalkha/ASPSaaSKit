@@ -14,6 +14,9 @@
         },
         delete: {
             method: 'DELETE', url: '/user/delete/:id'
-        }
+        },
+        invite: {
+            method: 'POST', url: '/user/invite'
+        },
     });
 }]);

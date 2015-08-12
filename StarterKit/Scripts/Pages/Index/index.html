@@ -9,6 +9,9 @@
             <div class="grid_panel">
                 <div id="index_grid" ui-grid="vm.gridOptions" ui-grid-selection class="grid"></div>
             </div>
+            <div class="custom_action pull-left" ng-if="vm.config.customActions!=null" style="margin-top: 15px;">
+                <button ng-repeat="action in vm.config.customActions" class="btn btn-link" ng-click="action.fn()"><span ng-bind="::action.name"></span></button>
+            </div>
             <div class="action_buttons pull-right" style="margin-top: 15px;">
                 <button ng-disabled="vm.selectedLine==null" class="btn btn-danger" ng-click="vm.deleteSelectedEntity()"><i class="fa fa-remove"></i> Delete</button>
                 <button ng-disabled="vm.selectedLine==null" class="btn btn-info" ng-click="vm.editSelectedEntity()"><i class="fa fa-edit"></i> Edit</button>

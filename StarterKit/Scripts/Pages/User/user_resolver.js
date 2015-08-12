@@ -3,7 +3,7 @@
         viewModel: ['userResource', function (userResource) {
             return userResource.index().$promise.then()
         }],
-        config: ['userResource', function (userResource) {
+        config: ['userResource', '$location', function (userResource, $location) {
             return {
                 name: 'User',
                 icon: 'users',
@@ -11,10 +11,11 @@
                 inline: true,
                 resource: userResource,
                 columnDefs: [
-                { field: 'FirstName' },
-                { field: 'LastName' },
-                { field: 'Email' },
-                { field: 'EmailConfirmed'}]
+                    { field: 'FirstName' },
+                    { field: 'LastName' },
+                    { field: 'Email' },
+                    { field: 'EmailConfirmed' }],
+                customActions: [{ name: 'Invite User', fn: function () { $location.path('/invite'); }}]
             }
         }]
     },
