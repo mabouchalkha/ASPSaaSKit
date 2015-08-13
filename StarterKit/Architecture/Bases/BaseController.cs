@@ -1,7 +1,7 @@
 ﻿using StarterKit.Utils;
 using System.Web.Mvc;
 
-namespace StarterKit.Controllers
+namespace StarterKit.Architecture.Bases
 {
     public abstract class BaseController : Controller
     {

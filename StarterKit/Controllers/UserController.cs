@@ -1,15 +1,14 @@
-﻿using StarterKit.Repositories;
-using System.Web.Mvc;
-using StarterKit.Mappers;
-using System;
-using StarterKit.ViewModels;
+﻿using StarterKit.Architecture.Bases;
 using StarterKit.DOM;
-using System.Threading.Tasks;
-using StarterKit.Utils;
 using StarterKit.Helpers;
-using Microsoft.AspNet.Identity;
-using System.Linq;
+using StarterKit.Mappers;
+using StarterKit.Repositories;
+using StarterKit.Utils;
+using StarterKit.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace StarterKit.Controllers
 {

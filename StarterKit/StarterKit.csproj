@@ -197,7 +197,7 @@
     <Compile Include="Architecture\Interfaces\IRepository.cs" />
     <Compile Include="Architecture\Interfaces\ITenantable.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Architecture\Bases\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TenantController.cs" />
     <Compile Include="Controllers\UserController.cs" />

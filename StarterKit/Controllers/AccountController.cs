@@ -1,14 +1,13 @@
-﻿using StarterKit.DOM;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using StarterKit.Architecture.Bases;
+using StarterKit.DOM;
 using StarterKit.Repositories;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Linq;
 
 namespace StarterKit.Controllers
 {
