@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -23,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TypeScriptToolsVersion>1.5</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -251,7 +253,7 @@
     <Content Include="Lib\angular-toastr.tpls.js" />
     <Content Include="Lib\slim_scroll.js" />
     <Content Include="Lib\ui-grid.min.css" />
-    <Content Include="Scripts\app.js" />
+    <TypeScriptCompile Include="Scripts\app.ts" />
     <Content Include="Scripts\Directives\accessLvl_dir.js" />
     <Content Include="Scripts\Directives\collapse_nav_dir.js" />
     <Content Include="Scripts\Directives\custom_background_dir.js" />
@@ -261,9 +263,10 @@
     <Content Include="Scripts\Directives\toggle_off_canvas_dir.js" />
     <Content Include="Scripts\Factories\http_response_interceptor_fact.js" />
     <Content Include="Scripts\Factories\authentication_fact.js" />
-    <Content Include="Scripts\Factories\overlay.js" />
-    <Content Include="Scripts\Factories\notification.js" />
-    <Content Include="Scripts\home_ctrl.js" />
+    <TypeScriptCompile Include="Scripts\Architectures\factories.dom.notif.ts" />
+    <TypeScriptCompile Include="Scripts\Factories\overlay.ts" />
+    <TypeScriptCompile Include="Scripts\home_ctrl.ts" />
+    <TypeScriptCompile Include="Scripts\Factories\notification.ts" />
     <Content Include="Scripts\Pages\404.html" />
     <Content Include="Scripts\Pages\Account\account.html" />
     <Content Include="Scripts\Pages\Account\account_ctrl.js" />
@@ -285,7 +288,7 @@
     <Content Include="Scripts\Pages\ResetPassword\reset_password.html" />
     <Content Include="Scripts\Pages\ResetPassword\reset_password_ctrl.js" />
     <Content Include="Scripts\Pages\Login\login.html" />
-    <Content Include="Scripts\Pages\Login\login_ctrl.js" />
+    <TypeScriptCompile Include="Scripts\Pages\Login\login_ctrl.ts" />
     <Content Include="Scripts\Pages\One\one_ctrl.js" />
     <Content Include="Scripts\Pages\One\one.html" />
     <Content Include="Scripts\Pages\Two\two_ctrl.js" />
@@ -308,6 +311,7 @@
     <Content Include="Lib\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <None Include="Properties\PublishProfiles\sarwa.pubxml" />
+    <Content Include="Scripts\tsconfig.json" />
     <None Include="Web.Debug.appharbor.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </None>
@@ -321,6 +325,18 @@
     <none Include="Web.Release.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </none>
+    <TypeScriptCompile Include="Scripts\Routing\routes.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angular-ui-bootstrap\angular-ui-bootstrap.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-router.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-sortable.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-mocks.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-resource.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-route.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular-sanitize.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\angularjs\angular.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -338,6 +354,7 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
@@ -366,6 +383,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
