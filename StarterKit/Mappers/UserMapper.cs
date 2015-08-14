@@ -49,7 +49,7 @@ namespace StarterKit.Mappers
         {
             if (user != null)
             {
-                if (user.Email.Equals(viewModel.Email, StringComparison.OrdinalIgnoreCase))
+                if (!user.Email.Equals(viewModel.Email, StringComparison.OrdinalIgnoreCase))
                 {
                     user.EmailConfirmed = false;
                     user.UserName = viewModel.Email;
