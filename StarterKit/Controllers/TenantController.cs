@@ -12,7 +12,12 @@ namespace StarterKit.Controllers
     [Authorize(Roles = "Owner, Admin")]
     public class TenantController : BaseController
     {
-        private TenantRepository _tenantRepo = new TenantRepository();
+        private TenantRepository _tenantRepo;
+
+        public TenantController(TenantRepository repo)
+        {
+            _tenantRepo = repo;
+        }
 
         [HttpGet]
         public JsonResult Read()

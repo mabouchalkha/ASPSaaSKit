@@ -15,7 +15,12 @@ namespace StarterKit.Controllers
     [Authorize]
     public class UserController : BaseController
     {
-        private UserRepository _userRepo = new UserRepository();
+        private UserRepository _userRepo;
+
+        public UserController(UserRepository userRepo)
+        {
+            _userRepo = userRepo;
+        }
 
         [HttpGet]
         public JsonResult Index()
