@@ -1,5 +1,6 @@
 ﻿using StarterKit.Architecture.Abstract;
 using StarterKit.Architecture.Interfaces;
+using StarterKit.DAL;
 using StarterKit.DOM;
 using System;
 using System.Collections.Generic;
@@ -7,8 +8,15 @@ using System.Linq;
 
 namespace StarterKit.Repositories
 {
-    public class TenantRepository : RepositoryBase<Tenant>, IRepository<Tenant, Guid>
+    public class TenantRepository : IRepository<Tenant, Guid>
     {
+        private ApplicationDbContext context;
+
+        public TenantRepository(ApplicationDbContext _context)
+        {
+            context = _context;
+        }
+
         public List<Tenant> Index()
         {
             return context.Tenants.ToList();

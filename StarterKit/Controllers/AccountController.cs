@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using StarterKit.Architecture.Bases;
+using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
 using StarterKit.Repositories;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
+using System;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -14,10 +16,15 @@ namespace StarterKit.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        private TenantRepository _tenantRepo = new TenantRepository();
+        private TenantRepository _tenantRepo;
 
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
+
+        public AccountController(TenantRepository repo)
+        {
+            _tenantRepo = repo;
+        }
 
         public ApplicationUserManager UserManager
         {

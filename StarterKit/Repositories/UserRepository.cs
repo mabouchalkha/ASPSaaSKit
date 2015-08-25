@@ -9,12 +9,18 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using System.Web.Security;
+using StarterKit.DAL;
 
 namespace StarterKit.Repositories
 {
-    public class UserRepository : RepositoryTenantable<ApplicationUser>, IRepository<ApplicationUser, string>
+    public class UserRepository : RepositoryTenantable, IRepository<ApplicationUser, string>
     {
         private ApplicationUserManager _userManager;
+
+        public UserRepository(ApplicationDbContext context) : base(context)
+        {
+
+        }
 
         public ApplicationUserManager UserManager
         {
