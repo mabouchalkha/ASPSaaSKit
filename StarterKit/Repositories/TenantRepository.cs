@@ -8,14 +8,9 @@ using System.Linq;
 
 namespace StarterKit.Repositories
 {
-    public class TenantRepository : IRepository<Tenant, Guid>
+    public class TenantRepository : RepositoryTenantable, IBaseRepository<Tenant, Guid>
     {
-        private ApplicationDbContext context;
-
-        public TenantRepository(ApplicationDbContext _context)
-        {
-            context = _context;
-        }
+        public TenantRepository(ApplicationDbContext _context) : base(_context) { }
 
         public List<Tenant> Index()
         {

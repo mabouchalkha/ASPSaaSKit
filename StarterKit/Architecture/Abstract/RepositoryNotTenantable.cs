@@ -7,16 +7,17 @@ using System.Web;
 using EntityFramework.DynamicFilters;
 using StarterKit.Helpers;
 using StarterKit.Architecture.Interfaces;
+using LegalIt.Architecture.Interfaces;
 
 namespace StarterKit.Architecture.Abstract
 {
-    // NEVER USE A CONTEXT OUTSIDE OF A REPOSITORY... IF WE DO, TENANTID WILL BE IGNORE AND DATA WILL LEAK
-    public abstract class RepositoryBase<T>
+    public abstract class RepositoryNotTenantable : IRepositoryNotTenantable
     {
-        protected ApplicationDbContext context = new ApplicationDbContext();
+        protected ApplicationDbContext context;
 
-        protected RepositoryBase()
+        protected RepositoryNotTenantable(ApplicationDbContext context)
         {
+            this.context = context;
             //context.DisableFilter("Tenant");
         }
     }

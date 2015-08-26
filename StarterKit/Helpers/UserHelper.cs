@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.Owin;
 using StarterKit.DAL;
 using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
+using System.Threading.Tasks;
 
 namespace StarterKit.Helpers
 {
@@ -29,6 +30,13 @@ namespace StarterKit.Helpers
             }
 
             return null;
+        }
+
+        public async static Task SendEmailConfirmationAsync(ApplicationUserManager manager, string referrer, string id)
+        {
+            string token = await manager.GenerateEmailConfirmationTokenAsync(id);
+            token = HttpUtility.UrlEncode(token);
+            await manager.SendEmailAsync(id, "Confirm Email", "Please confirm your email following this link : " + referrer + "#/confirmemail?userid=" + id + "&code=" + token);
         }
     }
 }

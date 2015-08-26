@@ -210,8 +210,9 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Architecture\Abstract\RepositoryTenantable.cs" />
-    <Compile Include="Architecture\Abstract\RepositoryBase.cs" />
-    <Compile Include="Architecture\Interfaces\IRepository.cs" />
+    <Compile Include="Architecture\Abstract\RepositoryNotTenantable.cs" />
+    <Compile Include="Architecture\Interfaces\IBaseRepository.cs" />
+    <Compile Include="Architecture\Interfaces\IRepositoryNotTenantable.cs" />
     <Compile Include="Architecture\Interfaces\IRepositoryTenantable.cs" />
     <Compile Include="Architecture\Interfaces\ITenantable.cs" />
     <Compile Include="Controllers\AccountController.cs" />

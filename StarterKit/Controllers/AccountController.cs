@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using StarterKit.Architecture.Bases;
-using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
+using StarterKit.Helpers;
 using StarterKit.Repositories;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
-using System;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -149,6 +148,7 @@ namespace StarterKit.Controllers
                 {
                     if (user.EmailConfirmed == false)
                     {
+                        await UserHelper.SendEmailConfirmationAsync(UserManager, Request.UrlReferrer.ToString(), user.Id);
                         return info("You need to confirm your email before you can login", null, new { needEmailConfirmation = true });
                     }
 
@@ -226,10 +226,7 @@ namespace StarterKit.Controllers
 
                     if (currentUser != null)
                     {
-                        string token = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                        token = HttpUtility.UrlEncode(token);
-                        await UserManager.SendEmailAsync(user.Id, "Confirm Email", "Please confirm your email following this link : " + Request.UrlReferrer + "#/confirmemail?userid=" + user.Id + "&code=" + token);
-
+                        UserHelper.SendEmailConfirmationAsync(UserManager, Request.UrlReferrer.ToString(), user.Id);
                         return success("Account successfully created. Please check your inbox to confirm your email");
                     }
                 }

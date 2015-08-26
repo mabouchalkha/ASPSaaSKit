@@ -2,7 +2,7 @@
 
 namespace StarterKit.Architecture.Interfaces
 {
-    public interface IRepository<T, TKey>
+    public interface IBaseRepository<T, TKey>
     {
         List<T> Index();
         T Read(TKey id);

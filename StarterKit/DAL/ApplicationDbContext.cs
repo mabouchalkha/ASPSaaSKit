@@ -12,7 +12,10 @@ namespace StarterKit.DAL
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext() : base("DefaultConnections") { }
+        public ApplicationDbContext() : base("DefaultConnections")
+        {
+            Database.Initialize(false);
+        }
 
         public DbSet<Client> Clients { get; set; }
         public DbSet<Contact> Contacts { get; set; }

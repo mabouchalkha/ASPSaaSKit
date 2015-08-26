@@ -67,11 +67,9 @@ namespace LegalIt.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<ApplicationDbContext>().To<ApplicationDbContext>().InRequestScope();
-            kernel.Bind<IRepository<Tenant, Guid>>().To<TenantRepository>();
-
-            //kernel.Bind<ApplicationDbContext>().To<ApplicationDbContext>();
-            kernel.Bind<IRepositoryTenantable>().To<RepositoryTenantable>().InRequestScope();
+            kernel.Bind<ApplicationDbContext>().ToSelf().InRequestScope();
+            kernel.Bind<IRepositoryTenantable>().To<RepositoryTenantable>();
+            kernel.Bind<IRepositoryNotTenantable>().To<RepositoryNotTenantable>();
         }
     }
 }

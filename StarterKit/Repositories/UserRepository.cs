@@ -13,14 +13,11 @@ using StarterKit.DAL;
 
 namespace StarterKit.Repositories
 {
-    public class UserRepository : RepositoryTenantable, IRepository<ApplicationUser, string>
+    public class UserRepository : RepositoryTenantable, IBaseRepository<ApplicationUser, string>
     {
         private ApplicationUserManager _userManager;
 
-        public UserRepository(ApplicationDbContext context) : base(context)
-        {
-
-        }
+        public UserRepository(ApplicationDbContext context) : base(context) { }
 
         public ApplicationUserManager UserManager
         {
