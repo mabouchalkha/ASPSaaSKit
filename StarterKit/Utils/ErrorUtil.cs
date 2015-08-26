@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+
 namespace StarterKit.Utils
 {
     public static class ErrorUtil
@@ -13,6 +17,31 @@ namespace StarterKit.Utils
             }
 
             return e.Message;
+        }
+
+        public static string GenerateModelStateError(ModelStateDictionary modelState)
+        {
+            string errors = string.Empty;
+
+            if (modelState != null)
+            {
+                List<string> errorList = modelState.Keys.SelectMany(key => modelState[key].Errors.Select(x => key + ": " + x.ErrorMessage)).ToList();
+                return ErrorUtil.JoinErrors(errorList);
+            }
+
+            return errors;
+        }
+
+        public static string JoinErrors(IEnumerable<string> errors)
+        {
+            List<string> newErrors = new List<string>();
+
+            foreach (string error in errors)
+            {
+                newErrors.Add(error.Replace(".", "<br />"));
+            }
+
+            return string.Join("<br />", newErrors);
         }
     }
 }

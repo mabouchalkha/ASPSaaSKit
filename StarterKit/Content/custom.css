@@ -54,3 +54,9 @@
     filter: alpha(opacity=60);
     z-index: 9999;
 }
+
+/* OVERLOAD FOR TOASTR*/
+#toast-container > div {
+    min-width: 450px !important;
+    width: auto !important;
+}

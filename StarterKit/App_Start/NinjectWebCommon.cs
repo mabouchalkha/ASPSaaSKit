@@ -70,6 +70,7 @@ namespace LegalIt.App_Start
             kernel.Bind<ApplicationDbContext>().ToSelf().InRequestScope();
             kernel.Bind<IRepositoryTenantable>().To<RepositoryTenantable>();
             kernel.Bind<IRepositoryNotTenantable>().To<RepositoryNotTenantable>();
+            kernel.Bind<TenantRepository>().ToSelf().InRequestScope();
         }
     }
 }

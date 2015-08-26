@@ -6,6 +6,7 @@ using StarterKit.Helpers;
 using StarterKit.Repositories;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -169,7 +170,7 @@ namespace StarterKit.Controllers
                 }
             }
 
-            return unsuccess(ErrorUtil.DefaultError, JsonStatus.s_401);
+            return unsuccess(ErrorUtil.GenerateModelStateError(ModelState), JsonStatus.s_401);
         }
 
         [HttpPost]
@@ -219,7 +220,7 @@ namespace StarterKit.Controllers
 
                     IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
-                    if (!result.Succeeded) return unsuccess(string.Empty);
+                    if (!result.Succeeded) return unsuccess(ErrorUtil.JoinErrors(result.Errors));
 
                     UserManager.AddToRole(user.Id, "Owner");
                     var currentUser = await UserManager.FindByEmailAsync(model.Email);
@@ -234,7 +235,7 @@ namespace StarterKit.Controllers
                 return unsuccess(string.Join("<br />", userIsValid.Errors));
             }
 
-            return unsuccess(ErrorUtil.DefaultError);
+            return unsuccess(ErrorUtil.GenerateModelStateError(ModelState), JsonStatus.s_401);
         }
 	}
 }

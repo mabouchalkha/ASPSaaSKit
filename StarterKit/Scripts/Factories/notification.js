@@ -5,7 +5,7 @@
             "allowHtml": true,
             "positionClass": "toast-top-right",
             "stimeOut": "3600",
-            "extendedTimeOut": "3600",
+            "extendedTimeOut": "36000",
             "closeButton": true
         }
     }
