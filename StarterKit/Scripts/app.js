@@ -8,7 +8,7 @@
     'ui.grid.selection',
     'ui.grid.pinning',
     'toastr'
-    //our own triangular modules
+    //our own starterkit modules
 ])
 .constant('APP', {
     name: 'starterKit',
