@@ -1,27 +1,107 @@
-﻿var app = angular.module('starterKit', ['ngRoute', 'ui.bootstrap', 'toastr', 'ngResource', 'ui.grid', 'ui.grid.selection', 'ui.grid.pinning']);
+﻿var app = angular.module('starterKit', [
+    //angular modules
+    'ngResource',
+    //3rd party angular modules
+    'ui.router',
+    'ui.bootstrap',
+    'ui.grid',
+    'ui.grid.selection',
+    'ui.grid.pinning',
+    'toastr'
+    //our own triangular modules
+])
+.constant('APP', {
+    name: 'starterKit',
+    logo: 'Content/Images/logo.png',
+    version: '0.0.1',
+    languages: [{
+        name: 'LANGUAGES.ENGLISH',
+        key: 'en'
+    }, {
+        name: 'LANGUAGES.FRENCH',
+        key: 'fr'
+    }],
+});
 
-angular.module('starterKit').config(['$routeProvider', '$httpProvider', '$locationProvider', '$injector', function ($routeProvider, $httpProvider, $locationProvider, $injector) {
-    $routeProvider
-        .when('/', { templateUrl: '/Scripts/Pages/Dashboard/dashboard.html', controller: 'dashboardController as vm' })
-        
-        .when('/login', { templateUrl: '/Scripts/Pages/Login/login.html', controller: 'loginController as vm' })
-        .when('/resetPassword', { templateUrl: '/Scripts/Pages/ResetPassword/reset_password.html', controller: 'resetPasswordController as vm' })
-        .when('/confirmemail', { templateUrl: '/Scripts/Pages/ConfirmEmail/confirm_email.html', controller: 'confirmEmailController as vm' })
-        .when('/twofactor', { templateUrl: '/Scripts/Pages/TwoFactor/twofactor.html', controller: 'twofactorController as vm' })
+angular.module('starterKit').config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$injector', function ($stateProvider, $urlRouterProvider, $httpProvider, $injector) {
+    $stateProvider
+        .state('dashboard', {
+            url: '/',
+            templateUrl: '/Scripts/Pages/Dashboard/dashboard.html',
+            controller: 'dashboardController as vm'
+        })
+        .state('login', {
+            url: '/login?returnUrl',
+            templateUrl: '/Scripts/Pages/Login/login.html',
+            controller: 'loginController as vm'
+        })
+        .state('resetPassword', {
+            url: '/resetPassword?userid&code',
+            templateUrl: '/Scripts/Pages/ResetPassword/reset_password.html',
+            controller: 'resetPasswordController as vm'
+        })
+        .state('confirmemail', {
+            url: '/confirmemail?userid&code',
+            templateUrl: '/Scripts/Pages/ConfirmEmail/confirm_email.html',
+            controller: 'confirmEmailController as vm'
+        })
+        .state('twofactor', {
+            url: '/twofactor',
+            templateUrl: '/Scripts/Pages/TwoFactor/twofactor.html',
+            controller: 'twofactorController as vm'
+        })
+        .state('account', {
+            url: '/account',
+            templateUrl: '/Scripts/Pages/Account/account.html',
+            controller: 'accountController as vm',
+            resolve: $injector.get('accountResolver').resolve
+        })
+        .state('user', {
+            abstract: true,
+            url: '/user',
+            template: '<div data-ui-view></div>',
+        })
+            .state('user.list', {
+                url: '',
+                templateUrl: '/Scripts/Pages/index/index.html',
+                controller: 'indexController as vm',
+                resolve: $injector.get('userResolver').resolveIndex
+            })
+            .state('user.create', {
+                url: '/create',
+                templateUrl: '/Scripts/Pages/User/user.html',
+                controller: 'userController as vm',
+                resolve: $injector.get('userResolver').resolve
+            })
+            .state('user.detail', {
+                url: '/:id',
+                templateUrl: '/Scripts/Pages/User/user.html',
+                controller: 'userController as vm',
+                resolve: $injector.get('userResolver').resolve
+            })
+        .state('invite', {
+            url: '/invite',
+            templateUrl: '/Scripts/Pages/Invite/invite.html',
+            controller: 'inviteController as vm'
+        })
+        .state('404', {
+            url: '/404',
+            templateUrl: '/Scripts/Pages/404.html'
+        });
 
-        .when('/404', { templateUrl: '/Scripts/Pages/404.html', })
+    $urlRouterProvider.otherwise('/404');
 
-        .when('/account', { templateUrl: '/Scripts/Pages/Account/account.html', controller: 'accountController as vm', resolve: $injector.get('accountResolver').resolve })
-
-        .when('/user', { templateUrl: '/Scripts/Pages/index/index.html', controller: 'indexController as vm', resolve: $injector.get('userResolver').resolveIndex })
-        .when('/user/create', { templateUrl: '/Scripts/Pages/User/user.html', controller: 'userController as vm', resolve: $injector.get('userResolver').resolve })
-        .when('/user/:id', { templateUrl: '/Scripts/Pages/User/user.html', controller: 'userController as vm', resolve: $injector.get('userResolver').resolve })
-        .when('/invite', { templateUrl: '/Scripts/Pages/Invite/invite.html', controller: 'inviteController as vm' })
-
-        .otherwise({ redirectTo: '/404' });
+    // set default routes when no path specified
+    $urlRouterProvider.when('', '/');
+    $urlRouterProvider.when('/', '/');
 
     $httpProvider.interceptors.push('HttpResponseInterceptor');
 }]);
+
+angular.module('starterKit').run(['$state', 'stateWatcherService', function ($state, stateWatcherService) {
+    
+}]);
+
 
 angular.element(document).ready(function () {
     var req = $.ajax({ url: 'Account/GetCurrentUser' });
@@ -30,32 +110,32 @@ angular.element(document).ready(function () {
         var app = angular.bootstrap(document, ["starterKit"]);
         var root = app.get('$rootScope');
         var auth = app.get('Authentication');
-        var $location = app.get('$location');
+        var $state = app.get('$state');
         var notif = app.get('notif');
 
         auth.user = resp.data.user;
         root.$broadcast('user:change', auth.user);
-        var anonRoutes = ['/login', '/register', '/404', '/resetPassword', '/twofactor', '/confirmpassword'];
-        var authRoutes = ['/user', '/account', '/invite'];
+        var anonRoutes = ['login', 'register', '404', 'resetPassword', 'twofactor', 'confirmpassword'];
+        var authRoutes = ['user', 'user', 'account', 'invite'];
 
-        root.$on('$routeChangeStart', function (event, next, current) {
+        root.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             notif.wait();
 
-            if (anonRoutes.indexOf($location.url()) == -1 && !auth.isAuthenticated()) {
-                $location.path('/login');
+            if (anonRoutes.indexOf($state.current.name) == -1 && !auth.isAuthenticated()) {
+                $state.go('login');
             }
         });
 
-        root.$on('$routeChangeSuccess', function (event, next, current) {
+        root.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             notif.clear();
         });
 
-        root.$on('$routeChangeError', function (event, next, current) {
+        root.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams) {
             notif.clear();
         });
 
-        if (auth.user == null && $location.path() == '/') {
-            $location.path('/login');
+        if (auth.user == null && $state.current.name == '') {
+            $state.go('login');
         }
 
         root.$apply();

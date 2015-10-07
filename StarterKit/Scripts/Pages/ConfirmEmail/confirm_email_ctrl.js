@@ -1,4 +1,4 @@
-﻿angular.module('starterKit').controller('confirmEmailController', ['Authentication', '$location', function (Authentication, $location) {
+﻿angular.module('starterKit').controller('confirmEmailController', ['Authentication', '$state', '$stateParams', function (Authentication, $state, $stateParams) {
     var vm = this;
 
     var _init = function () {
@@ -23,24 +23,17 @@
         
         result.then(function (resp) {
             if (resp.success == true) {
-               $location.search({userid: null, code: null});
-               $location.path('/login');
+               $state.go('login');
             }
         });
     };
 
     var _retrieveUserParams = function () {
-        var qs = $location.search();
-
-        if (qs != null) {
-            if (qs.userid != null && qs.code != null) {
-                vm.user.id = qs.userid;
-                vm.user.code = qs.code;
-
-                return true;
-            }
+        if ($stateParams.userid != null && $stateParams.code != null) {
+            vm.user.id = $stateParams.userid;
+            vm.user.code = $stateParams.code;
+            return true;
         }
-        
         return false;
     };
 

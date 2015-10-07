@@ -125,6 +125,7 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -282,6 +283,7 @@
     <Content Include="Scripts\Factories\authentication_fact.js" />
     <Content Include="Scripts\Factories\overlay.js" />
     <Content Include="Scripts\Factories\notification.js" />
+    <Content Include="Scripts\Factories\state-watcher.service.js" />
     <Content Include="Scripts\home_ctrl.js" />
     <Content Include="Scripts\Pages\404.html" />
     <Content Include="Scripts\Pages\Account\account.html" />

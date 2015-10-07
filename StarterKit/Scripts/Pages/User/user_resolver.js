@@ -3,7 +3,7 @@
         viewModel: ['userResource', function (userResource) {
             return userResource.index().$promise.then()
         }],
-        config: ['userResource', '$location', function (userResource, $location) {
+        config: ['userResource', '$state', function (userResource, $state) {
             return {
                 name: 'User',
                 icon: 'users',
@@ -15,13 +15,13 @@
                     { field: 'LastName' },
                     { field: 'Email' },
                     { field: 'EmailConfirmed' }],
-                customActions: [{ name: 'Invite User', fn: function () { $location.path('/invite'); }}]
+                customActions: [{ name: 'Invite User', fn: function () { $state.go('invite'); } }]
             }
         }]
     },
     resolve: {
-        viewModel: ['userResource', '$route', function (userResource, $route) {
-            var id = $route.current.params.id;
+        viewModel: ['userResource', '$stateParams', function (userResource, $stateParams) {
+            var id = $stateParams.id;
 
             if (id == null || id == 'create') {
                 return { data: {} };

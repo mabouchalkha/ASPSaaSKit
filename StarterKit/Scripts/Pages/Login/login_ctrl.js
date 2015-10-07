@@ -1,4 +1,4 @@
-﻿angular.module('starterKit').controller('loginController', ['$routeParams', 'Authentication', '$location', 'notif', function ($routeParams, Authentication, $location, notif) {
+﻿angular.module('starterKit').controller('loginController', ['$state', '$stateParams', '$location', 'Authentication', 'notif', function ($state, $stateParams, $location, Authentication, notif) {
     var vm = this;
 
     var _init = function () {
@@ -9,7 +9,7 @@
             confirmPassword: '',
             firstName: '',
             lastName: '',
-            returnUrl: $routeParams.returnUrl,
+            returnUrl: $stateParams.returnUrl,
             loginFailure: false
         };
 
@@ -45,11 +45,10 @@
                 }
                 else if (vm.user.returnUrl != null) {
                     var returnUrl = vm.user.returnUrl;
-                    $location.search('returnUrl', null);
                     $location.path(returnUrl);
                 }
                 else {
-                    $location.path('/');
+                    $state.go('dashboard');
                 }
             }
         }).finally(function () {

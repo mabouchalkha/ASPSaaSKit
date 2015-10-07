@@ -1,4 +1,4 @@
-﻿angular.module("starterKit").controller('appController', ['$scope', '$location', 'Authentication', '$modal', function ($scope, $location, Authentication, $modal) {
+﻿angular.module("starterKit").controller('appController', ['$scope', '$state', 'Authentication', '$modal', function ($scope, $state, Authentication, $modal) {
     var vm = this;
 
     var _init = function () {
@@ -17,7 +17,7 @@
         var result = Authentication.logout();
 
         result.then(function () {
-            $location.path('#/login');
+            $state.go('login');
         });
     };
 
