@@ -1,4 +1,4 @@
-﻿angular.module('starterKit').controller('userController', ['viewModel', 'userResource', '$location', 'notif', function (viewModel, userResource, $location, notif) {
+﻿angular.module('starterKit').controller('userController', ['viewModel', 'userResource', '$state', 'notif', function (viewModel, userResource, $state, notif) {
     var vm = this;
 
     var _init = function () {
@@ -21,7 +21,7 @@
     };
 
     var _reloadIndex = function () {
-        $location.path('/user');
+        $state.go('user.list');
     };
 
     var _clearNotif = function () {

@@ -1,4 +1,4 @@
-﻿angular.module('starterKit').controller('twofactorController', ['Authentication', '$location', 'notif', function (Authentication, $location, notif) {
+﻿angular.module('starterKit').controller('twofactorController', ['Authentication', '$state', 'notif', function (Authentication, $state, notif) {
     var vm = this;
 
     var _init = function () {
@@ -12,7 +12,7 @@
         
         result.then(function (resp) {
             if (resp.success == true) {
-               $location.path('/');
+                $state.go('dashboard');
             }
         });
     };

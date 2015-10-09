@@ -1,4 +1,4 @@
-﻿angular.module('starterKit').controller('accountController', ['viewModel', '$route', 'accountResource', 'notif', function (viewModel, $route, accountResource, notif) {
+﻿angular.module('starterKit').controller('accountController', ['viewModel', '$state', 'accountResource', 'notif', function (viewModel, $state, accountResource, notif) {
     var vm = this;
 
     var _init = function () {
@@ -9,7 +9,7 @@
         notif.wait();
 
         accountResource.update(vm.viewModel).$promise.then(function (resp) {
-            $route.reload();
+            $state.reload('account');
         }).finally(function () {
             notif.clear();
         });

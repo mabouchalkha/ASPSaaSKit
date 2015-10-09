@@ -1,4 +1,4 @@
-﻿angular.module('starterKit').controller('indexController', ['viewModel', 'config', '$scope', 'notif', '$location', '$modal', '$route', function (viewModel, config, $scope, notif, $location, $modal, $route) {
+﻿angular.module('starterKit').controller('indexController', ['viewModel', 'config', '$scope', 'notif', '$location', '$modal', '$state', function (viewModel, config, $scope, notif, $location, $modal, $state) {
     var vm = this;
 
     var _init = function () {
@@ -66,14 +66,15 @@
         notif.wait();
 
         config.resource.delete({id: id}).$promise.then(function (resp) {
-            $route.reload();
+            $state.reload($state.current.name);
         }).finally(function () {
             notif.clear();
         });
     }
 
     vm.addEntity = function () {
-        $location.path($location.path() + '/create');
+        //$location.path($location.path() + '/create');
+        $state.go('user.create');
     }
 
     vm.editSelectedEntity = function () {
