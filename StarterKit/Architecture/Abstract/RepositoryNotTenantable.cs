@@ -1,23 +1,14 @@
 ﻿using StarterKit.DAL;
-using StarterKit.DOM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using EntityFramework.DynamicFilters;
-using StarterKit.Helpers;
-using StarterKit.Architecture.Interfaces;
-using LegalIt.Architecture.Interfaces;
 
 namespace StarterKit.Architecture.Abstract
 {
-    public abstract class RepositoryNotTenantable : IRepositoryNotTenantable
+    public abstract class RepositoryNotTenantable 
     {
         protected ApplicationDbContext context;
 
-        protected RepositoryNotTenantable(ApplicationDbContext context)
+        protected RepositoryNotTenantable()
         {
-            this.context = context;
+            this.context = new ApplicationDbContext();
             //context.DisableFilter("Tenant");
         }
     }

@@ -10,7 +10,7 @@ namespace StarterKit.Repositories
 {
     public class TenantRepository : RepositoryTenantable, IBaseRepository<Tenant, Guid>
     {
-        public TenantRepository(ApplicationDbContext _context) : base(_context) { }
+        public TenantRepository() :base() { }
 
         public List<Tenant> Index()
         {

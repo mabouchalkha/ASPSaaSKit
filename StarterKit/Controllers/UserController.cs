@@ -17,9 +17,9 @@ namespace StarterKit.Controllers
     {
         private UserRepository _userRepo;
 
-        public UserController(UserRepository userRepo)
+        public UserController()
         {
-            _userRepo = userRepo;
+            _userRepo = new UserRepository();
         }
 
         [HttpGet]

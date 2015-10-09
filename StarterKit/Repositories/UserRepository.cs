@@ -17,7 +17,7 @@ namespace StarterKit.Repositories
     {
         private ApplicationUserManager _userManager;
 
-        public UserRepository(ApplicationDbContext context) : base(context) { }
+        public UserRepository() : base() { }
 
         public ApplicationUserManager UserManager
         {
