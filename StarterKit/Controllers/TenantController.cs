@@ -14,9 +14,9 @@ namespace StarterKit.Controllers
     {
         private TenantRepository _tenantRepo;
 
-        public TenantController(TenantRepository repo)
+        public TenantController()
         {
-            _tenantRepo = repo;
+            _tenantRepo = new TenantRepository();
         }
 
         [HttpGet]

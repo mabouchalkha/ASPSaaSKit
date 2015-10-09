@@ -21,9 +21,9 @@ namespace StarterKit.Controllers
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
 
-        public AccountController(TenantRepository repo)
+        public AccountController()
         {
-            _tenantRepo = repo;
+            _tenantRepo = new TenantRepository();
         }
 
         public ApplicationUserManager UserManager
@@ -37,8 +37,6 @@ namespace StarterKit.Controllers
             get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
             private set { _signInManager = value; }
         }
-
-        public AccountController() { }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
