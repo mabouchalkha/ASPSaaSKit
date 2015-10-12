@@ -2,6 +2,7 @@
     //angular modules
     'ngResource',
     //3rd party angular modules
+    'angular-stripe',
     'ui.router',
     'ui.bootstrap',
     'ui.grid',
