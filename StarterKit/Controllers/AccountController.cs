@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using StarterKit.Architecture.Bases;
+using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Repositories;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,17 +15,20 @@ using System.Web.Mvc;
 
 namespace StarterKit.Controllers
 {
+    [Export]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     [Authorize]
     public class AccountController : BaseController
     {
-        private TenantRepository _tenantRepo;
+        private ITenantRepository _tenantRepo;
 
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
 
-        public AccountController()
+        [ImportingConstructor]
+        public AccountController(ITenantRepository tenantRepository)
         {
-            _tenantRepo = new TenantRepository();
+            _tenantRepo = tenantRepository;
         }
 
         public ApplicationUserManager UserManager
@@ -225,7 +230,7 @@ namespace StarterKit.Controllers
 
                     if (currentUser != null)
                     {
-                        UserHelper.SendEmailConfirmationAsync(UserManager, Request.UrlReferrer.ToString(), user.Id);
+                        await UserHelper.SendEmailConfirmationAsync(UserManager, Request.UrlReferrer.ToString(), user.Id);
                         return success("Account successfully created. Please check your inbox to confirm your email");
                     }
                 }

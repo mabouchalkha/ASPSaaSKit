@@ -1,4 +1,5 @@
 ﻿using StarterKit.Architecture.Bases;
+using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Mappers;
@@ -6,26 +7,30 @@ using StarterKit.Repositories;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace StarterKit.Controllers
 {
+    [Export]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     [Authorize]
     public class UserController : BaseController
     {
-        private UserRepository _userRepo;
+        private IUserRepository _userRepo;
 
-        public UserController()
+        [ImportingConstructor]
+        public UserController(IUserRepository userRepository)
         {
-            _userRepo = new UserRepository();
+            _userRepo = userRepository;
         }
 
         [HttpGet]
         public JsonResult Index()
         {
-            return success(string.Empty, new { entities = _userRepo.Index().MapToIndexUserViewModels() });
+            return success(string.Empty, new { entities = _userRepo.Index().ToList().MapToIndexUserViewModels() });
         }
 
         [HttpPut]
@@ -41,16 +46,17 @@ namespace StarterKit.Controllers
 
                     if (_userRepo.HasPendingChange(updatedUser))
                     {
-                        bool isUpdated = _userRepo.Update(updatedUser);
+                        updatedUser = _userRepo.Update(updatedUser);
 
-                        if (isUpdated)
-                        {
-                            return success("User successfully updated");
-                        }
-                        else
-                        {
-                            return unsuccess("Cannot save this user. Please refresh and try again");
-                        }
+                        return success("User successfully updated");
+                        //if (isUpdated)
+                        //{
+                        //    return success("User successfully updated");
+                        //}
+                        //else
+                        //{
+                        //    return unsuccess("Cannot save this user. Please refresh and try again");
+                        //}
                     }
                     else
                     {
@@ -75,16 +81,17 @@ namespace StarterKit.Controllers
 
                 if (currentUser.Id != id)
                 {
-                    bool isDeleted = _userRepo.Delete(id);
+                    _userRepo.Delete(id);
 
-                    if (isDeleted)
-                    {
-                        return success("User successfully deleted");
-                    }
-                    else
-                    {
-                        return unsuccess("User delete unsuccessfully. Please try again");
-                    }
+                    return success("User successfully deleted");
+                    //if (isDeleted)
+                    //{
+                    //    return success("User successfully deleted");
+                    //}
+                    //else
+                    //{
+                    //    return unsuccess("User delete unsuccessfully. Please try again");
+                    //}
                 }
                 else
                 {
@@ -126,16 +133,18 @@ namespace StarterKit.Controllers
 
                 if (result.Succeeded)
                 {
-                    bool hasCreated = _userRepo.Create(user);
+                    user = _userRepo.Create(user);
 
-                    if (hasCreated)
-                    {
-                        return success("User created successfully", null, new { id = user.Id });
-                    }
-                    else
-                    {
-                        return unsuccess("User creation failed");
-                    }
+                    return success("User created successfully", null, new { id = user.Id });
+
+                    //if (hasCreated)
+                    //{
+                    //    return success("User created successfully", null, new { id = user.Id });
+                    //}
+                    //else
+                    //{
+                    //    return unsuccess("User creation failed");
+                    //}
                 }
 
                 return unsuccess(string.Join("<br />", result.Errors));

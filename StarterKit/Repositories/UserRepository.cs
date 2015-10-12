@@ -10,14 +10,19 @@ using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using System.Web.Security;
 using StarterKit.DAL;
+using System.Data.Entity;
+using System.Linq.Expressions;
+using EntityFramework.DynamicFilters;
+using StarterKit.Helpers;
+using System.ComponentModel.Composition;
 
 namespace StarterKit.Repositories
 {
-    public class UserRepository : RepositoryTenantable, IBaseRepository<ApplicationUser, string>
+    [Export(typeof(IUserRepository))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class UserRepository : TenantableBaseRepository<ApplicationUser, string>, IUserRepository
     {
         private ApplicationUserManager _userManager;
-
-        public UserRepository() : base() { }
 
         public ApplicationUserManager UserManager
         {
@@ -25,32 +30,37 @@ namespace StarterKit.Repositories
             private set { _userManager = value; }
         }
 
-        public List<ApplicationUser> Index()
-        {
-            return context.Users.Where(u => u.EmailConfirmed == true).ToList();
-        }
+        //public override IEnumerable<ApplicationUser> Index()
+        //{
+        //    using (ApplicationDbContext entityContext = new ApplicationDbContext())
+        //        return entityContext.Users.Where(u => u.EmailConfirmed == true).ToArray().ToList();
+        //}
 
-        public ApplicationUser Read(string id)
-        {
-            return context.Users.FirstOrDefault(u => u.Id == id);
-        }
+        //public override ApplicationUser Read(string id)
+        //{
+        //    using (ApplicationDbContext entityContext = new ApplicationDbContext())
+        //        return entityContext.Users.FirstOrDefault(u => u.Id == id);
+        //}
 
-        public bool Create(ApplicationUser entity)
+        public override ApplicationUser Create(ApplicationUser entity)
         {
-            context.Users.Add(entity);
-            var changeCount = context.SaveChanges();
-
-            if (changeCount > 0)
+            using (ApplicationDbContext entityContext = new ApplicationDbContext())
             {
-                string token = UserManager.GenerateEmailConfirmationToken(entity.Id);
-                token = HttpUtility.UrlEncode(token);
-                UserManager.SendEmail(entity.Id, "Confirm Email", "Please confirm your email following this link : " + HttpContext.Current.Request.UrlReferrer + "#/confirmemail?userid=" + entity.Id + "&code=" + token);
-                UserManager.AddToRole(entity.Id, "User");
+                entityContext.Users.Add(entity);
+                var changeCount = entityContext.SaveChanges();
 
-                return true;
+                if (changeCount > 0)
+                {
+                    string token = UserManager.GenerateEmailConfirmationToken(entity.Id);
+                    token = HttpUtility.UrlEncode(token);
+                    UserManager.SendEmail(entity.Id, "Confirm Email", "Please confirm your email following this link : " + HttpContext.Current.Request.UrlReferrer + "#/confirmemail?userid=" + entity.Id + "&code=" + token);
+                    UserManager.AddToRole(entity.Id, "User");
+
+                    return entity;
+                }
+
+                return entity;
             }
-
-            return false;
         }
 
         public async Task<IdentityResult> ValidateUser(ApplicationUser entity)
@@ -58,34 +68,58 @@ namespace StarterKit.Repositories
             return await UserManager.UserValidator.ValidateAsync(entity);
         }
 
-        public bool Update(ApplicationUser entity)
-        {
-            return context.SaveChanges() > 0;
-        }
+        //public override ApplicationUser Update(ApplicationUser entity)
+        //{
+        //    using (ApplicationDbContext entityContext = new ApplicationDbContext())
+        //    {
+        //        entityContext.SaveChanges();
+        //        return entity;
+        //    }
+        //}
 
         public bool HasPendingChange(ApplicationUser entity)
         {
-            return context.ChangeTracker.HasChanges();
+            using (ApplicationDbContext entityContext = new ApplicationDbContext())
+                return entityContext.ChangeTracker.HasChanges();
         }
 
-        public bool Delete(string id)
-        {
-            ApplicationUser userToDelete = context.Users.FirstOrDefault(u => u.Id == id);
+        //public override void Delete(string id)
+        //{
+        //    using (ApplicationDbContext entityContext = new ApplicationDbContext())
+        //    {
+        //        ApplicationUser userToDelete = entityContext.Users.FirstOrDefault(u => u.Id == id);
 
-            if (userToDelete != null)
-            {
-                context.Users.Remove(userToDelete);
-                return context.SaveChanges() > 0;
-            }
-
-            return false;
-        }
+        //        if (userToDelete != null)
+        //        {
+        //            entityContext.Users.Remove(userToDelete);
+        //            entityContext.SaveChanges();
+        //        }
+        //    }
+        //}
 
         public bool EmailExit(string email)
         {
-            ApplicationUser user = context.Users.FirstOrDefault(u => u.Email == email);
+            using (ApplicationDbContext entityContext = new ApplicationDbContext())
+            {
+                ApplicationUser user = entityContext.Users.FirstOrDefault(u => u.Email == email);
+                return user != null;
+            }
+        }
 
-            return user != null;
+        protected override DbSet<ApplicationUser> DbSet(ApplicationDbContext entityContext)
+        {
+            return (DbSet<ApplicationUser>)entityContext.Users;
+        }
+
+        protected override Expression<Func<ApplicationUser, bool>> IdentifierPredicate(ApplicationDbContext entityContext, string id)
+        {
+            return (e => e.Id == id);
+        }
+
+        protected override void ActivateTenantCRUD(ApplicationDbContext entityContext)
+        {
+            entityContext.EnableFilter("Tenant");
+            entityContext.SetFilterScopedParameterValue("Tenant", "currentTenantId", TenantHelper.GetCurrentTenantId());
         }
     }
 }
