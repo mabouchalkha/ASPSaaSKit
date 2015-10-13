@@ -124,6 +124,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Stripe.net, Version=4.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stripe.net.4.2.1\lib\net40\Stripe.net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -224,6 +228,8 @@
     <Compile Include="Controllers\TenantController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DOM\ApplicationUser.cs" />
+    <Compile Include="DOM\Feature.cs" />
+    <Compile Include="DOM\Plan.cs" />
     <Compile Include="DOM\Tenant.cs" />
     <Compile Include="Extentions\DataExtensions.cs" />
     <Compile Include="Global.asax.cs">
