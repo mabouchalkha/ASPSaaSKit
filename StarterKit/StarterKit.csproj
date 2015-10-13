@@ -214,7 +214,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Architecture\Abstract\BaseRepository.cs" />
-    <Compile Include="Architecture\Abstract\TenantableBaseRepository.cs" />
+    <Compile Include="Architecture\Abstract\GenericRepository.cs" />
+    <Compile Include="Architecture\Abstract\GenericTenantableRepository.cs" />
     <Compile Include="Architecture\Interfaces\IBaseRepository.cs" />
     <Compile Include="Architecture\Interfaces\IIdentifiableEntity.cs" />
     <Compile Include="Architecture\Interfaces\ITenantable.cs" />

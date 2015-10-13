@@ -12,98 +12,62 @@ using StarterKit.Mappers;
 
 namespace StarterKit.Architecture.Abstract
 {
-    public abstract class BaseRepository<T, U, TKey> : IBaseRepository<T, TKey>
+    public abstract class BaseRepository<T, U, TKey>
         where T : class, IIdentifiableEntity<TKey>, new()
         where U : DbContext, new()
     {
-        protected abstract DbSet<T> DbSet(U entityContext);
         protected abstract Expression<Func<T, bool>> IdentifierPredicate(U entityContext, TKey id);
-        protected abstract void ActivateTenantCRUD(U entityContext);
-    
-        T AddEntity(U entityContext, T entity)
-        {
-            return DbSet(entityContext).Add(entity);
-        }
+        protected abstract DbSet<T> DbSet(U entityContext);
 
-        IEnumerable<T> GetEntities(U entityContext)
-        {
-            return DbSet(entityContext).ToFullyLoaded();
-        }
-
-        T GetEntity(U entityContext, TKey id)
+        private T GetEntity(U entityContext, TKey id)
         {
             return DbSet(entityContext).Where(IdentifierPredicate(entityContext, id)).FirstOrDefault();
         }
 
-        T UpdateEntity(U entityContext, T entity)
+        private T UpdateEntity(U entityContext, T entity)
         {
             var q = DbSet(entityContext).Where(IdentifierPredicate(entityContext, entity.EntityId));
             return q.FirstOrDefault();
         }
 
-        public virtual T Create(T entity)
+        private T AddEntity(U entityContext, T entity)
         {
-            using (U entityContext = new U())
-            {
-                ActivateTenantCRUD(entityContext);
-                T addedEntity = AddEntity(entityContext, entity);
-                entityContext.SaveChanges();
-                return addedEntity;
-            }
+            return DbSet(entityContext).Add(entity);
         }
 
-        public virtual void Delete(T entity)
+        private IEnumerable<T> GetEntities(U entityContext)
         {
-            using (U entityContext = new U())
-            {
-                ActivateTenantCRUD(entityContext);
-                entityContext.Entry<T>(entity).State = EntityState.Deleted;
-                entityContext.SaveChanges();
-            }
+            return DbSet(entityContext).ToFullyLoaded();
         }
 
-        public virtual void Delete(TKey id)
+        public T CreateGeneric(U context, T entity)
         {
-            using (U entityContext = new U())
-            {
-                ActivateTenantCRUD(entityContext);
-                T entity = GetEntity(entityContext, id);
-                entityContext.Entry<T>(entity).State = EntityState.Deleted;
-                entityContext.SaveChanges();
-            }
+            throw new NotImplementedException();
         }
 
-        public virtual IEnumerable<T> Index()
+        public void DeleteGeneric(U entityContext, T entity)
         {
-            using (U entityContext = new U())
-            {
-                ActivateTenantCRUD(entityContext);
-                return (GetEntities(entityContext)).ToArray().ToList();
-            }
+            throw new NotImplementedException();
         }
 
-        public virtual T Read(TKey id)
+        public void DeleteGeneric(U entityContext, TKey id)
         {
-            using (U entityContext = new U())
-            {
-                ActivateTenantCRUD(entityContext);
-                return GetEntity(entityContext, id);
-            }
-        }        
+            throw new NotImplementedException();
+        }
 
-        public virtual T Update(T entity)
+        public IEnumerable<T> IndexGeneric(U entityContext)
         {
-            using (U entityContext = new U())
-            {
-                ActivateTenantCRUD(entityContext);
-                T existingEntity = UpdateEntity(entityContext, entity);
+            throw new NotImplementedException();
+        }
 
-                // maybe a automapper
-                SimpleMapper.PropertyMap(entity, existingEntity);
+        public T ReadGeneric(U entityContext, TKey id)
+        {
+            throw new NotImplementedException();
+        }
 
-                entityContext.SaveChanges();
-                return existingEntity;
-            }
+        public T UpdateGeneric(U entityContext, T entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
