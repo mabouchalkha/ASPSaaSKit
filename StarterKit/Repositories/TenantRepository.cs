@@ -1,43 +1,28 @@
-﻿using StarterKit.Architecture.Abstract;
+﻿using EntityFramework.DynamicFilters;
+using StarterKit.Architecture.Abstract;
 using StarterKit.Architecture.Interfaces;
 using StarterKit.DAL;
 using StarterKit.DOM;
+using StarterKit.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel.Composition;
+using System.Data.Entity;
+using System.Linq.Expressions;
 
 namespace StarterKit.Repositories
 {
-    public class TenantRepository : RepositoryTenantable, IBaseRepository<Tenant, Guid>
+    [Export(typeof(ITenantRepository))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class TenantRepository : GenericTenantableRepository<Tenant, ApplicationDbContext, Guid>, ITenantRepository
     {
-        public TenantRepository() :base() { }
-
-        public List<Tenant> Index()
+        protected override DbSet<Tenant> DbSet(ApplicationDbContext entityContext)
         {
-            return context.Tenants.ToList();
+            return entityContext.Tenants;
         }
 
-        public Tenant Read(Guid id)
+        protected override Expression<Func<Tenant, bool>> IdentifierPredicate(ApplicationDbContext entityContext, Guid id)
         {
-            return context.Tenants.FirstOrDefault(c => c.Id == id);
-        }
-
-        public bool Create(Tenant entity)
-        {
-            context.Tenants.Add(entity);
-            int changeCount = context.SaveChanges();
-
-            return changeCount > 0;
-        }
-
-        public bool Update(Tenant entity)
-        {
-            return context.SaveChanges() > 0;
-        }
-
-        public bool Delete(Guid id)
-        {
-            throw new NotImplementedException();
+            return (e => e.Id == id);
         }
     }
 }

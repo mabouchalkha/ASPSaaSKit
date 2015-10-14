@@ -2,12 +2,24 @@
 
 namespace StarterKit.Architecture.Interfaces
 {
-    public interface IBaseRepository<T, TKey>
+    public interface IBaseRepository
     {
-        List<T> Index();
+
+    }
+
+    public interface IBaseRepository<T, TKey> : IBaseRepository
+        where T : class, new() 
+    {
+        IEnumerable<T> Index();
+
         T Read(TKey id);
-        bool Create(T entity);
-        bool Update(T entity);
-        bool Delete(TKey id);
+
+        T Create(T entity);
+
+        T Update(T entity);
+
+        void Delete(TKey id);
+
+        void Delete(T entity);
     }
 }

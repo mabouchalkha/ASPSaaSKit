@@ -1,22 +1,27 @@
 ﻿using StarterKit.Architecture.Bases;
+using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Mappers;
 using StarterKit.Repositories;
 using StarterKit.Utils;
 using System;
+using System.ComponentModel.Composition;
 using System.Web.Mvc;
 
 namespace StarterKit.Controllers
 {
+    [Export]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     [Authorize(Roles = "Owner, Admin")]
     public class TenantController : BaseController
     {
-        private TenantRepository _tenantRepo;
+        private ITenantRepository _tenantRepo;
 
-        public TenantController()
+        [ImportingConstructor]
+        public TenantController(ITenantRepository tenantRepository)
         {
-            _tenantRepo = new TenantRepository();
+            _tenantRepo = tenantRepository;
         }
 
         [HttpGet]
@@ -42,16 +47,17 @@ namespace StarterKit.Controllers
                     if (databaseTenant != null)
                     {
                         databaseTenant.UpdateUiTenantToDatabase(tenant);
-                        bool isUpdated = _tenantRepo.Update(databaseTenant);
+                        databaseTenant = _tenantRepo.Update(databaseTenant);
 
-                        if (isUpdated)
-                        {
-                            return success("Account successfully updated");
-                        }
-                        else
-                        {
-                            return unsuccess("Cannot save this account. Please refresh and try again");
-                        }
+                        return success("Account successfully updated");
+                        //if (isUpdated)
+                        //{
+                        //    return success("Account successfully updated");
+                        //}
+                        //else
+                        //{
+                        //    return unsuccess("Cannot save this account. Please refresh and try again");
+                        //}
                     }
                     else
                     {

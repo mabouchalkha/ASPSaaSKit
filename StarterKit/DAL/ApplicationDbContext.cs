@@ -17,8 +17,6 @@ namespace StarterKit.DAL
             Database.Initialize(false);
         }
 
-        public DbSet<Client> Clients { get; set; }
-        public DbSet<Contact> Contacts { get; set; }
         public DbSet<Tenant> Tenants { get; set; }
 
         public static ApplicationDbContext Create()
@@ -32,6 +30,11 @@ namespace StarterKit.DAL
         {
             modelBuilder.Filter("Tenant", (ITenantable e, Guid currentTenantId) => e.TenantId == currentTenantId, null);
             modelBuilder.DisableFilterGlobally("Tenant");
+
+            modelBuilder.Ignore<IIdentifiableEntity>();
+            modelBuilder.Entity<Tenant>().HasKey<Guid>(e => e.Id).Ignore(e => e.EntityId);
+            modelBuilder.Entity<ApplicationUser>().HasKey<string>(e => e.Id).Ignore(e => e.EntityId);
+
             base.OnModelCreating(modelBuilder);
         }
 

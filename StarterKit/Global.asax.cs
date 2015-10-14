@@ -1,11 +1,17 @@
-﻿using StarterKit.Utils;
+﻿using StarterKit.Architecture;
+using StarterKit.Utils;
 using System;
+using System.ComponentModel.Composition.Hosting;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
+using Stripe;
+using System.Configuration;
+using StarterKit.Architecture.MEF;
 
 namespace StarterKit
 {
@@ -19,10 +25,13 @@ namespace StarterKit
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            //if (!HttpContext.Current.IsDebuggingEnabled)
-            //{
-            //    Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
-            //}
+            StripeConfiguration.SetApiKey(ConfigurationManager.AppSettings["stripeSecretKey"]);
+
+            AggregateCatalog catalog = new AggregateCatalog();
+            catalog.Catalogs.Add(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
+            CompositionContainer container = MEFLoader.Init(catalog.Catalogs);
+
+            DependencyResolver.SetResolver(new MefDependencyResolver(container));
         }
 
         void Application_Error(object sender, EventArgs e)

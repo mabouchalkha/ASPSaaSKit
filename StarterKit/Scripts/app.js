@@ -2,6 +2,7 @@
     //angular modules
     'ngResource',
     //3rd party angular modules
+    'angular-stripe',
     'ui.router',
     'ui.bootstrap',
     'ui.grid',
@@ -23,7 +24,7 @@
     }],
 });
 
-angular.module('starterKit').config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$injector', function ($stateProvider, $urlRouterProvider, $httpProvider, $injector) {
+angular.module('starterKit').config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'stripeProvider', '$injector', function ($stateProvider, $urlRouterProvider, $httpProvider, stripeProvider, $injector) {
     $stateProvider
         .state('dashboard', {
             url: '/',
@@ -55,6 +56,11 @@ angular.module('starterKit').config(['$stateProvider', '$urlRouterProvider', '$h
             templateUrl: '/Scripts/Pages/Account/account.html',
             controller: 'accountController as vm',
             resolve: $injector.get('accountResolver').resolve
+        })
+        .state('subscription', {
+            url: '/subscription',
+            templateUrl: '/Scripts/Pages/Subscription/subscription.html',
+            controller: 'subscriptionController as vm'
         })
         .state('user', {
             abstract: true,
@@ -94,6 +100,9 @@ angular.module('starterKit').config(['$stateProvider', '$urlRouterProvider', '$h
     // set default routes when no path specified
     $urlRouterProvider.when('', '/');
     $urlRouterProvider.when('/', '/');
+
+    // config for stripe
+    stripeProvider.setPublishableKey('pk_test_aJr8G3tbyDyvpscTSgpyn0E5');
 
     $httpProvider.interceptors.push('HttpResponseInterceptor');
 }]);

@@ -10,14 +10,19 @@ using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using System.Web.Security;
 using StarterKit.DAL;
+using System.Data.Entity;
+using System.Linq.Expressions;
+using EntityFramework.DynamicFilters;
+using StarterKit.Helpers;
+using System.ComponentModel.Composition;
 
 namespace StarterKit.Repositories
 {
-    public class UserRepository : RepositoryTenantable, IBaseRepository<ApplicationUser, string>
+    [Export(typeof(IUserRepository))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class UserRepository : GenericTenantableRepository<ApplicationUser, ApplicationDbContext, string>, IUserRepository
     {
         private ApplicationUserManager _userManager;
-
-        public UserRepository() : base() { }
 
         public ApplicationUserManager UserManager
         {
@@ -25,32 +30,14 @@ namespace StarterKit.Repositories
             private set { _userManager = value; }
         }
 
-        public List<ApplicationUser> Index()
+        protected override DbSet<ApplicationUser> DbSet(ApplicationDbContext entityContext)
         {
-            return context.Users.Where(u => u.EmailConfirmed == true).ToList();
+            return (DbSet<ApplicationUser>)entityContext.Users;
         }
 
-        public ApplicationUser Read(string id)
+        protected override Expression<Func<ApplicationUser, bool>> IdentifierPredicate(ApplicationDbContext entityContext, string id)
         {
-            return context.Users.FirstOrDefault(u => u.Id == id);
-        }
-
-        public bool Create(ApplicationUser entity)
-        {
-            context.Users.Add(entity);
-            var changeCount = context.SaveChanges();
-
-            if (changeCount > 0)
-            {
-                string token = UserManager.GenerateEmailConfirmationToken(entity.Id);
-                token = HttpUtility.UrlEncode(token);
-                UserManager.SendEmail(entity.Id, "Confirm Email", "Please confirm your email following this link : " + HttpContext.Current.Request.UrlReferrer + "#/confirmemail?userid=" + entity.Id + "&code=" + token);
-                UserManager.AddToRole(entity.Id, "User");
-
-                return true;
-            }
-
-            return false;
+            return (e => e.Id == id);
         }
 
         public async Task<IdentityResult> ValidateUser(ApplicationUser entity)
@@ -58,34 +45,45 @@ namespace StarterKit.Repositories
             return await UserManager.UserValidator.ValidateAsync(entity);
         }
 
-        public bool Update(ApplicationUser entity)
-        {
-            return context.SaveChanges() > 0;
-        }
-
-        public bool HasPendingChange(ApplicationUser entity)
-        {
-            return context.ChangeTracker.HasChanges();
-        }
-
-        public bool Delete(string id)
-        {
-            ApplicationUser userToDelete = context.Users.FirstOrDefault(u => u.Id == id);
-
-            if (userToDelete != null)
-            {
-                context.Users.Remove(userToDelete);
-                return context.SaveChanges() > 0;
-            }
-
-            return false;
-        }
-
         public bool EmailExit(string email)
         {
-            ApplicationUser user = context.Users.FirstOrDefault(u => u.Email == email);
-
-            return user != null;
+            using (ApplicationDbContext entityContext = this.GetContext())
+            {
+                ApplicationUser user = entityContext.Users.FirstOrDefault(u => u.Email == email);
+                return user != null;
+            }
         }
+
+        public override ApplicationUser Create(ApplicationUser entity)
+        {
+            using (ApplicationDbContext entityContext = this.GetContext())
+            {
+                entityContext.Users.Add(entity);
+                var changeCount = entityContext.SaveChanges();
+
+                if (changeCount > 0)
+                {
+                    string token = UserManager.GenerateEmailConfirmationToken(entity.Id);
+                    token = HttpUtility.UrlEncode(token);
+                    UserManager.SendEmail(entity.Id, "Confirm Email", "Please confirm your email following this link : " + HttpContext.Current.Request.UrlReferrer + "#/confirmemail?userid=" + entity.Id + "&code=" + token);
+                    UserManager.AddToRole(entity.Id, "User");
+
+                    return entity;
+                }
+
+                return entity;
+            }
+        }
+
+        //public override ApplicationUser Update(ApplicationUser entity)
+        //{
+        //    using (ApplicationDbContext entityContext = this.GetContext())
+        //    {
+        //        entityContext.Entry(entity).State = EntityState.Modified;
+        //        entityContext.SaveChanges();
+
+        //        return entity;                
+        //    }
+        //}
     }
 }
