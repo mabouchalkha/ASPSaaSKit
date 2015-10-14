@@ -10,7 +10,6 @@ namespace StarterKit.Architecture.Interfaces
 {
     public interface IUserRepository : IBaseRepository<ApplicationUser, string>
     {
-        bool HasPendingChange(ApplicationUser entity);
         Task<IdentityResult> ValidateUser(ApplicationUser entity);
         bool EmailExit(string email);
     }

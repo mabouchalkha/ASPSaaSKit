@@ -11,6 +11,7 @@ using System.Web.Routing;
 using System.Web.Script.Serialization;
 using Stripe;
 using System.Configuration;
+using StarterKit.Architecture.MEF;
 
 namespace StarterKit
 {

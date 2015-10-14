@@ -40,34 +40,43 @@ namespace StarterKit.Architecture.Abstract
             return DbSet(entityContext).ToFullyLoaded();
         }
 
-        public T CreateGeneric(U context, T entity)
+        public T CreateGeneric(U entityContext, T entity)
         {
-            throw new NotImplementedException();
+            T addedEntity = AddEntity(entityContext, entity);
+            entityContext.SaveChanges();
+
+            return addedEntity;
         }
 
         public void DeleteGeneric(U entityContext, T entity)
         {
-            throw new NotImplementedException();
+            entityContext.Entry<T>(entity).State = EntityState.Deleted;
+            entityContext.SaveChanges();
         }
 
         public void DeleteGeneric(U entityContext, TKey id)
         {
-            throw new NotImplementedException();
+            T entity = GetEntity(entityContext, id);
+            entityContext.Entry<T>(entity).State = EntityState.Deleted;
+            entityContext.SaveChanges();
         }
 
         public IEnumerable<T> IndexGeneric(U entityContext)
         {
-            throw new NotImplementedException();
+            return (GetEntities(entityContext)).ToArray().ToList();
         }
 
         public T ReadGeneric(U entityContext, TKey id)
         {
-            throw new NotImplementedException();
+            return GetEntity(entityContext, id);
         }
 
         public T UpdateGeneric(U entityContext, T entity)
         {
-            throw new NotImplementedException();
+            entityContext.Entry(entity).State = EntityState.Modified;
+            entityContext.SaveChanges();
+
+            return entity;  
         }
     }
 }

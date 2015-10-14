@@ -12,9 +12,9 @@ namespace StarterKit.DOM
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public string StripeCustomerId { get; set; }
-        public DateTime ActiveUntil { get; set; }
-        public DateTime CreditCardExpires { get; set; }
+        //public string StripeCustomerId { get; set; }
+        //public DateTime? ActiveUntil { get; set; }
+        //public DateTime? CreditCardExpires { get; set; }
         public bool IsTrial { get; set; }
 
         public Guid EntityId

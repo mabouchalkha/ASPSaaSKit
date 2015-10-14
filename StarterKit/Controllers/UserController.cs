@@ -43,25 +43,9 @@ namespace StarterKit.Controllers
                 if (user != null)
                 {
                     ApplicationUser updatedUser = userToUpdate.MapToApplicationUser(user);
+                    updatedUser = _userRepo.Update(updatedUser);
 
-                    if (_userRepo.HasPendingChange(updatedUser))
-                    {
-                        updatedUser = _userRepo.Update(updatedUser);
-
-                        return success("User successfully updated");
-                        //if (isUpdated)
-                        //{
-                        //    return success("User successfully updated");
-                        //}
-                        //else
-                        //{
-                        //    return unsuccess("Cannot save this user. Please refresh and try again");
-                        //}
-                    }
-                    else
-                    {
-                        return info("User has no pending change");
-                    }
+                    return success("User successfully updated");
                 }
                 else
                 {

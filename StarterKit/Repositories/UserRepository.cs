@@ -45,17 +45,9 @@ namespace StarterKit.Repositories
             return await UserManager.UserValidator.ValidateAsync(entity);
         }
 
-        public bool HasPendingChange(ApplicationUser entity)
-        {
-            using (ApplicationDbContext entityContext = new ApplicationDbContext())
-            {
-                return entityContext.ChangeTracker.HasChanges();
-            }
-        }
-
         public bool EmailExit(string email)
         {
-            using (ApplicationDbContext entityContext = new ApplicationDbContext())
+            using (ApplicationDbContext entityContext = this.GetContext())
             {
                 ApplicationUser user = entityContext.Users.FirstOrDefault(u => u.Email == email);
                 return user != null;
@@ -82,5 +74,16 @@ namespace StarterKit.Repositories
                 return entity;
             }
         }
+
+        //public override ApplicationUser Update(ApplicationUser entity)
+        //{
+        //    using (ApplicationDbContext entityContext = this.GetContext())
+        //    {
+        //        entityContext.Entry(entity).State = EntityState.Modified;
+        //        entityContext.SaveChanges();
+
+        //        return entity;                
+        //    }
+        //}
     }
 }

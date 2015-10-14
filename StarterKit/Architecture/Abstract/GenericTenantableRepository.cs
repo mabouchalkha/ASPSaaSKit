@@ -34,7 +34,7 @@ namespace StarterKit.Architecture.Abstract
 
         public virtual void Delete(T entity)
         {
-            using (U entityContext = new U())
+            using (U entityContext = this.GetContext())
             {
                 base.DeleteGeneric(entityContext, entity);
             }
@@ -50,7 +50,7 @@ namespace StarterKit.Architecture.Abstract
 
         public virtual IEnumerable<T> Index()
         {
-            using (U entityContext = new U())
+            using (U entityContext = this.GetContext())
             {
                 return base.IndexGeneric(entityContext);
             }
@@ -66,7 +66,7 @@ namespace StarterKit.Architecture.Abstract
 
         public virtual T Update(T entity)
         {
-            using (U entityContext = new U())
+            using (U entityContext = this.GetContext())
             {
                 return base.UpdateGeneric(entityContext, entity);
             }

@@ -221,16 +221,14 @@
     <Compile Include="Architecture\Interfaces\ITenantable.cs" />
     <Compile Include="Architecture\Interfaces\IUserRepository.cs" />
     <Compile Include="Architecture\Interfaces\ITenantRepository.cs" />
-    <Compile Include="Architecture\MefDependencyResolver.cs" />
-    <Compile Include="Architecture\MefExtensions.cs" />
+    <Compile Include="Architecture\MEF\MefDependencyResolver.cs" />
+    <Compile Include="Architecture\MEF\MefExtensions.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Architecture\Bases\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TenantController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DOM\ApplicationUser.cs" />
-    <Compile Include="DOM\Feature.cs" />
-    <Compile Include="DOM\Plan.cs" />
     <Compile Include="DOM\Tenant.cs" />
     <Compile Include="Extentions\DataExtensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -241,11 +239,7 @@
     <Compile Include="Mappers\SimpleMapper.cs" />
     <Compile Include="Mappers\TenantMapper.cs" />
     <Compile Include="Mappers\UserMapper.cs" />
-    <Compile Include="Architecture\MEFLoader.cs" />
-    <Compile Include="Migrations\201510111943294_Init.cs" />
-    <Compile Include="Migrations\201510111943294_Init.Designer.cs">
-      <DependentUpon>201510111943294_Init.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Architecture\MEF\MEFLoader.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\TenantRepository.cs" />
@@ -373,11 +367,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201510111943294_Init.resx">
-      <DependentUpon>201510111943294_Init.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 
-namespace StarterKit.Architecture
+namespace StarterKit.Architecture.MEF
 {
     public static class MEFLoader
     {

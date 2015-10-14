@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarterKit.Architecture
+namespace StarterKit.Architecture.MEF
 {
     public static class MefExtensions
     {
