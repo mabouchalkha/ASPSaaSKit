@@ -20,7 +20,7 @@ namespace StarterKit.Repositories
 {
     [Export(typeof(IUserRepository))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class UserRepository : TenantableBaseRepository<ApplicationUser, string>, IUserRepository
+    public class UserRepository : GenericTenantableRepository<ApplicationUser, ApplicationDbContext, string>, IUserRepository
     {
         private ApplicationUserManager _userManager;
 
@@ -30,21 +30,41 @@ namespace StarterKit.Repositories
             private set { _userManager = value; }
         }
 
-        //public override IEnumerable<ApplicationUser> Index()
-        //{
-        //    using (ApplicationDbContext entityContext = new ApplicationDbContext())
-        //        return entityContext.Users.Where(u => u.EmailConfirmed == true).ToArray().ToList();
-        //}
+        protected override DbSet<ApplicationUser> DbSet(ApplicationDbContext entityContext)
+        {
+            return (DbSet<ApplicationUser>)entityContext.Users;
+        }
 
-        //public override ApplicationUser Read(string id)
-        //{
-        //    using (ApplicationDbContext entityContext = new ApplicationDbContext())
-        //        return entityContext.Users.FirstOrDefault(u => u.Id == id);
-        //}
+        protected override Expression<Func<ApplicationUser, bool>> IdentifierPredicate(ApplicationDbContext entityContext, string id)
+        {
+            return (e => e.Id == id);
+        }
+
+        public async Task<IdentityResult> ValidateUser(ApplicationUser entity)
+        {
+            return await UserManager.UserValidator.ValidateAsync(entity);
+        }
+
+        public bool HasPendingChange(ApplicationUser entity)
+        {
+            using (ApplicationDbContext entityContext = new ApplicationDbContext())
+            {
+                return entityContext.ChangeTracker.HasChanges();
+            }
+        }
+
+        public bool EmailExit(string email)
+        {
+            using (ApplicationDbContext entityContext = new ApplicationDbContext())
+            {
+                ApplicationUser user = entityContext.Users.FirstOrDefault(u => u.Email == email);
+                return user != null;
+            }
+        }
 
         public override ApplicationUser Create(ApplicationUser entity)
         {
-            using (ApplicationDbContext entityContext = new ApplicationDbContext())
+            using (ApplicationDbContext entityContext = this.GetContext())
             {
                 entityContext.Users.Add(entity);
                 var changeCount = entityContext.SaveChanges();
@@ -61,65 +81,6 @@ namespace StarterKit.Repositories
 
                 return entity;
             }
-        }
-
-        public async Task<IdentityResult> ValidateUser(ApplicationUser entity)
-        {
-            return await UserManager.UserValidator.ValidateAsync(entity);
-        }
-
-        //public override ApplicationUser Update(ApplicationUser entity)
-        //{
-        //    using (ApplicationDbContext entityContext = new ApplicationDbContext())
-        //    {
-        //        entityContext.SaveChanges();
-        //        return entity;
-        //    }
-        //}
-
-        public bool HasPendingChange(ApplicationUser entity)
-        {
-            using (ApplicationDbContext entityContext = new ApplicationDbContext())
-                return entityContext.ChangeTracker.HasChanges();
-        }
-
-        //public override void Delete(string id)
-        //{
-        //    using (ApplicationDbContext entityContext = new ApplicationDbContext())
-        //    {
-        //        ApplicationUser userToDelete = entityContext.Users.FirstOrDefault(u => u.Id == id);
-
-        //        if (userToDelete != null)
-        //        {
-        //            entityContext.Users.Remove(userToDelete);
-        //            entityContext.SaveChanges();
-        //        }
-        //    }
-        //}
-
-        public bool EmailExit(string email)
-        {
-            using (ApplicationDbContext entityContext = new ApplicationDbContext())
-            {
-                ApplicationUser user = entityContext.Users.FirstOrDefault(u => u.Email == email);
-                return user != null;
-            }
-        }
-
-        protected override DbSet<ApplicationUser> DbSet(ApplicationDbContext entityContext)
-        {
-            return (DbSet<ApplicationUser>)entityContext.Users;
-        }
-
-        protected override Expression<Func<ApplicationUser, bool>> IdentifierPredicate(ApplicationDbContext entityContext, string id)
-        {
-            return (e => e.Id == id);
-        }
-
-        protected override void ActivateTenantCRUD(ApplicationDbContext entityContext)
-        {
-            entityContext.EnableFilter("Tenant");
-            entityContext.SetFilterScopedParameterValue("Tenant", "currentTenantId", TenantHelper.GetCurrentTenantId());
         }
     }
 }

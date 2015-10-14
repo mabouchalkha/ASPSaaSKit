@@ -1,27 +1,24 @@
 ﻿using EntityFramework.DynamicFilters;
 using StarterKit.Architecture.Interfaces;
 using StarterKit.DAL;
-using StarterKit.Extentions;
 using StarterKit.Helpers;
+using System.Data.Entity;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using StarterKit.Extentions;
+using StarterKit.Mappers;
 
 namespace StarterKit.Architecture.Abstract
 {
-    public abstract class GenericTenantableRepository<T, U, TKey> : BaseRepository<T, U, TKey>, IBaseRepository<T, TKey>
+    public abstract class GenericRepository<T, U, TKey> : BaseRepository<T, U, TKey>, IBaseRepository<T, TKey>
         where T : class, IIdentifiableEntity<TKey>, new()
         where U : DbContext, new()
-    {
-        protected U GetContext()
+    {    
+        protected U GetContext ()
         {
-            U context = new U();
-            context.EnableFilter("Tenant");
-            context.SetFilterScopedParameterValue("Tenant", "currentTenantId", TenantHelper.GetCurrentTenantId());
-
-            return context;
+            return new U();
         }
 
         public virtual T Create(T entity)
@@ -34,7 +31,7 @@ namespace StarterKit.Architecture.Abstract
 
         public virtual void Delete(T entity)
         {
-            using (U entityContext = new U())
+            using (U entityContext = this.GetContext())
             {
                 base.DeleteGeneric(entityContext, entity);
             }
@@ -50,7 +47,7 @@ namespace StarterKit.Architecture.Abstract
 
         public virtual IEnumerable<T> Index()
         {
-            using (U entityContext = new U())
+            using (U entityContext = this.GetContext())
             {
                 return base.IndexGeneric(entityContext);
             }
@@ -62,11 +59,11 @@ namespace StarterKit.Architecture.Abstract
             {
                 return base.ReadGeneric(entityContext, id);
             }
-        }
+        }        
 
         public virtual T Update(T entity)
         {
-            using (U entityContext = new U())
+            using (U entityContext = this.GetContext())
             {
                 return base.UpdateGeneric(entityContext, entity);
             }
