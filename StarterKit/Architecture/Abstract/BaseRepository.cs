@@ -21,13 +21,12 @@ namespace StarterKit.Architecture.Abstract
 
         private T GetEntity(U entityContext, TKey id)
         {
-            return DbSet(entityContext).Where(IdentifierPredicate(entityContext, id)).FirstOrDefault();
+            return DbSet(entityContext).FirstOrDefault(IdentifierPredicate(entityContext, id));
         }
 
         private T UpdateEntity(U entityContext, T entity)
         {
-            var q = DbSet(entityContext).Where(IdentifierPredicate(entityContext, entity.EntityId));
-            return q.FirstOrDefault();
+            return DbSet(entityContext).FirstOrDefault(IdentifierPredicate(entityContext, entity.EntityId));
         }
 
         private T AddEntity(U entityContext, T entity)
@@ -35,9 +34,18 @@ namespace StarterKit.Architecture.Abstract
             return DbSet(entityContext).Add(entity);
         }
 
-        private IEnumerable<T> GetEntities(U entityContext)
+        private IEnumerable<T> GetEntities(U entityContext, params Expression<Func<T, object>>[] includeProperties)
         {
-            return DbSet(entityContext).ToFullyLoaded();
+            var dbSet = DbSet(entityContext);
+
+            if (includeProperties != null)
+            {
+                foreach (var property in includeProperties)
+                {
+                    dbSet.Include(property);
+                }
+            }
+            return dbSet.ToFullyLoaded();
         }
 
         public T CreateGeneric(U entityContext, T entity)
@@ -61,9 +69,9 @@ namespace StarterKit.Architecture.Abstract
             entityContext.SaveChanges();
         }
 
-        public IEnumerable<T> IndexGeneric(U entityContext)
+        public IEnumerable<T> IndexGeneric(U entityContext, params Expression<Func<T, object>>[] includeProperties)
         {
-            return (GetEntities(entityContext)).ToArray().ToList();
+            return (GetEntities(entityContext, includeProperties)).ToArray().ToList();
         }
 
         public T ReadGeneric(U entityContext, TKey id)

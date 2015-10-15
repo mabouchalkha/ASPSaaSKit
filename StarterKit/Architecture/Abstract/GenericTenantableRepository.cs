@@ -20,6 +20,7 @@ namespace StarterKit.Architecture.Abstract
             U context = new U();
             context.EnableFilter("Tenant");
             context.SetFilterScopedParameterValue("Tenant", "currentTenantId", TenantHelper.GetCurrentTenantId());
+            context.Database.Log = Console.Write;
 
             return context;
         }
@@ -48,11 +49,11 @@ namespace StarterKit.Architecture.Abstract
             }
         }
 
-        public virtual IEnumerable<T> Index()
+        public virtual IEnumerable<T> Index(params Expression<Func<T, object>>[] includeProperties)
         {
             using (U entityContext = this.GetContext())
             {
-                return base.IndexGeneric(entityContext);
+                return base.IndexGeneric(entityContext, includeProperties);
             }
         }
 

@@ -15,10 +15,13 @@ namespace StarterKit.Architecture.Abstract
     public abstract class GenericRepository<T, U, TKey> : BaseRepository<T, U, TKey>, IBaseRepository<T, TKey>
         where T : class, IIdentifiableEntity<TKey>, new()
         where U : DbContext, new()
-    {    
-        protected U GetContext ()
+    {
+        protected U GetContext()
         {
-            return new U();
+            U context = new U();
+            context.Database.Log = Console.Write;
+
+            return context;
         }
 
         public virtual T Create(T entity)
@@ -45,11 +48,11 @@ namespace StarterKit.Architecture.Abstract
             }
         }
 
-        public virtual IEnumerable<T> Index()
+        public virtual IEnumerable<T> Index(params Expression<Func<T, object>>[] includeProperties)
         {
             using (U entityContext = this.GetContext())
             {
-                return base.IndexGeneric(entityContext);
+                return base.IndexGeneric(entityContext, includeProperties);
             }
         }
 

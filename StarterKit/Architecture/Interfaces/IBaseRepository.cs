@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace StarterKit.Architecture.Interfaces
 {
@@ -10,7 +12,7 @@ namespace StarterKit.Architecture.Interfaces
     public interface IBaseRepository<T, TKey> : IBaseRepository
         where T : class, new() 
     {
-        IEnumerable<T> Index();
+        IEnumerable<T> Index(params Expression<Func<T, object>>[] includeProperties);
 
         T Read(TKey id);
 

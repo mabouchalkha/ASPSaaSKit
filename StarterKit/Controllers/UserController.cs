@@ -30,7 +30,7 @@ namespace StarterKit.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            return success(string.Empty, new { entities = _userRepo.Index().ToList().MapToIndexUserViewModels() });
+            return success(string.Empty, new { entities = _userRepo.Index(u => u.Roles).ToList().MapToIndexUserViewModels() });
         }
 
         [HttpPut]
