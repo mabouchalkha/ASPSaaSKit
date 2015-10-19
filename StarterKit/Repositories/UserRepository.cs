@@ -15,6 +15,7 @@ using System.Linq.Expressions;
 using EntityFramework.DynamicFilters;
 using StarterKit.Helpers;
 using System.ComponentModel.Composition;
+using StarterKit.Repositories.Interfaces;
 
 namespace StarterKit.Repositories
 {
@@ -75,15 +76,9 @@ namespace StarterKit.Repositories
             }
         }
 
-        //public override ApplicationUser Update(ApplicationUser entity)
-        //{
-        //    using (ApplicationDbContext entityContext = this.GetContext())
-        //    {
-        //        entityContext.Entry(entity).State = EntityState.Modified;
-        //        entityContext.SaveChanges();
-
-        //        return entity;                
-        //    }
-        //}
+        public ApplicationUserManager GetCurrentUser()
+        {
+            return UserManager;
+        }
     }
 }

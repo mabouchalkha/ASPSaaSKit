@@ -20,18 +20,14 @@ namespace StarterKit.DOM
             return userIdentity;
         }
 
-        [Required]
-        [ForeignKey("Tenant")]
         public Guid TenantId { get; set; }
 
-        [ForeignKey("TenantId")]
         public Tenant Tenant { get; set; }
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
-        [NotMapped]
         public string FullName
         {
             get

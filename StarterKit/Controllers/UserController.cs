@@ -4,6 +4,7 @@ using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Mappers;
 using StarterKit.Repositories;
+using StarterKit.Repositories.Interfaces;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
 using System.Collections.Generic;
@@ -19,18 +20,18 @@ namespace StarterKit.Controllers
     [Authorize]
     public class UserController : BaseController
     {
-        private IUserRepository _userRepo;
+        private IUserRepository _userRepository;
 
         [ImportingConstructor]
         public UserController(IUserRepository userRepository)
         {
-            _userRepo = userRepository;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
         public JsonResult Index()
         {
-            return success(string.Empty, new { entities = _userRepo.Index().ToList().MapToIndexUserViewModels() });
+            return success(string.Empty, new { entities = _userRepository.Index(u => u.Roles).ToList().MapToIndexUserViewModels() });
         }
 
         [HttpPut]
@@ -38,12 +39,12 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = _userRepo.Read(userToUpdate.Id);
+                ApplicationUser user = _userRepository.Read(userToUpdate.Id);
 
                 if (user != null)
                 {
                     ApplicationUser updatedUser = userToUpdate.MapToApplicationUser(user);
-                    updatedUser = _userRepo.Update(updatedUser);
+                    updatedUser = _userRepository.Update(updatedUser);
 
                     return success("User successfully updated");
                 }
@@ -65,17 +66,9 @@ namespace StarterKit.Controllers
 
                 if (currentUser.Id != id)
                 {
-                    _userRepo.Delete(id);
+                    _userRepository.Delete(id);
 
                     return success("User successfully deleted");
-                    //if (isDeleted)
-                    //{
-                    //    return success("User successfully deleted");
-                    //}
-                    //else
-                    //{
-                    //    return unsuccess("User delete unsuccessfully. Please try again");
-                    //}
                 }
                 else
                 {
@@ -91,7 +84,7 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = _userRepo.Read(id);
+                ApplicationUser user = _userRepository.Read(id);
 
                 if (user != null)
                 {
@@ -113,11 +106,11 @@ namespace StarterKit.Controllers
             {
                 ApplicationUser user = newUser.MapToApplicationUser();
 
-                var result = await _userRepo.ValidateUser(user);
+                var result = await _userRepository.ValidateUser(user);
 
                 if (result.Succeeded)
                 {
-                    user = _userRepo.Create(user);
+                    user = _userRepository.Create(user);
 
                     return success("User created successfully", null, new { id = user.Id });
 
@@ -146,9 +139,9 @@ namespace StarterKit.Controllers
 
                 foreach (string email in emailCollection)
                 {
-                    if (!_userRepo.EmailExit(email))
+                    if (!_userRepository.EmailExit(email))
                     {
-                        _userRepo.Create(new ApplicationUser() { Email = email, UserName = email });
+                        _userRepository.Create(new ApplicationUser() { Email = email, UserName = email });
                     }
                 }
 

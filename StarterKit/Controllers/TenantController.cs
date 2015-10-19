@@ -4,6 +4,7 @@ using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Mappers;
 using StarterKit.Repositories;
+using StarterKit.Repositories.Interfaces;
 using StarterKit.Utils;
 using System;
 using System.ComponentModel.Composition;
@@ -16,19 +17,19 @@ namespace StarterKit.Controllers
     [Authorize(Roles = "Owner, Admin")]
     public class TenantController : BaseController
     {
-        private ITenantRepository _tenantRepo;
+        private ITenantRepository _tenantRepository;
 
         [ImportingConstructor]
         public TenantController(ITenantRepository tenantRepository)
         {
-            _tenantRepo = tenantRepository;
+            _tenantRepository = tenantRepository;
         }
 
         [HttpGet]
         public JsonResult Read()
         {
             Guid currentTenantId = TenantHelper.GetCurrentTenantId();
-            Tenant currentTenant = _tenantRepo.Read(currentTenantId);
+            Tenant currentTenant = _tenantRepository.Read(currentTenantId);
 
             return success(string.Empty, currentTenant);
         }
@@ -42,12 +43,12 @@ namespace StarterKit.Controllers
 
                 if (currentTenantId == tenant.Id)
                 {
-                    Tenant databaseTenant = _tenantRepo.Read(currentTenantId);
+                    Tenant databaseTenant = _tenantRepository.Read(currentTenantId);
 
                     if (databaseTenant != null)
                     {
                         databaseTenant.UpdateUiTenantToDatabase(tenant);
-                        databaseTenant = _tenantRepo.Update(databaseTenant);
+                        databaseTenant = _tenantRepository.Update(databaseTenant);
 
                         return success("Account successfully updated");
                         //if (isUpdated)

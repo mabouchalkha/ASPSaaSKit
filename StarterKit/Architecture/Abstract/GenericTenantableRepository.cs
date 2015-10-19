@@ -48,19 +48,35 @@ namespace StarterKit.Architecture.Abstract
             }
         }
 
-        public virtual IEnumerable<T> Index()
+        public void DeleteBy(Expression<Func<T, bool>> predicate)
         {
             using (U entityContext = this.GetContext())
             {
-                return base.IndexGeneric(entityContext);
+                base.DeleteByGeneric(entityContext, predicate);
             }
         }
 
-        public virtual T Read(TKey id)
+        public virtual IEnumerable<T> Index(params Expression<Func<T, object>>[] includeProperties)
         {
             using (U entityContext = this.GetContext())
             {
-                return base.ReadGeneric(entityContext, id);
+                return base.IndexGeneric(entityContext, includeProperties).ToFullyLoaded();
+            }
+        }
+
+        public virtual T Read(TKey id, params Expression<Func<T, object>>[] includeProperties)
+        {
+            using (U entityContext = this.GetContext())
+            {
+                return base.ReadGeneric(entityContext, id, includeProperties);
+            }
+        }
+
+        public virtual T FindBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            using (U entityContext = this.GetContext())
+            {
+                return base.FindByGeneric(entityContext, predicate, includeProperties);
             }
         }
 

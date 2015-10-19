@@ -5,6 +5,7 @@ using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Repositories;
+using StarterKit.Repositories.Interfaces;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
 using System.ComponentModel.Composition;
@@ -20,7 +21,7 @@ namespace StarterKit.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        private ITenantRepository _tenantRepo;
+        private ITenantRepository _tenantRepository;
 
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
@@ -28,7 +29,7 @@ namespace StarterKit.Controllers
         [ImportingConstructor]
         public AccountController(ITenantRepository tenantRepository)
         {
-            _tenantRepo = tenantRepository;
+            _tenantRepository = tenantRepository;
         }
 
         public ApplicationUserManager UserManager
@@ -217,8 +218,13 @@ namespace StarterKit.Controllers
 
                 if (userIsValid.Succeeded == true)
                 {
-                    Tenant newTenant = new DOM.Tenant() { IsTrial = true };
-                    _tenantRepo.Create(newTenant);
+                    Tenant newTenant = new DOM.Tenant()
+                    {
+                        IsTrial = true,
+                        ActiveUntil = System.DateTime.UtcNow.AddDays(15)
+                    };
+                          
+                    _tenantRepository.Create(newTenant);
                     user.TenantId = newTenant.Id;
 
                     IdentityResult result = await UserManager.CreateAsync(user, model.Password);
