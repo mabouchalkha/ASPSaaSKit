@@ -34,17 +34,9 @@ namespace StarterKit.Architecture.Abstract
             return DbSet(entityContext).Add(entity);
         }
 
-        private IEnumerable<T> GetEntities(U entityContext, params Expression<Func<T, object>>[] includeProperties)
+        private IEnumerable<T> GetEntities(U entityContext)
         {
             var dbSet = DbSet(entityContext);
-
-            if (includeProperties != null)
-            {
-                foreach (var property in includeProperties)
-                {
-                    dbSet.Include(property);
-                }
-            }
             return dbSet.ToFullyLoaded();
         }
 
@@ -69,9 +61,9 @@ namespace StarterKit.Architecture.Abstract
             entityContext.SaveChanges();
         }
 
-        public IEnumerable<T> IndexGeneric(U entityContext, params Expression<Func<T, object>>[] includeProperties)
+        public IEnumerable<T> IndexGeneric(U entityContext)
         {
-            return (GetEntities(entityContext, includeProperties)).ToArray().ToList();
+            return (GetEntities(entityContext)).ToArray().ToList();
         }
 
         public T ReadGeneric(U entityContext, TKey id)

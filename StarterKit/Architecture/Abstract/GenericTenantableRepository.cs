@@ -49,11 +49,11 @@ namespace StarterKit.Architecture.Abstract
             }
         }
 
-        public virtual IEnumerable<T> Index(params Expression<Func<T, object>>[] includeProperties)
+        public virtual IEnumerable<T> Index()
         {
             using (U entityContext = this.GetContext())
             {
-                return base.IndexGeneric(entityContext, includeProperties);
+                return base.IndexGeneric(entityContext);
             }
         }
 
