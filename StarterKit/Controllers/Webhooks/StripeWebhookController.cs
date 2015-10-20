@@ -27,6 +27,19 @@ namespace StarterKit.Controllers.Webhooks
         private IDataRepositoryFactory _DataRepositoryFactory;
         private IStripeEventLogRepository _StripeEventLogRepository;
 
+        private StripeCustomerService _stripeCustomerSerive;
+        public StripeCustomerService StripeCustomerService
+        {
+            get
+            {
+                return _stripeCustomerSerive ?? new StripeCustomerService();
+            }
+            set
+            {
+                _stripeCustomerSerive = value;
+            }
+        }
+
         [HttpPost]
         public ActionResult Index()
         {
@@ -99,8 +112,28 @@ namespace StarterKit.Controllers.Webhooks
                     subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
                     subscriptionPlanRepository.DeleteBy(sp => sp.ExternalId == planStripe.Id);
                     break;
+                case StripeEvents.CustomerSubscriptionTrialWillEnd:
+                    StripeSubscription subscriptionTrialWillEnd = Mapper<StripeSubscription>.MapFromJson(stripeEvent.Data.Object.ToString());
+                    // emailService.SendCustomerSubscriptionTrialWillEndEmail(charge);
+                    break;
+                case StripeEvents.InvoicePaymentSucceeded:
+                    StripeInvoice stripeInvoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
+                    StripeCustomer customer = StripeCustomerService.Get(stripeInvoice.CustomerId);
+                    IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
+
+                    // ApplicationUser user = userRepository.UserManager.FindByEmailAsync(customer.Email);
+                    // user.Tenant.ActiveUntil = user.Tenant.ActiveUntil.AddMonths(1); 
+                    // userRepository.Update(user);
+
+                    // emailService.SendInvoicePaymentSucceededEmail(invoice, customer);
+
+                    break;
+                case StripeEvents.InvoicePaymentFailed:
+                    stripeInvoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
+                    // emailService.SendInvoicePaymentFailedEmail(invoice, customer);
+                    break;
                 case StripeEvents.ChargeRefunded:
-                    var charge = Mapper<StripeCharge>.MapFromJson(stripeEvent.Data.Object.ToString());
+                    StripeCharge charge = Mapper<StripeCharge>.MapFromJson(stripeEvent.Data.Object.ToString());
                     // emailService.SendEmail(charge);
                     break;
                 default:

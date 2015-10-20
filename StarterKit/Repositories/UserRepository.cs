@@ -75,10 +75,5 @@ namespace StarterKit.Repositories
                 return entity;
             }
         }
-
-        public ApplicationUserManager GetCurrentUser()
-        {
-            return UserManager;
-        }
     }
 }

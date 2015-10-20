@@ -11,7 +11,7 @@ namespace StarterKit.Repositories.Interfaces
 {
     public interface IUserRepository : IBaseRepository<ApplicationUser, string>
     {
-        ApplicationUserManager GetCurrentUser();
+        ApplicationUserManager UserManager { get; }
         Task<IdentityResult> ValidateUser(ApplicationUser entity);
         bool EmailExit(string email);
     }
