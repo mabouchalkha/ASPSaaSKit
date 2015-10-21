@@ -23,8 +23,6 @@ namespace StarterKit
                  .Include("~/Lib/bootstrap.min.js")
                 .IncludeDirectory("~/Scripts/Factories", "*.js", true)
                 .IncludeDirectory("~/Scripts/Directives", "*.js", true)
-                .IncludeDirectory("~/Scripts/Pages/One", "*.js", true)
-                .IncludeDirectory("~/Scripts/Pages/Two", "*.js", true)
                 .IncludeDirectory("~/Scripts/Pages/Login", "*.js", true)
                 .IncludeDirectory("~/Scripts/Pages/Account", "*.js", true)
                 .IncludeDirectory("~/Scripts/Pages/ResetPassword", "*.js", true)

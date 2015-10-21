@@ -25,7 +25,7 @@ namespace StarterKit.Utils
 
             if (modelState != null)
             {
-                List<string> errorList = modelState.Keys.SelectMany(key => modelState[key].Errors.Select(x => key + ": " + x.ErrorMessage)).ToList();
+                List<string> errorList = modelState.Keys.SelectMany(key => modelState[key].Errors.Select(x => x.ErrorMessage)).ToList();
                 return ErrorUtil.JoinErrors(errorList);
             }
 

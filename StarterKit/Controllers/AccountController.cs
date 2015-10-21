@@ -84,7 +84,7 @@ namespace StarterKit.Controllers
             {
                 var result = await UserManager.ResetPasswordAsync(viewModel.Id, viewModel.Code, viewModel.Password);
 
-                return result.Succeeded == true ? success("Your password has been changed") : unsuccess(string.Join("<br />", result.Errors));
+                return result.Succeeded == true ? success("Your password has been changed") : unsuccess(ErrorUtil.JoinErrors(result.Errors));
             }
 
             return unsuccess(ErrorUtil.DefaultError);

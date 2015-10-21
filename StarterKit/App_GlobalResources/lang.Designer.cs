@@ -61,7 +61,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Le code est obligatoire.
+        ///   Looks up a localized string similar to Code is required.
         /// </summary>
         internal static string codeRequired {
             get {
@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to L&apos;adresse de couriel est obligatoire.
+        ///   Looks up a localized string similar to Email address is required.
         /// </summary>
         internal static string emailRequired {
             get {
@@ -79,7 +79,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Le prenom est obligatoire.
+        ///   Looks up a localized string similar to First name is required.
         /// </summary>
         internal static string firstNameRequired {
             get {
@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to L&apos;ID est obligatoire.
+        ///   Looks up a localized string similar to Id is required.
         /// </summary>
         internal static string idRequired {
             get {
@@ -97,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Le nom de famille est obligatoire.
+        ///   Looks up a localized string similar to Last name is required.
         /// </summary>
         internal static string lastNameRequired {
             get {
@@ -106,7 +106,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Le mot de passe doit contenir entre 2 et 6 caracteres.
+        ///   Looks up a localized string similar to Password must be between 2 and 6 characters.
         /// </summary>
         internal static string passwordLength {
             get {
@@ -115,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to La confirmation du mot de passe ne correspond pas.
+        ///   Looks up a localized string similar to Password confirmation does not match the password.
         /// </summary>
         internal static string passwordMatch {
             get {
@@ -124,7 +124,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Le mot de passe est obligatoire.
+        ///   Looks up a localized string similar to Password is required.
         /// </summary>
         internal static string passwordRequired {
             get {

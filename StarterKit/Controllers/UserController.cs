@@ -54,7 +54,7 @@ namespace StarterKit.Controllers
                 }
             }
 
-            return unsuccess(ErrorUtil.DefaultError);
+            return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));
         }
 
         [HttpDelete]
@@ -76,7 +76,7 @@ namespace StarterKit.Controllers
                 }
             }
 
-            return unsuccess(ErrorUtil.DefaultError);
+            return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));
         }
 
         [HttpGet]
@@ -96,7 +96,7 @@ namespace StarterKit.Controllers
                 }
             }
 
-            return unsuccess(ErrorUtil.DefaultError);
+            return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));
         }
 
         [HttpPost]
@@ -113,21 +113,12 @@ namespace StarterKit.Controllers
                     user = _userRepository.Create(user);
 
                     return success("User created successfully", null, new { id = user.Id });
-
-                    //if (hasCreated)
-                    //{
-                    //    return success("User created successfully", null, new { id = user.Id });
-                    //}
-                    //else
-                    //{
-                    //    return unsuccess("User creation failed");
-                    //}
                 }
 
-                return unsuccess(string.Join("<br />", result.Errors));
+                return unsuccess(ErrorUtil.JoinErrors(result.Errors));
             }
 
-            return unsuccess(ErrorUtil.DefaultError);
+            return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));
         }
 
         [HttpPost]

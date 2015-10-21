@@ -1,6 +1,7 @@
 ﻿using StarterKit.DOM;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,13 @@ namespace StarterKit.DAL.Mapping
         public TenantMap()
         {
             // Primary Key
-            HasKey<Guid>(t => t.Id);
+            HasKey(t => t.Id);
+
+            // Set Id as GUID
+            Property(t => t.Id)
+                .HasColumnName("Id")
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity)
+                .IsRequired();
 
             // Properties
             Property(t => t.Name)
@@ -31,7 +38,6 @@ namespace StarterKit.DAL.Mapping
             HasMany(t => t.ApplicationUser)
                 .WithRequired(t => t.Tenant)
                 .HasForeignKey(t => t.TenantId);
-
         }
     }
 }

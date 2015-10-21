@@ -1,16 +1,16 @@
-﻿using StarterKit.Architecture.Abstract;
-using StarterKit.DOM;
-using System.Linq;
-using System;
-using System.Web;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.AspNet.Identity;
-using System.Threading.Tasks;
+using StarterKit.Architecture.Abstract;
 using StarterKit.DAL;
-using System.Data.Entity;
-using System.Linq.Expressions;
-using System.ComponentModel.Composition;
+using StarterKit.DOM;
 using StarterKit.Repositories.Interfaces;
+using System;
+using System.ComponentModel.Composition;
+using System.Data.Entity;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace StarterKit.Repositories
 {

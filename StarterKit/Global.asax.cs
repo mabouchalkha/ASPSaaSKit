@@ -12,6 +12,9 @@ using System.Web.Script.Serialization;
 using Stripe;
 using System.Configuration;
 using StarterKit.Architecture.MEF;
+using FluentValidation.Mvc;
+using System.Threading;
+using System.Globalization;
 
 namespace StarterKit
 {
@@ -24,6 +27,7 @@ namespace StarterKit
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            FluentValidationModelValidatorProvider.Configure();
 
             StripeConfiguration.SetApiKey(ConfigurationManager.AppSettings["stripeSecretKey"]);
 
@@ -47,5 +51,11 @@ namespace StarterKit
 
             Server.ClearError();
         }
-    }
+
+        protected void Application_BeginRequest()
+        {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("fr");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("fr");
+        }
+}
 }

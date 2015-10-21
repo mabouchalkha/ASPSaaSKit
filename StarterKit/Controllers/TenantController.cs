@@ -51,14 +51,6 @@ namespace StarterKit.Controllers
                         databaseTenant = _tenantRepository.Update(databaseTenant);
 
                         return success("Account successfully updated");
-                        //if (isUpdated)
-                        //{
-                        //    return success("Account successfully updated");
-                        //}
-                        //else
-                        //{
-                        //    return unsuccess("Cannot save this account. Please refresh and try again");
-                        //}
                     }
                     else
                     {
