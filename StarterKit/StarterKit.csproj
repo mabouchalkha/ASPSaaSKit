@@ -207,6 +207,7 @@
     <Compile Include="Architecture\Interfaces\IBaseRepository.cs" />
     <Compile Include="Architecture\Interfaces\IIdentifiableEntity.cs" />
     <Compile Include="Architecture\Interfaces\ITenantable.cs" />
+    <Compile Include="Authorize\AuthorizeSubscriber.cs" />
     <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\SubscriptionPlanController.cs" />
     <Compile Include="Controllers\Webhooks\StripeWebhookController.cs" />

@@ -10,6 +10,8 @@ using StarterKit.Repositories.Interfaces;
 using System.ComponentModel.Composition;
 using StarterKit.DOM;
 using StarterKit.Architecture.Bases;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 
 namespace StarterKit.Controllers.Webhooks
 {
@@ -71,6 +73,7 @@ namespace StarterKit.Controllers.Webhooks
             {
                 case StripeEvents.PlanCreated:
                     StripePlan planStripe = Mapper<StripePlan>.MapFromJson(stripeEvent.Data.Object.ToString());
+
                     SubscriptionPlan subscriptionPlan = new SubscriptionPlan
                     {
                         AmountInCents = planStripe.Amount,
@@ -109,6 +112,7 @@ namespace StarterKit.Controllers.Webhooks
                     break;
                 case StripeEvents.PlanDeleted:
                     planStripe = Mapper<StripePlan>.MapFromJson(stripeEvent.Data.Object.ToString());
+
                     subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
                     subscriptionPlanRepository.DeleteBy(sp => sp.ExternalId == planStripe.Id);
                     break;
@@ -119,11 +123,12 @@ namespace StarterKit.Controllers.Webhooks
                 case StripeEvents.InvoicePaymentSucceeded:
                     StripeInvoice stripeInvoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
                     StripeCustomer customer = StripeCustomerService.Get(stripeInvoice.CustomerId);
-                    IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
 
-                    // ApplicationUser user = userRepository.UserManager.FindByEmailAsync(customer.Email);
-                    // user.Tenant.ActiveUntil = user.Tenant.ActiveUntil.AddMonths(1); 
-                    // userRepository.Update(user);
+                    IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
+                    ApplicationUser user = userRepository.UserManager.FindByEmail(customer.Email);
+
+                    user.Tenant.ActiveUntil = user.Tenant.ActiveUntil.AddMonths(1); 
+                    userRepository.Update(user);
 
                     // emailService.SendInvoicePaymentSucceededEmail(invoice, customer);
 

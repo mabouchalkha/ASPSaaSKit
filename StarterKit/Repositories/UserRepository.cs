@@ -1,19 +1,14 @@
 ﻿using StarterKit.Architecture.Abstract;
-using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
-using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Web;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
-using System.Web.Security;
 using StarterKit.DAL;
 using System.Data.Entity;
 using System.Linq.Expressions;
-using EntityFramework.DynamicFilters;
-using StarterKit.Helpers;
 using System.ComponentModel.Composition;
 using StarterKit.Repositories.Interfaces;
 
