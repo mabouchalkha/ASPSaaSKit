@@ -235,7 +235,7 @@ namespace StarterKit.Controllers
                     }
                 }
 
-                return unsuccess(string.Join("<br />", userIsValid.Errors));
+                return unsuccess(ErrorUtil.JoinErrors(userIsValid.Errors));
             }
 
             return unsuccess(ErrorUtil.GenerateModelStateError(ModelState), JsonStatus.s_401);
