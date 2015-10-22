@@ -4,6 +4,7 @@ using StarterKit.Architecture.Interfaces;
 using StarterKit.DAL;
 using StarterKit.DOM;
 using StarterKit.Helpers;
+using StarterKit.Repositories.Interfaces;
 using System;
 using System.ComponentModel.Composition;
 using System.Data.Entity;

@@ -2,30 +2,31 @@
 <section id="plans">
     <div class="container">
         <div class="row">
-
             <!-- item -->
-            <div class="col-md-4 text-center">
-                <div class="panel panel-danger panel-pricing">
-                    <div class="panel-heading">
-                        <i class="fa fa-desktop"></i>
-                        <h3>BASIC Plan</h3>
-                    </div>
-                    <div class="panel-body text-center">
-                        <p><strong>$10 / Month</strong></p>
-                    </div>
-                    <ul class="list-group text-center">
-                        <li class="list-group-item"><i class="fa fa-check"></i> Personal use</li>
-                        <li class="list-group-item"><i class="fa fa-check"></i> Unlimited projects</li>
-                        <li class="list-group-item"><i class="fa fa-check"></i> 27/7 support</li>
-                    </ul>
-                    <div class="panel-footer">
-                        <a class="btn btn-lg btn-block btn-danger" href="#">BUY NOW!</a>
+            <div ng-repeat="plan in ::vm.plans">
+                <div class="col-md-4 text-center">
+                    <div class="panel panel-{{plan.CSSClass}} panel-pricing">
+                        <div class="panel-heading">
+                            <i class="fa fa-desktop"></i>
+                            <h3>{{plan.Name}}</h3>
+                        </div>
+                        <div class="panel-body text-center">
+                            <p><strong>$ {{plan.AmountInDollars}} / {{plan.Interval}}</strong></p>
+                        </div>
+                        <ul class="list-group text-center">
+                            <li class="list-group-item"><i class="fa fa-check"></i> Personal use</li>
+                            <li class="list-group-item"><i class="fa fa-check"></i> Unlimited projects</li>
+                            <li class="list-group-item"><i class="fa fa-check"></i> 27/7 support</li>
+                        </ul>
+                        <div class="panel-footer">
+                            <a class="btn btn-lg btn-block btn-{{plan.CSSClass}}" ui-sref="billing({planId: plan.Id})">BUY NOW!</a>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- /item -->
             <!-- item -->
-            <div class="col-md-4 text-center">
+            <!--<div class="col-md-4 text-center">
                 <div class="panel panel-warning panel-pricing">
                     <div class="panel-heading">
                         <i class="fa fa-desktop"></i>
@@ -43,10 +44,10 @@
                         <a class="btn btn-lg btn-block btn-warning" href="#">BUY NOW!</a>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <!-- /item -->
             <!-- item -->
-            <div class="col-md-4 text-center">
+            <!--<div class="col-md-4 text-center">
                 <div class="panel panel-success panel-pricing">
                     <div class="panel-heading">
                         <i class="fa fa-desktop"></i>
@@ -64,7 +65,7 @@
                         <a class="btn btn-lg btn-block btn-success" href="#">BUY NOW!</a>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <!-- /item -->
 
         </div>

@@ -7,6 +7,7 @@ using System;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
+using StarterKit.DAL.Mapping;
 
 namespace StarterKit.DAL
 {
@@ -18,6 +19,10 @@ namespace StarterKit.DAL
         }
 
         public DbSet<Tenant> Tenants { get; set; }
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+        public DbSet<Feature> Features { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<StripeEventLog> StripeEventLogs { get; set; }
 
         public static ApplicationDbContext Create()
         {
@@ -32,8 +37,14 @@ namespace StarterKit.DAL
             modelBuilder.DisableFilterGlobally("Tenant");
 
             modelBuilder.Ignore<IIdentifiableEntity>();
-            modelBuilder.Entity<Tenant>().HasKey<Guid>(e => e.Id).Ignore(e => e.EntityId);
-            modelBuilder.Entity<ApplicationUser>().HasKey<string>(e => e.Id).Ignore(e => e.EntityId);
+
+            modelBuilder.Configurations.Add(new TenantMap());
+            modelBuilder.Configurations.Add(new ApplicationUserMap());
+            modelBuilder.Configurations.Add(new SubscriptionMap());
+            modelBuilder.Configurations.Add(new SubscriptionPlanMap());
+            modelBuilder.Configurations.Add(new FeatureMap());
+            modelBuilder.Configurations.Add(new StripeEventLogMap());
+
 
             base.OnModelCreating(modelBuilder);
         }

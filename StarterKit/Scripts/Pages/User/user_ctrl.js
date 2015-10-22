@@ -8,15 +8,13 @@
     };
 
     vm.submit = function () {
-        if (vm.viewModel.Email) {
-            notif.wait();
+        notif.wait();
 
-            if (vm.isNew) {
-                userResource.create(vm.viewModel).$promise.then(_reloadIndex).finally(_clearNotif);
-            }
-            else {
-                userResource.update(vm.viewModel).$promise.then(_reloadIndex).finally(_clearNotif);
-            }
+        if (vm.isNew) {
+            userResource.create(vm.viewModel).$promise.then(_reloadIndex).finally(_clearNotif);
+        }
+        else {
+            userResource.update(vm.viewModel).$promise.then(_reloadIndex).finally(_clearNotif);
         }
     };
 

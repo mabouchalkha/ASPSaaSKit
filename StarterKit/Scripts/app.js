@@ -60,7 +60,12 @@ angular.module('starterKit').config(['$stateProvider', '$urlRouterProvider', '$h
         .state('subscription', {
             url: '/subscription',
             templateUrl: '/Scripts/Pages/Subscription/subscription.html',
-            controller: 'subscriptionController as vm'
+            controller: 'subscriptionController as vm',
+            resolve: {
+                plans: ['planResource', function (planResource) {
+                    return planResource.index().$promise.then();
+                }]
+            }
         })
         .state('user', {
             abstract: true,
