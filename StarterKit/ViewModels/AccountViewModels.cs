@@ -50,7 +50,7 @@ namespace StarterKit.ViewModels
 
     [Validator(typeof(LoginViewModelValidator))]
     public class LoginViewModel
-    {
+    {        
         public string Email { get; set; }
         public string Password { get; set; }
         public bool RememberMe { get; set; }
@@ -72,7 +72,7 @@ namespace StarterKit.ViewModels
         public string id { get; set; }
         public string Code { get; set; }
     }
-
+    
     [Validator(typeof(ResetPasswordViewModelValidator))]
     public class ResetPasswordViewModel
     {
