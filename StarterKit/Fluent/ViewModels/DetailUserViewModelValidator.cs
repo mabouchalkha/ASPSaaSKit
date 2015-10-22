@@ -7,9 +7,9 @@ namespace StarterKit.Fluent.ViewModels
     {
         public DetailUserViewModelValidator()
         {
-            RuleFor(vm => vm.FirstName).NotEmpty().WithLocalizedMessage(() => Resources.lang.firstNameRequired);
-            RuleFor(vm => vm.LastName).NotEmpty().WithLocalizedMessage(() => Resources.lang.lastNameRequired);
-            RuleFor(vm => vm.Email).EmailAddress().NotEmpty().WithLocalizedMessage(() => Resources.lang.emailRequired);
+            RuleFor(vm => vm.FirstName).NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.firstNameRequired);
+            RuleFor(vm => vm.LastName).NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.lastNameRequired);
+            RuleFor(vm => vm.Email).EmailAddress().NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.emailRequired);
         }
     }
 }

@@ -225,6 +225,7 @@
     <Compile Include="Architecture\Interfaces\IBaseRepository.cs" />
     <Compile Include="Architecture\Interfaces\IIdentifiableEntity.cs" />
     <Compile Include="Architecture\Interfaces\ITenantable.cs" />
+    <Compile Include="Architecture\Serialization\CustomJsonResult.cs" />
     <Compile Include="Authorize\AuthorizeSubscriber.cs" />
     <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\SubscriptionPlanController.cs" />
@@ -398,13 +399,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App_GlobalResources\lang.resx">
-      <Generator>PublicResourceProxyGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>lang.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App_GlobalResources\lang.fr.resx">
-      <Generator>PublicResourceProxyGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>lang.fr.designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

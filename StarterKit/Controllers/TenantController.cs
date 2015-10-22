@@ -64,7 +64,7 @@ namespace StarterKit.Controllers
                 
             }
 
-            return unsuccess(ErrorUtil.DefaultError);
+            return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));
         }
     }
 }
