@@ -1,6 +1,10 @@
 ﻿<!-- Plans -->
 <section id="plans">
     <div class="container">
+        <h2>Subscription - Plan & Billing</h2>
+        <p>
+            Currently subscribed to {{plan.name}}, which costs {{plan.AmountInDollars}} per {{plan.Interval}}.
+        </p>
         <div class="row">
             <!-- item -->
             <div ng-repeat="plan in ::vm.plans">

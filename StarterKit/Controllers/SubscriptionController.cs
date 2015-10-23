@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using StarterKit.Architecture.Bases;
 using StarterKit.DOM;
 using StarterKit.Repositories.Interfaces;
+using StarterKit.ViewModels;
 using Stripe;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
+using System.Configuration;
 using System.Web.Mvc;
 
 namespace StarterKit.Controllers
@@ -62,29 +59,36 @@ namespace StarterKit.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            return success(string.Empty, new { });
+            // May this data will be created by webhooks
+           IEnumerable<Subscription> subscriptions = _SubscriptionRepository.Index();
+            // TODO Ensure if the subscription still valid in stripe
+            // Maybe we need a mapper for view model
+            return success(string.Empty, subscriptions);
         }
 
         [HttpPost]
-        public async Task<JsonResult> Billing(SubscriptionPlan subscriptionPlan, string userId, string stripeTokenId)
+        public JsonResult Billing(SubscriptionViewModel subscriptionViewModel)
         {
-            SubscriptionPlan plan = _SubscriptionPlanRepository.Read(subscriptionPlan.Id);
+            string stripePublishableKey = ConfigurationManager.AppSettings["stripePublishableKey"];
+
+            SubscriptionPlan plan = _SubscriptionPlanRepository.Read(subscriptionViewModel.SubscriptionPlanId);
             try
             {
                 // I need username with Tenant, Plan, StripeToken
                 // ApplicationUserManager UserManager
                 // StripeCustomerService to create customer
                 // StripeSubscriptionService to create a subscription
-                
-                var user = await _UserRepository.UserManager.FindByNameAsync(User.Identity.Name);
 
-                if (String.IsNullOrWhiteSpace(user.Tenant.StripeCustomerId))
+                // var user = _UserRepository.UserManager.FindByName(User.Identity.Name);
+                var user = _UserRepository.UserManager.FindById(subscriptionViewModel.UserId);
+
+                if (string.IsNullOrWhiteSpace(user.Tenant.StripeCustomerId))
                 {
                     // create a customer which will create subscription if plan is set and cc info via stripetoken
                     var customer = new StripeCustomerCreateOptions
                     {
                         Email = user.Email,
-                        Source = new StripeSourceOptions() { TokenId = stripeTokenId },
+                        Source = new StripeSourceOptions() { TokenId = subscriptionViewModel.StripeTokenId },
                         PlanId = plan.ExternalId
                     };
 

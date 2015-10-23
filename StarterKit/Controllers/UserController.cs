@@ -1,9 +1,7 @@
 ﻿using StarterKit.Architecture.Bases;
-using StarterKit.Architecture.Interfaces;
 using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Mappers;
-using StarterKit.Repositories;
 using StarterKit.Repositories.Interfaces;
 using StarterKit.Utils;
 using StarterKit.ViewModels;

@@ -1,5 +1,6 @@
 ﻿namespace StarterKit.Utils
 {
+    // we need to replace this by HttpStatusCode enum
     public enum JsonStatus
     {
         s_401 = 401,
