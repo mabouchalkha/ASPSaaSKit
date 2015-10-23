@@ -1,4 +1,6 @@
-﻿using StarterKit.Architecture.Interfaces;
+﻿using FluentValidation.Attributes;
+using StarterKit.Architecture.Interfaces;
+using StarterKit.Fluent.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

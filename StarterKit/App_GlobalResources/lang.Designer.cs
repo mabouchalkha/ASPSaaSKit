@@ -70,11 +70,29 @@ namespace StarterKit.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Something went wrong. Please contact your administrator.
+        /// </summary>
+        public static string defaultError {
+            get {
+                return ResourceManager.GetString("defaultError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email address is required.
         /// </summary>
         public static string emailRequired {
             get {
                 return ResourceManager.GetString("emailRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot retrieve entity with id {0}.
+        /// </summary>
+        public static string entityNotFound {
+            get {
+                return ResourceManager.GetString("entityNotFound", resourceCulture);
             }
         }
         
@@ -97,11 +115,29 @@ namespace StarterKit.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An important exception has been thrown. Thanks for contacting your administrator.
+        /// </summary>
+        public static string importantException {
+            get {
+                return ResourceManager.GetString("importantException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last name is required.
         /// </summary>
         public static string lastNameRequired {
             get {
                 return ResourceManager.GetString("lastNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to successfully updated.
+        /// </summary>
+        public static string modelUpdateSuccess {
+            get {
+                return ResourceManager.GetString("modelUpdateSuccess", resourceCulture);
             }
         }
         
@@ -129,6 +165,42 @@ namespace StarterKit.App_GlobalResources {
         public static string passwordRequired {
             get {
                 return ResourceManager.GetString("passwordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string tenant {
+            get {
+                return ResourceManager.GetString("tenant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot edit an account that you are not part of.
+        /// </summary>
+        public static string tenantCantEdit {
+            get {
+                return ResourceManager.GetString("tenantCantEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account name is required.
+        /// </summary>
+        public static string tenantNameRequired {
+            get {
+                return ResourceManager.GetString("tenantNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User.
+        /// </summary>
+        public static string user {
+            get {
+                return ResourceManager.GetString("user", resourceCulture);
             }
         }
     }

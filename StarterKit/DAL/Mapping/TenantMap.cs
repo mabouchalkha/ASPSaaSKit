@@ -25,7 +25,7 @@ namespace StarterKit.DAL.Mapping
             // Properties
             Property(t => t.Name)
                 .IsOptional()
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
             Property(t => t.StripeCustomerId)
                 .IsOptional()

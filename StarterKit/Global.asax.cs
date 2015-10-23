@@ -54,8 +54,8 @@ namespace StarterKit
 
         protected void Application_BeginRequest()
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en");
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("fr");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("fr");
         }
 }
 }

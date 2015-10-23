@@ -120,8 +120,14 @@
   <data name="codeRequired" xml:space="preserve">
     <value>Code is required</value>
   </data>
+  <data name="defaultError" xml:space="preserve">
+    <value>Something went wrong. Please contact your administrator</value>
+  </data>
   <data name="emailRequired" xml:space="preserve">
     <value>Email address is required</value>
+  </data>
+  <data name="entityNotFound" xml:space="preserve">
+    <value>Cannot retrieve entity with id {0}</value>
   </data>
   <data name="firstNameRequired" xml:space="preserve">
     <value>First name is required</value>
@@ -129,8 +135,14 @@
   <data name="idRequired" xml:space="preserve">
     <value>Id is required</value>
   </data>
+  <data name="importantException" xml:space="preserve">
+    <value>An important exception has been thrown. Thanks for contacting your administrator</value>
+  </data>
   <data name="lastNameRequired" xml:space="preserve">
     <value>Last name is required</value>
+  </data>
+  <data name="modelUpdateSuccess" xml:space="preserve">
+    <value>successfully updated</value>
   </data>
   <data name="passwordLength" xml:space="preserve">
     <value>Password must be between 2 and 6 characters</value>
@@ -140,5 +152,17 @@
   </data>
   <data name="passwordRequired" xml:space="preserve">
     <value>Password is required</value>
+  </data>
+  <data name="tenant" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="tenantCantEdit" xml:space="preserve">
+    <value>You cannot edit an account that you are not part of</value>
+  </data>
+  <data name="tenantNameRequired" xml:space="preserve">
+    <value>Account name is required</value>
+  </data>
+  <data name="user" xml:space="preserve">
+    <value>User</value>
   </data>
 </root>

@@ -39,19 +39,8 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = _userRepository.Read(userToUpdate.Id);
-
-                if (user != null)
-                {
-                    ApplicationUser updatedUser = userToUpdate.MapToApplicationUser(user);
-                    updatedUser = _userRepository.Update(updatedUser);
-
-                    return success("User successfully updated");
-                }
-                else
-                {
-                    return unsuccess(string.Format("Cannot find user with Id : {0}", userToUpdate.Id));
-                }
+                _userRepository.Update(userToUpdate.MapFromViewModel());
+                return success(MessageUtil.GenerateUpdateSuccessfull(App_GlobalResources.lang.user));
             }
 
             return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));
@@ -88,7 +77,7 @@ namespace StarterKit.Controllers
 
                 if (user != null)
                 {
-                    return success(string.Empty, user.MapToDetailUserViewModel());
+                    return success(string.Empty, user.MapToViewModel());
                 }
                 else
                 {
