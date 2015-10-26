@@ -1,4 +1,5 @@
 ﻿using StarterKit.DOM;
+using StarterKit.Repositories.Interfaces;
 using StarterKit.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace StarterKit.Mappers
             };
         }
 
-        public static DetailUserViewModel MapToDetailUserViewModel(this ApplicationUser user)
+        public static DetailUserViewModel MapToViewModel(this ApplicationUser user)
         {
             return new DetailUserViewModel()
             {
@@ -45,33 +46,43 @@ namespace StarterKit.Mappers
             };
         }
 
-        public static ApplicationUser MapToApplicationUser(this DetailUserViewModel viewModel, ApplicationUser user = null)
+        public static ApplicationUser MapFromViewModel(this DetailUserViewModel viewModel)
         {
-            if (user != null)
+            return new ApplicationUser()
             {
-                if (user.Email.Equals(viewModel.Email, StringComparison.OrdinalIgnoreCase))
-                {
-                    user.EmailConfirmed = false;
-                    user.UserName = viewModel.Email;
-                }
+                EmailConfirmed = false,
+                LastName = viewModel.LastName,
+                FirstName = viewModel.FirstName,
+                Email = viewModel.Email,
+                UserName = viewModel.Email,
+                TwoFactorEnabled = viewModel.TwoFactorEnabled
+            };
 
-                //send new confirm email
-                user.LastName = viewModel.LastName;
-                user.FirstName = viewModel.FirstName;
-                user.Email = viewModel.Email;
-            }
-            else
-            {
-                user = new ApplicationUser();
-                user.EmailConfirmed = false;
-                user.LastName = viewModel.LastName;
-                user.FirstName = viewModel.FirstName;
-                user.Email = viewModel.Email;
-                user.UserName = viewModel.Email;
-                user.TwoFactorEnabled = viewModel.TwoFactorEnabled;
-            }
+            //if (user != null)
+            //{
+            //    if (user.Email.Equals(viewModel.Email, StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        user.EmailConfirmed = false;
+            //        user.UserName = viewModel.Email;
+            //    }
 
-            return user;
+            //    //send new confirm email
+            //    user.LastName = viewModel.LastName;
+            //    user.FirstName = viewModel.FirstName;
+            //    user.Email = viewModel.Email;
+            //}
+            //else
+            //{
+            //    user = new ApplicationUser();
+            //    user.EmailConfirmed = false;
+            //    user.LastName = viewModel.LastName;
+            //    user.FirstName = viewModel.FirstName;
+            //    user.Email = viewModel.Email;
+            //    user.UserName = viewModel.Email;
+            //    user.TwoFactorEnabled = viewModel.TwoFactorEnabled;
+            //}
+
+            //return user;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace StarterKit.Utils
 {
     public static class ErrorUtil
     {
-        public static string DefaultError = "Something went wrong with your last action. Please try again or contact an administrator.";
+        public static string DefaultError = App_GlobalResources.lang.defaultError;
 
         public static string GetInnerMessage(Exception e)
         {

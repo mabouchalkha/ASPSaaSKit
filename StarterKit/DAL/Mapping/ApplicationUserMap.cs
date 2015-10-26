@@ -18,11 +18,11 @@ namespace StarterKit.DAL.Mapping
             // Properties
             Property(t => t.FirstName)
                 .IsRequired()
-                .HasMaxLength(12);
+                .HasMaxLength(100);
 
             Property(t => t.LastName)
                 .IsRequired()
-                .HasMaxLength(12);
+                .HasMaxLength(100);
 
             Ignore(t => t.FullName);
             Ignore(t => t.EntityId);

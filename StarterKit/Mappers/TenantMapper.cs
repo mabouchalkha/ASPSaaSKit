@@ -1,4 +1,5 @@
 ﻿using StarterKit.DOM;
+using StarterKit.Repositories.Interfaces;
 using StarterKit.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -9,15 +10,35 @@ namespace StarterKit.Mappers
 {
     public static class TenantMapper
     {
-        public static void UpdateUiTenantToDatabase(this Tenant databaseTenant, Tenant uiTenant)
+        public static TenantViewModel MapToViewModel(this Tenant tenant)
         {
-            if (databaseTenant != null)
+            return new TenantViewModel()
             {
-                if (uiTenant != null)
-                {
-                    databaseTenant.Name = uiTenant.Name;
-                }
-            }
+                Id = tenant.Id,
+                IsTrial = tenant.IsTrial,
+                Name = tenant.Name
+            };
+        }
+
+        public static Tenant MapFromViewModel(this TenantViewModel tenant)
+        {
+            return new Tenant()
+            {
+                Id = tenant.Id,
+                Name = tenant.Name
+            };
+            //Tenant databaseTenant = _repo.Read(tenant.Id);
+
+            //if (databaseTenant != null)
+            //{
+            //    databaseTenant.Name = tenant.Name;
+            //}
+            //else
+            //{
+            //    throw new InvalidOperationException(string.Format(App_GlobalResources.lang.entityNotFound, tenant.Id));
+            //}
+
+            //return databaseTenant;
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using StarterKit.Architecture.Abstract;
+using StarterKit.Architecture.Exceptions;
 using StarterKit.DAL;
 using StarterKit.DOM;
+using StarterKit.Helpers;
 using StarterKit.Repositories.Interfaces;
 using System;
 using System.ComponentModel.Composition;
@@ -24,6 +26,16 @@ namespace StarterKit.Repositories
         {
             get { return _userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
             private set { _userManager = value; }
+        }
+
+        protected override void ValidateTenant(ApplicationUser entity)
+        {
+            Guid currentTenantId = TenantHelper.GetCurrentTenantId();
+
+            if (entity.TenantId != currentTenantId)
+            {
+                throw new TenantViolationException();
+            }
         }
 
         protected override DbSet<ApplicationUser> DbSet(ApplicationDbContext entityContext)
@@ -69,6 +81,16 @@ namespace StarterKit.Repositories
 
                 return entity;
             }
+        }
+
+        public override ApplicationUser Update(ApplicationUser entity)
+        {
+            using (ApplicationDbContext entityContext = this.GetContext())
+            {
+                ApplicationUser databaseUser = this.Read(entity.Id);
+            }
+
+            return entity;
         }
     }
 }

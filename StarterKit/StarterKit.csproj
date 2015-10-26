@@ -222,9 +222,11 @@
     <Compile Include="Architecture\Abstract\BaseRepository.cs" />
     <Compile Include="Architecture\Abstract\GenericRepository.cs" />
     <Compile Include="Architecture\Abstract\GenericTenantableRepository.cs" />
+    <Compile Include="Architecture\Exceptions\TenantViolationException.cs" />
     <Compile Include="Architecture\Interfaces\IBaseRepository.cs" />
     <Compile Include="Architecture\Interfaces\IIdentifiableEntity.cs" />
     <Compile Include="Architecture\Interfaces\ITenantable.cs" />
+    <Compile Include="Architecture\Serialization\CustomJsonResult.cs" />
     <Compile Include="Authorize\AuthorizeSubscriber.cs" />
     <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\SubscriptionPlanController.cs" />
@@ -235,8 +237,9 @@
     <Compile Include="DAL\Mapping\SubscriptionMap.cs" />
     <Compile Include="DAL\Mapping\SubscriptionPlanMap.cs" />
     <Compile Include="DAL\Mapping\TenantMap.cs" />
-    <Compile Include="Fluent\ViewModels\AccountViewModelValidator.cs" />
-    <Compile Include="Fluent\ViewModels\DetailUserViewModelValidator.cs" />
+    <Compile Include="Fluent\AccountViewModelValidator.cs" />
+    <Compile Include="Fluent\TenantViewModelValidator.cs" />
+    <Compile Include="Fluent\DetailUserViewModelValidator.cs" />
     <Compile Include="Repositories\DataRepositoryFactory.cs" />
     <Compile Include="Repositories\Interfaces\IDataRepositoryFactory.cs" />
     <Compile Include="Repositories\Interfaces\IStripeEventLogRepository.cs" />
@@ -273,6 +276,7 @@
     <Compile Include="Repositories\SubscriptionPlanRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\TenantRepository.cs" />
+    <Compile Include="Utils\MessageUtil.cs" />
     <Compile Include="Utils\ErrorUtil.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="DAL\ApplicationDbContext.cs" />
@@ -281,6 +285,7 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\JsonStatus.cs" />
+    <Compile Include="ViewModels\TenantViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -380,7 +385,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
-    <Folder Include="Fluent\DOM\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -398,13 +402,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App_GlobalResources\lang.resx">
-      <Generator>PublicResourceProxyGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>lang.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App_GlobalResources\lang.fr.resx">
-      <Generator>PublicResourceProxyGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>lang.fr.designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

@@ -15,6 +15,8 @@ namespace StarterKit.Architecture.Abstract
         where T : class, IIdentifiableEntity<TKey>, new()
         where U : DbContext, new()
     {
+        protected abstract void ValidateTenant(T entity);
+
         protected U GetContext()
         {
             U context = new U();
@@ -29,6 +31,7 @@ namespace StarterKit.Architecture.Abstract
         {
             using (U entityContext = this.GetContext())
             {
+                this.ValidateTenant(entity);
                 return base.CreateGeneric(entityContext, entity);
             }
         }
@@ -37,6 +40,7 @@ namespace StarterKit.Architecture.Abstract
         {
             using (U entityContext = this.GetContext())
             {
+                this.ValidateTenant(entity);
                 base.DeleteGeneric(entityContext, entity);
             }
         }
@@ -45,6 +49,7 @@ namespace StarterKit.Architecture.Abstract
         {
             using (U entityContext = this.GetContext())
             {
+                this.ValidateTenant(this.Read(id));
                 base.DeleteGeneric(entityContext, id);
             }
         }
@@ -85,6 +90,7 @@ namespace StarterKit.Architecture.Abstract
         {
             using (U entityContext = this.GetContext())
             {
+                this.ValidateTenant(entity);
                 return base.UpdateGeneric(entityContext, entity);
             }
         }
