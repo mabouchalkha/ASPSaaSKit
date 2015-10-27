@@ -55,7 +55,8 @@ namespace StarterKit.Mappers
                 FirstName = viewModel.FirstName,
                 Email = viewModel.Email,
                 UserName = viewModel.Email,
-                TwoFactorEnabled = viewModel.TwoFactorEnabled
+                TwoFactorEnabled = viewModel.TwoFactorEnabled,
+                Id = viewModel.Id
             };
 
             //if (user != null)

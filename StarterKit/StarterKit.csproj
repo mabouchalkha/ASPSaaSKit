@@ -270,7 +270,7 @@
     <Compile Include="Mappers\TenantMapper.cs" />
     <Compile Include="Mappers\UserMapper.cs" />
     <Compile Include="Architecture\MEF\MEFLoader.cs" />
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Mappers\Migrations\Configuration.cs" />
     <Compile Include="Repositories\StripeEventLogRepository.cs" />
     <Compile Include="Repositories\SubscriptionRepository.cs" />
     <Compile Include="Repositories\SubscriptionPlanRepository.cs" />
