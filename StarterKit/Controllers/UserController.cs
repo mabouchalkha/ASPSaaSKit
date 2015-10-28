@@ -121,7 +121,7 @@ namespace StarterKit.Controllers
                 {
                     if (!_userRepository.EmailExit(email))
                     {
-                        _userRepository.Create(new ApplicationUser() { Email = email, UserName = email });
+                        _userRepository.Create(new ApplicationUser() { Email = email, UserName = email, FirstName = email, LastName = email });
                     }
                 }
 
