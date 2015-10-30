@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="accountCreated" xml:space="preserve">
+    <value>Le compte a ete cree. Verifier vos couriel pour la confirmation</value>
+  </data>
   <data name="codeRequired" xml:space="preserve">
     <value>Le code est obligatoire</value>
   </data>
   <data name="defaultError" xml:space="preserve">
     <value>Quelque chose n'a pas marché. Veuillez contacter votre administrateur </value>
+  </data>
+  <data name="emailConfirmed" xml:space="preserve">
+    <value>Couriel valide. Merci de vous connecter</value>
+  </data>
+  <data name="emaillConfirmedNeedPassword" xml:space="preserve">
+    <value>Couriel valide. Vous allez recevoir un nouveau couriel pour votre mot de passe</value>
   </data>
   <data name="emailRequired" xml:space="preserve">
     <value>L'adresse de couriel est obligatoire</value>
@@ -138,8 +147,20 @@
   <data name="importantException" xml:space="preserve">
     <value>Une erreur grave est survenue. Merci de contacter votre administrateur</value>
   </data>
+  <data name="inviteNoEmail" xml:space="preserve">
+    <value>Veuillez fournir au moin une adresse email</value>
+  </data>
+  <data name="inviteSuccess" xml:space="preserve">
+    <value>Les utilisateurs vont recevoir un couriel pour confirmer leurs addresses</value>
+  </data>
   <data name="lastNameRequired" xml:space="preserve">
     <value>Le nom de famille est obligatoire</value>
+  </data>
+  <data name="loggedIn" xml:space="preserve">
+    <value>Vous etes maintenant connecte</value>
+  </data>
+  <data name="loginConfirmEmail" xml:space="preserve">
+    <value>Vous devez confirmer votre couriel avant de pouvoir vous connecter</value>
   </data>
   <data name="modelUpdateSuccess" xml:space="preserve">
     <value>: mise a jour réussie</value>
@@ -153,6 +174,12 @@
   <data name="passwordRequired" xml:space="preserve">
     <value>Le mot de passe est obligatoire</value>
   </data>
+  <data name="passwordReseted" xml:space="preserve">
+    <value>Votre mot de passe a ete reinitialiser, verifier votre couriel</value>
+  </data>
+  <data name="resendTwoFactor" xml:space="preserve">
+    <value>Un nouveau code a ete envoye a votre couriel</value>
+  </data>
   <data name="tenant" xml:space="preserve">
     <value>Compte</value>
   </data>
@@ -162,7 +189,22 @@
   <data name="tenantNameRequired" xml:space="preserve">
     <value>Le nom du compte est obligatoire</value>
   </data>
+  <data name="twoFactorEnable" xml:space="preserve">
+    <value>L'authentification 2 facteurs est active, verifier votre couriel</value>
+  </data>
   <data name="user" xml:space="preserve">
     <value>Utilisateur</value>
+  </data>
+  <data name="userCantRead" xml:space="preserve">
+    <value>Impossible de trouver l'utlisateur avec l'ID {0}</value>
+  </data>
+  <data name="userCreated" xml:space="preserve">
+    <value>L'utilisateur creer avec succes</value>
+  </data>
+  <data name="userDeleteSelf" xml:space="preserve">
+    <value>Vous ne pouvez pas supprimer votre propre compte</value>
+  </data>
+  <data name="userDeleted" xml:space="preserve">
+    <value>L'utilisateur a ete supprime</value>
   </data>
 </root>

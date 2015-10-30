@@ -15,8 +15,7 @@ namespace StarterKit.DAL.Mapping
             // Primary Key
             HasKey<string>(t => t.Id);
 
-            //HasRequired(t => t.Tenant).WithMany().WillCascadeOnDelete(false);
-
+            HasRequired(t => t.Tenant).WithMany().WillCascadeOnDelete(false);
             Ignore(t => t.EntityId);
         }
     }

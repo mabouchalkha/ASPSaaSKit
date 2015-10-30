@@ -24,7 +24,7 @@ namespace StarterKit.DAL
         public DbSet<Feature> Features { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<StripeEventLog> StripeEventLogs { get; set; }
-        public DbSet<ApplicationRole> Roles { get; set; }
+        //public DbSet<ApplicationRole> Roles { get; set; }
 
         public static ApplicationDbContext Create()
         {

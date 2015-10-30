@@ -31,7 +31,7 @@ namespace StarterKit.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            return success(string.Empty, new { entities = _userRepository.Index(u => u.Roles).ToList().MapToIndexUserViewModels() });
+            return success(string.Empty, new { entities = _userRepository.Index(u => u.Roles).ToList().MapToViewModels() });
         }
 
         [HttpPut]
@@ -51,18 +51,8 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = UserHelper.GetCurrentUser();
-
-                if (currentUser.Id != id)
-                {
-                    _userRepository.Delete(id);
-
-                    return success("User successfully deleted");
-                }
-                else
-                {
-                    return unsuccess("You cannot delete your own user");
-                }
+                _userRepository.Delete(id);
+                return success(App_GlobalResources.lang.userDeleted);
             }
 
             return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));
@@ -81,7 +71,7 @@ namespace StarterKit.Controllers
                 }
                 else
                 {
-                    return unsuccess(string.Format("Cannot retrieve user with id {0}", id));
+                    return unsuccess(string.Format(App_GlobalResources.lang.userCantRead, id));
                 }
             }
 
@@ -101,7 +91,7 @@ namespace StarterKit.Controllers
                 {
                     user = _userRepository.Create(user);
 
-                    return success("User created successfully", null, new { id = user.Id });
+                    return success(App_GlobalResources.lang.userCreated, null, new { id = user.Id });
                 }
 
                 return unsuccess(ErrorUtil.JoinErrors(result.Errors));
@@ -121,14 +111,14 @@ namespace StarterKit.Controllers
                 {
                     if (!_userRepository.EmailExit(email))
                     {
-                        _userRepository.Create(new ApplicationUser() { Email = email, UserName = email });
+                        _userRepository.Create(new ApplicationUser() { Email = email, UserName = email, FirstName = email, LastName = email });
                     }
                 }
 
-                return success("Users has been invited. They will receive an email to confirm their account");
+                return success(App_GlobalResources.lang.inviteSuccess);
             }
 
-            return unsuccess("You need to put some emails adresses");
+            return unsuccess(App_GlobalResources.lang.inviteNoEmail);
         }
     }
 }
