@@ -16,7 +16,7 @@ using System.Web.Mvc;
 namespace StarterKit.Controllers
 {
     [Export]
-    [PartCreationPolicy(CreationPolicy.NonShared)]C:\Code\ASPSaaSKit\StarterKit\Controllers\SubscriptionController.cs
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class SubscriptionController : BaseController
     {
         [ImportingConstructor]
