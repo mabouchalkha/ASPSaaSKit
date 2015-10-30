@@ -231,12 +231,14 @@
     <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\SubscriptionPlanController.cs" />
     <Compile Include="Controllers\Webhooks\StripeWebhookController.cs" />
+    <Compile Include="DAL\Mapping\ApplicationRoleMap.cs" />
     <Compile Include="DAL\Mapping\ApplicationUserMap.cs" />
     <Compile Include="DAL\Mapping\FeatureMap.cs" />
     <Compile Include="DAL\Mapping\StripeEventLogMap.cs" />
     <Compile Include="DAL\Mapping\SubscriptionMap.cs" />
     <Compile Include="DAL\Mapping\SubscriptionPlanMap.cs" />
     <Compile Include="DAL\Mapping\TenantMap.cs" />
+    <Compile Include="DOM\ApplicationRole.cs" />
     <Compile Include="Fluent\AccountViewModelValidator.cs" />
     <Compile Include="Fluent\TenantViewModelValidator.cs" />
     <Compile Include="Fluent\DetailUserViewModelValidator.cs" />
@@ -245,6 +247,7 @@
     <Compile Include="Repositories\Interfaces\IStripeEventLogRepository.cs" />
     <Compile Include="Repositories\Interfaces\ISubscriptionRepository.cs" />
     <Compile Include="Repositories\Interfaces\ISubscriptionPlanRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IRoleRepository.cs" />
     <Compile Include="Repositories\Interfaces\IUserRepository.cs" />
     <Compile Include="Repositories\Interfaces\ITenantRepository.cs" />
     <Compile Include="Architecture\MEF\MefDependencyResolver.cs" />
@@ -274,6 +277,7 @@
     <Compile Include="Repositories\StripeEventLogRepository.cs" />
     <Compile Include="Repositories\SubscriptionRepository.cs" />
     <Compile Include="Repositories\SubscriptionPlanRepository.cs" />
+    <Compile Include="Repositories\RolesRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\TenantRepository.cs" />
     <Compile Include="Utils\MessageUtil.cs" />

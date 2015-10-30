@@ -93,7 +93,7 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = newUser.MapToApplicationUser();
+                ApplicationUser user = newUser.MapFromViewModel();
 
                 var result = await _userRepository.ValidateUser(user);
 

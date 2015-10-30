@@ -20,9 +20,7 @@ namespace StarterKit.DOM
         public DateTime ActiveUntil { get; set; }
         public DateTime? CreditCardExpires { get; set; }
         public bool IsTrial { get; set; }
-
-        public ICollection<ApplicationUser> ApplicationUser { get; set; }
-
+        
         public Guid EntityId
         {
             get { return Id; }

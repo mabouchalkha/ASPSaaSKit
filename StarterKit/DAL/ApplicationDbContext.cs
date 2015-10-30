@@ -8,6 +8,7 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using StarterKit.DAL.Mapping;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace StarterKit.DAL
 {
@@ -23,6 +24,7 @@ namespace StarterKit.DAL
         public DbSet<Feature> Features { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<StripeEventLog> StripeEventLogs { get; set; }
+        public DbSet<ApplicationRole> Roles { get; set; }
 
         public static ApplicationDbContext Create()
         {
@@ -40,11 +42,11 @@ namespace StarterKit.DAL
 
             modelBuilder.Configurations.Add(new TenantMap());
             modelBuilder.Configurations.Add(new ApplicationUserMap());
+            modelBuilder.Configurations.Add(new ApplicationRoleMap());
             modelBuilder.Configurations.Add(new SubscriptionMap());
             modelBuilder.Configurations.Add(new SubscriptionPlanMap());
             modelBuilder.Configurations.Add(new FeatureMap());
             modelBuilder.Configurations.Add(new StripeEventLogMap());
-
 
             base.OnModelCreating(modelBuilder);
         }
