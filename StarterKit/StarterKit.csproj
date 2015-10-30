@@ -223,9 +223,14 @@
     <Compile Include="Architecture\Abstract\GenericRepository.cs" />
     <Compile Include="Architecture\Abstract\GenericTenantableRepository.cs" />
     <Compile Include="Architecture\Interfaces\IBaseRepository.cs" />
+    <Compile Include="Architecture\Interfaces\IBusinessEngine.cs" />
     <Compile Include="Architecture\Interfaces\IIdentifiableEntity.cs" />
     <Compile Include="Architecture\Interfaces\ITenantable.cs" />
     <Compile Include="Authorize\AuthorizeSubscriber.cs" />
+    <Compile Include="Business Engine\BusinessEngineFactory.cs" />
+    <Compile Include="Business Engine\Interfaces\IBusinessEngineFactory.cs" />
+    <Compile Include="Business Engine\Interfaces\ISubscriptionEngine.cs" />
+    <Compile Include="Business Engine\SubscriptionEngine.cs" />
     <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\SubscriptionPlanController.cs" />
     <Compile Include="Controllers\Webhooks\StripeWebhookController.cs" />
@@ -242,6 +247,7 @@
     <Compile Include="Repositories\Interfaces\IStripeEventLogRepository.cs" />
     <Compile Include="Repositories\Interfaces\ISubscriptionRepository.cs" />
     <Compile Include="Repositories\Interfaces\ISubscriptionPlanRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IGlobalUserRepository.cs" />
     <Compile Include="Repositories\Interfaces\IUserRepository.cs" />
     <Compile Include="Repositories\Interfaces\ITenantRepository.cs" />
     <Compile Include="Architecture\MEF\MefDependencyResolver.cs" />
@@ -271,6 +277,7 @@
     <Compile Include="Repositories\StripeEventLogRepository.cs" />
     <Compile Include="Repositories\SubscriptionRepository.cs" />
     <Compile Include="Repositories\SubscriptionPlanRepository.cs" />
+    <Compile Include="Repositories\GlobalTenantRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\TenantRepository.cs" />
     <Compile Include="Utils\ErrorUtil.cs" />
@@ -337,9 +344,13 @@
     <Content Include="Scripts\Pages\ConfirmEmail\confirm_email_ctrl.js" />
     <Content Include="Scripts\Pages\nav.html" />
     <Content Include="Scripts\Pages\header.html" />
+    <Content Include="Scripts\Pages\Subscription\billing.html" />
+    <Content Include="Scripts\Pages\Subscription\plan.html" />
+    <Content Include="Scripts\Pages\Subscription\profile.html" />
     <Content Include="Scripts\Pages\Subscription\subscription_ctrl.js" />
     <Content Include="Scripts\Pages\Subscription\subscription.html" />
     <Content Include="Scripts\Pages\Subscription\plan_resource.js" />
+    <Content Include="Scripts\Pages\Subscription\subscription_resource.js" />
     <Content Include="Scripts\Pages\TwoFactor\twofactor.html" />
     <Content Include="Scripts\Pages\TwoFactor\twofactor_ctrl.js" />
     <Content Include="Scripts\Pages\ResetPassword\reset_password.html" />

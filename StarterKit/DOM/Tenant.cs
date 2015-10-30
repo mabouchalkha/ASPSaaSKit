@@ -15,9 +15,12 @@ namespace StarterKit.DOM
         public string Name { get; set; }
 
         public string StripeCustomerId { get; set; }
+        public string StripeSubscriptionId { get; set; }
         public DateTime ActiveUntil { get; set; }
         public DateTime? CreditCardExpires { get; set; }
         public bool IsTrial { get; set; }
+
+        public string OwnerEmail { get; set; } 
 
         public ICollection<ApplicationUser> ApplicationUser { get; set; }
 

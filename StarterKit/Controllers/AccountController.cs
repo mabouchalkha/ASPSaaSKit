@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using StarterKit.Architecture.Bases;
 using StarterKit.Architecture.Interfaces;
+using StarterKit.Business_Engine.Interfaces;
 using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Repositories;
@@ -21,15 +22,16 @@ namespace StarterKit.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        private ITenantRepository _tenantRepository;
-
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
+        private IBusinessEngineFactory _BusinessEngineFactory;
+        private IDataRepositoryFactory _DataRepositoryFactory;
 
         [ImportingConstructor]
-        public AccountController(ITenantRepository tenantRepository)
+        public AccountController(IDataRepositoryFactory dataRepositoryFactory, IBusinessEngineFactory businessEngineFactory)
         {
-            _tenantRepository = tenantRepository;
+            _BusinessEngineFactory = businessEngineFactory;
+            _DataRepositoryFactory = dataRepositoryFactory;
         }
 
         public ApplicationUserManager UserManager
@@ -218,13 +220,16 @@ namespace StarterKit.Controllers
 
                 if (userIsValid.Succeeded == true)
                 {
+                    ITenantRepository tenantRepository = _DataRepositoryFactory.GetDataRepository<ITenantRepository>();
+
                     Tenant newTenant = new DOM.Tenant()
                     {
                         IsTrial = true,
-                        ActiveUntil = System.DateTime.UtcNow.AddDays(15)
+                        ActiveUntil = System.DateTime.UtcNow.AddDays(15),
+                        OwnerEmail = user.Email
                     };
-                          
-                    _tenantRepository.Create(newTenant);
+
+                    tenantRepository.Create(newTenant);
                     user.TenantId = newTenant.Id;
 
                     IdentityResult result = await UserManager.CreateAsync(user, model.Password);
@@ -236,6 +241,9 @@ namespace StarterKit.Controllers
 
                     if (currentUser != null)
                     {
+                        ISubscriptionEngine subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
+
+                        subscriptionEngine.SubscribeTenant(newTenant, 3, string.Empty);
                         await UserHelper.SendEmailConfirmationAsync(UserManager, Request.UrlReferrer.ToString(), user.Id);
                         return success("Account successfully created. Please check your inbox to confirm your email");
                     }

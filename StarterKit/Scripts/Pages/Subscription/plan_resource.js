@@ -3,8 +3,5 @@
         index: {
             method: 'GET', url: '/SubscriptionPlan'
         }
-        //read: {
-        //    method: 'GET', url: '/user/read/:id'
-        //}
     });
 }]);

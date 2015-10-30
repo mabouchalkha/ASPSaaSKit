@@ -12,6 +12,7 @@ using StarterKit.DOM;
 using StarterKit.Architecture.Bases;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
+using StarterKit.Business_Engine.Interfaces;
 
 namespace StarterKit.Controllers.Webhooks
 {
@@ -21,12 +22,15 @@ namespace StarterKit.Controllers.Webhooks
     {
 
         [ImportingConstructor]
-        public StripeWebhookController(IDataRepositoryFactory dataRepositoryFactory)
+        public StripeWebhookController(IBusinessEngineFactory businessEngineFactory, IDataRepositoryFactory dataRepositoryFactory)
         {
+            _BusinessEngineFactory = businessEngineFactory;
             _DataRepositoryFactory = dataRepositoryFactory;
         }
 
+        private IBusinessEngineFactory _BusinessEngineFactory;
         private IDataRepositoryFactory _DataRepositoryFactory;
+        
         private IStripeEventLogRepository _StripeEventLogRepository;
 
         private StripeCustomerService _stripeCustomerSerive;
@@ -45,6 +49,9 @@ namespace StarterKit.Controllers.Webhooks
         [HttpPost]
         public ActionResult Index()
         {
+            IGlobalTenantRepository tenantRepository;
+            ISubscriptionPlanRepository subscriptionPlanRepository;
+
             _StripeEventLogRepository = _DataRepositoryFactory.GetDataRepository<IStripeEventLogRepository>();
 
             Stream request = Request.InputStream;
@@ -87,7 +94,7 @@ namespace StarterKit.Controllers.Webhooks
                         TrialPeriodDays = planStripe.TrialPeriodDays
                     };
 
-                    ISubscriptionPlanRepository subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
+                    subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
                     subscriptionPlanRepository.Create(subscriptionPlan);
                     break;
                 case StripeEvents.PlanUpdated:
@@ -120,18 +127,47 @@ namespace StarterKit.Controllers.Webhooks
                     StripeSubscription subscriptionTrialWillEnd = Mapper<StripeSubscription>.MapFromJson(stripeEvent.Data.Object.ToString());
                     // emailService.SendCustomerSubscriptionTrialWillEndEmail(charge);
                     break;
+                case StripeEvents.CustomerCreated:
+                    StripeCustomer stripeCustomer = Mapper<StripeCustomer>.MapFromJson(stripeEvent.Data.Object.ToString());
+
+                    break;
+                case StripeEvents.CustomerSubscriptionCreated:
+                    StripeSubscription stripeSubscription = Mapper<StripeSubscription>.MapFromJson(stripeEvent.Data.Object.ToString());
+                    tenantRepository = _DataRepositoryFactory.GetDataRepository<IGlobalTenantRepository>();
+
+                    Tenant tenant = tenantRepository.FindBy(t => t.StripeCustomerId == stripeSubscription.CustomerId);
+                    tenant.StripeSubscriptionId = stripeSubscription.Id;
+                    tenantRepository.Update(tenant);
+                    break;
+                case StripeEvents.InvoiceCreated:
+                    StripeInvoice invoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
+
+                    break;
+                case StripeEvents.ChargeSucceeded:
+                    StripeCharge stripeCharge = Mapper<StripeCharge>.MapFromJson(stripeEvent.Data.Object.ToString());
+
+                    break;
                 case StripeEvents.InvoicePaymentSucceeded:
                     StripeInvoice stripeInvoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
                     StripeCustomer customer = StripeCustomerService.Get(stripeInvoice.CustomerId);
 
-                    IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
-                    ApplicationUser user = userRepository.UserManager.FindByEmail(customer.Email);
+                    tenantRepository = _DataRepositoryFactory.GetDataRepository<IGlobalTenantRepository>();
+                         
+                    tenant = tenantRepository.FindBy(t => t.OwnerEmail == customer.Email);
 
-                    user.Tenant.ActiveUntil = user.Tenant.ActiveUntil.AddMonths(1); 
-                    userRepository.Update(user);
+                    if(!string.IsNullOrWhiteSpace(tenant.StripeSubscriptionId))
+                    {
+                        var subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
+
+                        var subscription = subscriptionEngine.GetSubscriptionsTenant(tenant);
+                        if(subscription.Status != "trialing")
+                        {
+                            tenant.ActiveUntil = tenant.ActiveUntil.AddMonths(1);
+                            tenantRepository.Update(tenant);
+                        }
+                    }
 
                     // emailService.SendInvoicePaymentSucceededEmail(invoice, customer);
-
                     break;
                 case StripeEvents.InvoicePaymentFailed:
                     stripeInvoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
@@ -153,7 +189,8 @@ namespace StarterKit.Controllers.Webhooks
                     Request = stripeEvent.Request,
                     Type = stripeEvent.Type,
                     LiveMode = stripeEvent.LiveMode,
-                    UserId = stripeEvent.UserId
+                    UserId = stripeEvent.UserId,
+                    EventDate = DateTime.Now
                 });
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);

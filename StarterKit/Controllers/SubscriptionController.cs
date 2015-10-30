@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using StarterKit.Architecture.Bases;
+using StarterKit.Business_Engine;
+using StarterKit.Business_Engine.Interfaces;
 using StarterKit.DOM;
 using StarterKit.Repositories.Interfaces;
 using StarterKit.ViewModels;
@@ -17,108 +19,40 @@ namespace StarterKit.Controllers
     public class SubscriptionController : BaseController
     {
         [ImportingConstructor]
-        public SubscriptionController(ISubscriptionPlanRepository subscriptionPlanRepository,
-                                      ISubscriptionRepository subscriptionRepository,
-                                      IUserRepository userRepository)
+        public SubscriptionController(IBusinessEngineFactory businessEngineFactory,
+                                       IDataRepositoryFactory dataRepositoryFactory)
         {
-            _UserRepository = userRepository;
-            _SubscriptionPlanRepository = subscriptionPlanRepository;
-            _SubscriptionRepository = subscriptionRepository;
+            _BusinessEngineFactory = businessEngineFactory;
+            _DataRepositoryFactory = dataRepositoryFactory;
         }
 
-        private IUserRepository _UserRepository;
-        private ISubscriptionRepository _SubscriptionRepository;
-        private ISubscriptionPlanRepository _SubscriptionPlanRepository;
-
-        private StripeCustomerService _stripeCustomerSerive;
-        public StripeCustomerService StripeCustomerService
-        {
-            get
-            {
-                return _stripeCustomerSerive ?? new StripeCustomerService();
-            }
-            set
-            {
-                _stripeCustomerSerive = value;
-            }
-        }
-
-        private StripeSubscriptionService _stripeSubscriptionService;
-        public StripeSubscriptionService StripeSubscriptionService
-        {
-            get
-            {
-                return _stripeSubscriptionService ?? new StripeSubscriptionService();
-            }
-            private set
-            {
-                _stripeSubscriptionService = value;
-            }
-        }
+        private IBusinessEngineFactory _BusinessEngineFactory;
+        private IDataRepositoryFactory _DataRepositoryFactory;
 
         [HttpGet]
         public JsonResult Index()
         {
             // May this data will be created by webhooks
-           IEnumerable<Subscription> subscriptions = _SubscriptionRepository.Index();
+            //IEnumerable<Subscription> subscriptions = _SubscriptionRepository.Index();
             // TODO Ensure if the subscription still valid in stripe
             // Maybe we need a mapper for view model
-            return success(string.Empty, subscriptions);
+            IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
+            ISubscriptionEngine subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
+
+            var user = userRepository.Read(User.Identity.GetUserId(), u => u.Tenant);
+            var subscription = subscriptionEngine.GetSubscriptionsTenant(user.Tenant);
+            return success(string.Empty, subscription);
         }
 
         [HttpPost]
         public JsonResult Billing(SubscriptionViewModel subscriptionViewModel)
         {
-            string stripePublishableKey = ConfigurationManager.AppSettings["stripePublishableKey"];
+            IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
+            ISubscriptionEngine subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
 
-            SubscriptionPlan plan = _SubscriptionPlanRepository.Read(subscriptionViewModel.SubscriptionPlanId);
-            try
-            {
-                // I need username with Tenant, Plan, StripeToken
-                // ApplicationUserManager UserManager
-                // StripeCustomerService to create customer
-                // StripeSubscriptionService to create a subscription
-
-                // var user = _UserRepository.UserManager.FindByName(User.Identity.Name);
-                var user = _UserRepository.UserManager.FindById(subscriptionViewModel.UserId);
-
-                if (string.IsNullOrWhiteSpace(user.Tenant.StripeCustomerId))
-                {
-                    // create a customer which will create subscription if plan is set and cc info via stripetoken
-                    var customer = new StripeCustomerCreateOptions
-                    {
-                        Email = user.Email,
-                        Source = new StripeSourceOptions() { TokenId = subscriptionViewModel.StripeTokenId },
-                        PlanId = plan.ExternalId
-                    };
-
-                    StripeCustomer stripeCustomer = StripeCustomerService.Create(customer);
-
-                    // update user tenant
-                    // store stripeCustomer.id so you can add or/and update a subscriptions on the same user tenant
-                    // set activeuntildate
-
-                    user.Tenant.StripeCustomerId = stripeCustomer.Id;
-                    user.Tenant.ActiveUntil = DateTime.Now.AddDays((double)plan.TrialPeriodDays);
-                    _UserRepository.Update(user);
-                }
-                else
-                {
-                    // customer tenant already exists, add subscription to customer
-                    // update user
-                    // set activeuntildate
-
-                    StripeSubscription stripeSubscription = StripeSubscriptionService.Create(user.Tenant.StripeCustomerId, plan.ExternalId);
-                    user.Tenant.ActiveUntil = DateTime.Now.AddDays((double)plan.TrialPeriodDays);
-                    _UserRepository.Update(user);
-                }
-                //_SubscriptionRepository.Create()
-            }
-            catch (StripeException stripeException)
-            {
-                //ModelState.AddModelError("", stripeException);
-            }
-            return success(string.Empty, new { });
+            var user = userRepository.Read(User.Identity.GetUserId(), u => u.Tenant);
+            var tenant = subscriptionEngine.SubscribeTenant(user.Tenant, subscriptionViewModel.SubscriptionPlanId, subscriptionViewModel.StripeTokenId);
+            return success(string.Empty, tenant);
         }
     }
 }
