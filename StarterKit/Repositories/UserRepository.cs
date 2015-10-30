@@ -111,5 +111,22 @@ namespace StarterKit.Repositories
                 return this.UpdateGeneric(entityContext, databaseUser);
             }
         }
+
+        public override void Delete(ApplicationUser entity)
+        {
+            using (ApplicationDbContext entityContext = this.GetContext())
+            {
+                this.ValidateTenant(entity);
+
+                ApplicationUser currentUser = UserHelper.GetCurrentUser();
+
+                if (currentUser.Id == entity.Id)
+                {
+                    throw new ApplicationException(App_GlobalResources.lang.userDeleteSelf);
+                }
+
+                base.DeleteGeneric(entityContext, entity);
+            }
+        }
     }
 }

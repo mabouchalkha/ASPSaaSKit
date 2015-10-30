@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="accountCreated" xml:space="preserve">
+    <value>Account successfully created. Please check your inbox to confirm your email</value>
+  </data>
   <data name="codeRequired" xml:space="preserve">
     <value>Code is required</value>
   </data>
   <data name="defaultError" xml:space="preserve">
     <value>Something went wrong. Please contact your administrator</value>
+  </data>
+  <data name="emailConfirmed" xml:space="preserve">
+    <value>Email confirmed. Please now logging</value>
+  </data>
+  <data name="emailConfirmedNeedPassword" xml:space="preserve">
+    <value>Email confirmed successfully. We sent you an email to reset your password</value>
   </data>
   <data name="emailRequired" xml:space="preserve">
     <value>Email address is required</value>
@@ -138,8 +147,20 @@
   <data name="importantException" xml:space="preserve">
     <value>An important exception has been thrown. Thanks for contacting your administrator</value>
   </data>
+  <data name="inviteNoEmail" xml:space="preserve">
+    <value>You need to pass at least one email</value>
+  </data>
+  <data name="inviteSuccess" xml:space="preserve">
+    <value>Users will receive an email to confirm their password</value>
+  </data>
   <data name="lastNameRequired" xml:space="preserve">
     <value>Last name is required</value>
+  </data>
+  <data name="loggedIn" xml:space="preserve">
+    <value>You are now logged in</value>
+  </data>
+  <data name="loginConfirmEmail" xml:space="preserve">
+    <value>You need to confirm your email before you can log in</value>
   </data>
   <data name="modelUpdateSuccess" xml:space="preserve">
     <value>successfully updated</value>
@@ -153,6 +174,12 @@
   <data name="passwordRequired" xml:space="preserve">
     <value>Password is required</value>
   </data>
+  <data name="passwordReseted" xml:space="preserve">
+    <value>Password reseted, please check your email</value>
+  </data>
+  <data name="resendTwoFactor" xml:space="preserve">
+    <value>A new code has been sent to you. Please check your email</value>
+  </data>
   <data name="tenant" xml:space="preserve">
     <value>Account</value>
   </data>
@@ -162,7 +189,19 @@
   <data name="tenantNameRequired" xml:space="preserve">
     <value>Account name is required</value>
   </data>
+  <data name="twoFactorEnable" xml:space="preserve">
+    <value>2 factor authentication is enable, please check your email</value>
+  </data>
   <data name="user" xml:space="preserve">
     <value>User</value>
+  </data>
+  <data name="userCantRead" xml:space="preserve">
+    <value>Cant find user with ID {0}</value>
+  </data>
+  <data name="userCreated" xml:space="preserve">
+    <value>User created successfully</value>
+  </data>
+  <data name="userDeleteSelf" xml:space="preserve">
+    <value>You cannot delete your own account</value>
   </data>
 </root>

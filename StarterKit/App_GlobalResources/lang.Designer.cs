@@ -61,6 +61,15 @@ namespace StarterKit.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account successfully created. Please check your inbox to confirm your email.
+        /// </summary>
+        public static string accountCreated {
+            get {
+                return ResourceManager.GetString("accountCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Code is required.
         /// </summary>
         public static string codeRequired {
@@ -75,6 +84,24 @@ namespace StarterKit.App_GlobalResources {
         public static string defaultError {
             get {
                 return ResourceManager.GetString("defaultError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email confirmed. Please now logging.
+        /// </summary>
+        public static string emailConfirmed {
+            get {
+                return ResourceManager.GetString("emailConfirmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email confirmed successfully. We sent you an email to reset your password.
+        /// </summary>
+        public static string emailConfirmedNeedPassword {
+            get {
+                return ResourceManager.GetString("emailConfirmedNeedPassword", resourceCulture);
             }
         }
         
@@ -124,11 +151,47 @@ namespace StarterKit.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You need to pass at least one email.
+        /// </summary>
+        public static string inviteNoEmail {
+            get {
+                return ResourceManager.GetString("inviteNoEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Users will receive an email to confirm their password.
+        /// </summary>
+        public static string inviteSuccess {
+            get {
+                return ResourceManager.GetString("inviteSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last name is required.
         /// </summary>
         public static string lastNameRequired {
             get {
                 return ResourceManager.GetString("lastNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are now logged in.
+        /// </summary>
+        public static string loggedIn {
+            get {
+                return ResourceManager.GetString("loggedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You need to confirm your email before you can log in.
+        /// </summary>
+        public static string loginConfirmEmail {
+            get {
+                return ResourceManager.GetString("loginConfirmEmail", resourceCulture);
             }
         }
         
@@ -169,6 +232,24 @@ namespace StarterKit.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password reseted, please check your email.
+        /// </summary>
+        public static string passwordReseted {
+            get {
+                return ResourceManager.GetString("passwordReseted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A new code has been sent to you. Please check your email.
+        /// </summary>
+        public static string resendTwoFactor {
+            get {
+                return ResourceManager.GetString("resendTwoFactor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account.
         /// </summary>
         public static string tenant {
@@ -196,11 +277,47 @@ namespace StarterKit.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 2 factor authentication is enable, please check your email.
+        /// </summary>
+        public static string twoFactorEnable {
+            get {
+                return ResourceManager.GetString("twoFactorEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User.
         /// </summary>
         public static string user {
             get {
                 return ResourceManager.GetString("user", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cant find user with ID {0}.
+        /// </summary>
+        public static string userCantRead {
+            get {
+                return ResourceManager.GetString("userCantRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User created successfully.
+        /// </summary>
+        public static string userCreated {
+            get {
+                return ResourceManager.GetString("userCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot delete your own account.
+        /// </summary>
+        public static string userDeleteSelf {
+            get {
+                return ResourceManager.GetString("userDeleteSelf", resourceCulture);
             }
         }
     }
