@@ -204,4 +204,7 @@
   <data name="userDeleteSelf" xml:space="preserve">
     <value>Vous ne pouvez pas supprimer votre propre compte</value>
   </data>
+  <data name="userDeleted" xml:space="preserve">
+    <value>L'utilisateur a ete supprime</value>
+  </data>
 </root>

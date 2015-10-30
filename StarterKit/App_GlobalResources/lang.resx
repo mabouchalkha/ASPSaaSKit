@@ -201,6 +201,9 @@
   <data name="userCreated" xml:space="preserve">
     <value>User created successfully</value>
   </data>
+  <data name="userDeleted" xml:space="preserve">
+    <value>User successfully deleted</value>
+  </data>
   <data name="userDeleteSelf" xml:space="preserve">
     <value>You cannot delete your own account</value>
   </data>

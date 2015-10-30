@@ -52,6 +52,7 @@ namespace StarterKit.Controllers
             if (ModelState.IsValid)
             {
                 _userRepository.Delete(id);
+                return success(App_GlobalResources.lang.userDeleted);
             }
 
             return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));

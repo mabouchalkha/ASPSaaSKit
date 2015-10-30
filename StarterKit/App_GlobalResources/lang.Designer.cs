@@ -313,6 +313,15 @@ namespace StarterKit.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User successfully deleted.
+        /// </summary>
+        public static string userDeleted {
+            get {
+                return ResourceManager.GetString("userDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You cannot delete your own account.
         /// </summary>
         public static string userDeleteSelf {
