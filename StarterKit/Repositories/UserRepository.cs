@@ -88,9 +88,45 @@ namespace StarterKit.Repositories
             using (ApplicationDbContext entityContext = this.GetContext())
             {
                 ApplicationUser databaseUser = this.Read(entity.Id);
-            }
 
-            return entity;
+                if (databaseUser == null)
+                {
+                    throw new ApplicationException(string.Format("Canont find user with id {0}", entity.Id));
+                }
+                else
+                {
+                    if (!databaseUser.Email.Equals(entity.Email, StringComparison.OrdinalIgnoreCase))
+                    {
+                        databaseUser.EmailConfirmed = false;
+                        string token = UserManager.GenerateEmailConfirmationToken(entity.Id);
+                        token = HttpUtility.UrlEncode(token);
+                        UserManager.SendEmail(entity.Id, "Confirm Email", "Please confirm your email following this link : " + HttpContext.Current.Request.UrlReferrer + "#/confirmemail?userid=" + entity.Id + "&code=" + token);
+                    }
+
+                    databaseUser.FirstName = entity.FirstName;
+                    databaseUser.LastName = entity.LastName;
+                    databaseUser.Email = entity.Email;
+                }
+
+                return this.UpdateGeneric(entityContext, databaseUser);
+            }
+        }
+
+        public override void Delete(ApplicationUser entity)
+        {
+            using (ApplicationDbContext entityContext = this.GetContext())
+            {
+                this.ValidateTenant(entity);
+
+                ApplicationUser currentUser = UserHelper.GetCurrentUser();
+
+                if (currentUser.Id == entity.Id)
+                {
+                    throw new ApplicationException(App_GlobalResources.lang.userDeleteSelf);
+                }
+
+                base.DeleteGeneric(entityContext, entity);
+            }
         }
     }
 }

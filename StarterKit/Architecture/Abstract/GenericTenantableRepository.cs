@@ -54,10 +54,12 @@ namespace StarterKit.Architecture.Abstract
             }
         }
 
+        //what is it???
         public void DeleteBy(Expression<Func<T, bool>> predicate)
         {
             using (U entityContext = this.GetContext())
             {
+                //this.ValidateTenant(this.Read(id));
                 base.DeleteByGeneric(entityContext, predicate);
             }
         }
