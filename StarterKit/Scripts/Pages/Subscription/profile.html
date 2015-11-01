@@ -1,9 +1,7 @@
 ﻿<h3><p>Currently subscribed to </p></h3>
-<div ng-repeat="subscription in ::vm.subscriptions">
-    <h3>
-        <p>
-            {{subscription.StripePlan.Name}}, which costs {{subscription.StripePlan.Amount}} per {{subscription.StripePlan.Interval}}.
-        </p>
-    </h3>
-</div>
+<h3>
+    <p>
+        {{vm.subscription.StripePlanName}}, which costs {{vm.subscription.StripePlanAmount}} per {{vm.subscription.StripePlanInterval}}.
+    </p>
+</h3>
 <a class="btn btn-lg btn-info" ui-sref="subscription.plan({planId: plan.Id})">Change your subscription</a>

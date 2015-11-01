@@ -5,11 +5,11 @@
 
     var _init = function () {
         vm.plans = plans.data;
-        vm.subscriptions = subscriptions.data;
+        vm.subscription = subscriptions.data;
 
         vm.currentPlan = {};
 
-       subscriptionViewModel = {
+       billingViewModel = {
             SubscriptionPlanId: 0,
             StripeTokenId: ''
         };
@@ -26,7 +26,7 @@
         vm.currentPlan.Name = plan.Name;
         vm.currentPlan.Interval = plan.Interval;
         vm.currentPlan.AmountInDollars = plan.AmountInDollars;
-        subscriptionViewModel.SubscriptionPlanId = plan.Id;
+        billingViewModel.SubscriptionPlanId = plan.Id;
         $state.go('subscription.billing');
     };
 
@@ -34,9 +34,9 @@
         return stripe.card.createToken(vm.card)
       .then(function (response) {
           console.log('token created for card ending in ', response.card.last4);
-          subscriptionViewModel.StripeTokenId = response.id;
+          billingViewModel.StripeTokenId = response.id;
           
-          return $http.post('/Subscription/billing', subscriptionViewModel);
+          return $http.post('/Subscription/billing', billingViewModel);
       })
       .then(function (subscription) {
           $state.go('subscription.profile');

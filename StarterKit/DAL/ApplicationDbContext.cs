@@ -21,7 +21,6 @@ namespace StarterKit.DAL
         public DbSet<Tenant> Tenants { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
         public DbSet<Feature> Features { get; set; }
-        public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<StripeEventLog> StripeEventLogs { get; set; }
 
         public static ApplicationDbContext Create()
@@ -40,7 +39,6 @@ namespace StarterKit.DAL
 
             modelBuilder.Configurations.Add(new TenantMap());
             modelBuilder.Configurations.Add(new ApplicationUserMap());
-            modelBuilder.Configurations.Add(new SubscriptionMap());
             modelBuilder.Configurations.Add(new SubscriptionPlanMap());
             modelBuilder.Configurations.Add(new FeatureMap());
             modelBuilder.Configurations.Add(new StripeEventLogMap());

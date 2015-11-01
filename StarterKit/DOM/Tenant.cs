@@ -20,7 +20,8 @@ namespace StarterKit.DOM
         public DateTime? CreditCardExpires { get; set; }
         public bool IsTrial { get; set; }
 
-        public string OwnerEmail { get; set; } 
+        public string OwnerEmail { get; set; }
+        public string OwnerId { get; set; }
 
         public ICollection<ApplicationUser> ApplicationUser { get; set; }
 

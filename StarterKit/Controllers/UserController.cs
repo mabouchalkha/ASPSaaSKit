@@ -1,4 +1,5 @@
 ﻿using StarterKit.Architecture.Bases;
+using StarterKit.Authorize;
 using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Mappers;
@@ -16,6 +17,7 @@ namespace StarterKit.Controllers
     [Export]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     [Authorize]
+    [AuthorizeSubscriber]
     public class UserController : BaseController
     {
         private IUserRepository _userRepository;

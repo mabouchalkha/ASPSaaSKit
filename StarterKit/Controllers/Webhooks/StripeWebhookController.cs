@@ -20,7 +20,6 @@ namespace StarterKit.Controllers.Webhooks
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class StripeWebhookController : BaseController
     {
-
         [ImportingConstructor]
         public StripeWebhookController(IBusinessEngineFactory businessEngineFactory, IDataRepositoryFactory dataRepositoryFactory)
         {
@@ -80,6 +79,7 @@ namespace StarterKit.Controllers.Webhooks
             {
                 case StripeEvents.PlanCreated:
                     StripePlan planStripe = Mapper<StripePlan>.MapFromJson(stripeEvent.Data.Object.ToString());
+                    subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
 
                     SubscriptionPlan subscriptionPlan = new SubscriptionPlan
                     {
@@ -94,13 +94,12 @@ namespace StarterKit.Controllers.Webhooks
                         TrialPeriodDays = planStripe.TrialPeriodDays
                     };
 
-                    subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
                     subscriptionPlanRepository.Create(subscriptionPlan);
                     break;
                 case StripeEvents.PlanUpdated:
                     planStripe = Mapper<StripePlan>.MapFromJson(stripeEvent.Data.Object.ToString());
-
                     subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
+
                     SubscriptionPlan plan = subscriptionPlanRepository.FindBy(sp => sp.ExternalId == planStripe.Id);
                     if (plan != null)
                     {
@@ -119,8 +118,8 @@ namespace StarterKit.Controllers.Webhooks
                     break;
                 case StripeEvents.PlanDeleted:
                     planStripe = Mapper<StripePlan>.MapFromJson(stripeEvent.Data.Object.ToString());
-
                     subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
+
                     subscriptionPlanRepository.DeleteBy(sp => sp.ExternalId == planStripe.Id);
                     break;
                 case StripeEvents.CustomerSubscriptionTrialWillEnd:
@@ -160,7 +159,7 @@ namespace StarterKit.Controllers.Webhooks
                         var subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
 
                         var subscription = subscriptionEngine.GetSubscriptionsTenant(tenant);
-                        if(subscription.Status != "trialing")
+                        if(subscription.Status == "active")
                         {
                             tenant.ActiveUntil = tenant.ActiveUntil.AddMonths(1);
                             tenantRepository.Update(tenant);
@@ -172,10 +171,6 @@ namespace StarterKit.Controllers.Webhooks
                 case StripeEvents.InvoicePaymentFailed:
                     stripeInvoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
                     // emailService.SendInvoicePaymentFailedEmail(invoice, customer);
-                    break;
-                case StripeEvents.ChargeRefunded:
-                    StripeCharge charge = Mapper<StripeCharge>.MapFromJson(stripeEvent.Data.Object.ToString());
-                    // emailService.SendEmail(charge);
                     break;
                 default:
                     break;
@@ -198,9 +193,8 @@ namespace StarterKit.Controllers.Webhooks
 
         private bool HasEventBeenProcessedPreviously(StripeEvent stripeEvent)
         {
-            // Lookup in table StripeEvent log  by eventId
-            // if eventid exists return true otherwise return false
             bool eventProcessed = false;
+
             StripeEventLog stripeEventLog = _StripeEventLogRepository.FindBy(sev => sev.stripeEventId == stripeEvent.Id);
             if (stripeEventLog != null)
             {

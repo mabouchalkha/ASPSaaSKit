@@ -55,8 +55,7 @@ namespace StarterKit.Business_Engine
 
             if (!string.IsNullOrWhiteSpace(tenant.StripeCustomerId) && !string.IsNullOrWhiteSpace(tenant.StripeSubscriptionId))
             {
-                var test = StripeCustomerService.Get(tenant.StripeCustomerId).StripeSubscriptionList.Data.FirstOrDefault(s => s.Id == tenant.StripeSubscriptionId);
-                subscription = StripeSubscriptionService.List(tenant.StripeCustomerId).FirstOrDefault(t => t.Id == tenant.StripeSubscriptionId);
+                subscription = StripeCustomerService.Get(tenant.StripeCustomerId).StripeSubscriptionList.Data.FirstOrDefault(s => s.Id == tenant.StripeSubscriptionId);
             }
 
             return subscription;
@@ -83,14 +82,20 @@ namespace StarterKit.Business_Engine
                     StripeCustomer stripeCustomer = StripeCustomerService.Create(customer);
 
                     tenant.StripeCustomerId = stripeCustomer.Id;
-                    //tenant.StripeSubscriptionId = stripeCustomer.StripeSubscriptionList.
                     tenant.ActiveUntil = DateTime.Now.AddDays((double)plan.TrialPeriodDays);
                     tenantRepository.Update(tenant);
                 }
                 else
                 {
-                    StripeSubscription stripeSubscription = StripeSubscriptionService.Create(tenant.StripeCustomerId, plan.ExternalId);
-                    tenant.ActiveUntil = DateTime.Now.AddDays((double)plan.TrialPeriodDays);
+                    var subscriptionOptions = new StripeSubscriptionUpdateOptions
+                    {
+                        PlanId = plan.ExternalId
+                    };
+
+                    StripeSubscription stripeSubscription =
+                        StripeSubscriptionService.Update(tenant.StripeCustomerId, tenant.StripeSubscriptionId, subscriptionOptions);
+
+                    tenant.ActiveUntil = stripeSubscription.PeriodEnd.Value;
                     tenantRepository.Update(tenant);
                 }
             }

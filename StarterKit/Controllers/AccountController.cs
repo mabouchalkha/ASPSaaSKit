@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using StarterKit.Architecture.Bases;
 using StarterKit.Architecture.Interfaces;
+using StarterKit.Authorize;
 using StarterKit.Business_Engine.Interfaces;
 using StarterKit.DOM;
 using StarterKit.Helpers;
@@ -9,6 +10,7 @@ using StarterKit.Repositories;
 using StarterKit.Repositories.Interfaces;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
+using System;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -225,8 +227,9 @@ namespace StarterKit.Controllers
                     Tenant newTenant = new DOM.Tenant()
                     {
                         IsTrial = true,
-                        ActiveUntil = System.DateTime.UtcNow.AddDays(15),
-                        OwnerEmail = user.Email
+                        ActiveUntil = DateTime.Now.AddDays(-1),
+                        OwnerEmail = user.Email,
+                        OwnerId = user.Id
                     };
 
                     tenantRepository.Create(newTenant);
