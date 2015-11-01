@@ -1,4 +1,5 @@
 ﻿using StarterKit.DOM;
+using StarterKit.Repositories.Interfaces;
 using StarterKit.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -9,19 +10,19 @@ namespace StarterKit.Mappers
 {
     public static class UserMapper
     {
-        public static List<IndexUserViewModel> MapToIndexUserViewModels(this List<ApplicationUser> users)
+        public static List<IndexUserViewModel> MapToViewModels(this List<ApplicationUser> users)
         {
             List<IndexUserViewModel> usersViewModel = new List<IndexUserViewModel>();
 
             if (users != null)
             {
-                users.ForEach(u => usersViewModel.Add(u.MapToIndexUserViewModel()));
+                users.ForEach(u => usersViewModel.Add(u.MapToIndexViewModel()));
             }
 
             return usersViewModel;
         }
 
-        public static IndexUserViewModel MapToIndexUserViewModel(this ApplicationUser user)
+        public static IndexUserViewModel MapToIndexViewModel(this ApplicationUser user)
         {
             return new IndexUserViewModel()
             {
@@ -33,7 +34,7 @@ namespace StarterKit.Mappers
             };
         }
 
-        public static DetailUserViewModel MapToDetailUserViewModel(this ApplicationUser user)
+        public static DetailUserViewModel MapToViewModel(this ApplicationUser user)
         {
             return new DetailUserViewModel()
             {
@@ -45,33 +46,18 @@ namespace StarterKit.Mappers
             };
         }
 
-        public static ApplicationUser MapToApplicationUser(this DetailUserViewModel viewModel, ApplicationUser user = null)
+        public static ApplicationUser MapFromViewModel(this DetailUserViewModel viewModel)
         {
-            if (user != null)
+            return new ApplicationUser()
             {
-                if (user.Email.Equals(viewModel.Email, StringComparison.OrdinalIgnoreCase))
-                {
-                    user.EmailConfirmed = false;
-                    user.UserName = viewModel.Email;
-                }
-
-                //send new confirm email
-                user.LastName = viewModel.LastName;
-                user.FirstName = viewModel.FirstName;
-                user.Email = viewModel.Email;
-            }
-            else
-            {
-                user = new ApplicationUser();
-                user.EmailConfirmed = false;
-                user.LastName = viewModel.LastName;
-                user.FirstName = viewModel.FirstName;
-                user.Email = viewModel.Email;
-                user.UserName = viewModel.Email;
-                user.TwoFactorEnabled = viewModel.TwoFactorEnabled;
-            }
-
-            return user;
+                EmailConfirmed = false,
+                LastName = viewModel.LastName,
+                FirstName = viewModel.FirstName,
+                Email = viewModel.Email,
+                UserName = viewModel.Email,
+                TwoFactorEnabled = viewModel.TwoFactorEnabled,
+                Id = viewModel.Id
+            };
         }
     }
 }

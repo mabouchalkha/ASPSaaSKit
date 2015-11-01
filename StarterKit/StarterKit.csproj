@@ -227,12 +227,14 @@
     <Compile Include="Architecture\Abstract\BaseRepository.cs" />
     <Compile Include="Architecture\Abstract\GenericRepository.cs" />
     <Compile Include="Architecture\Abstract\GenericTenantableRepository.cs" />
+    <Compile Include="Architecture\Exceptions\TenantViolationException.cs" />
     <Compile Include="Architecture\Interfaces\IBaseRepository.cs" />
     <Compile Include="Architecture\Interfaces\IBusinessEngine.cs" />
     <Compile Include="Architecture\Interfaces\IIdentifiableEntity.cs" />
     <Compile Include="Architecture\Interfaces\ITenantable.cs" />
     <Compile Include="Architecture\Interfaces\Mapping\IMapFrom.cs" />
     <Compile Include="Architecture\Interfaces\Mapping\IMapFromCustom.cs" />
+	<Compile Include="Architecture\Serialization\CustomJsonResult.cs" />
     <Compile Include="Authorize\AuthorizeSubscriber.cs" />
     <Compile Include="Business Engine\BusinessEngineFactory.cs" />
     <Compile Include="Business Engine\Interfaces\IBusinessEngineFactory.cs" />
@@ -246,8 +248,10 @@
     <Compile Include="DAL\Mapping\StripeEventLogMap.cs" />
     <Compile Include="DAL\Mapping\SubscriptionPlanMap.cs" />
     <Compile Include="DAL\Mapping\TenantMap.cs" />
-    <Compile Include="Fluent\ViewModels\AccountViewModelValidator.cs" />
-    <Compile Include="Fluent\ViewModels\DetailUserViewModelValidator.cs" />
+    <Compile Include="Fluent\AccountViewModelValidator.cs" />
+    <Compile Include="Fluent\TenantViewModelValidator.cs" />
+    <Compile Include="Fluent\DetailUserViewModelValidator.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repositories\DataRepositoryFactory.cs" />
     <Compile Include="Repositories\Interfaces\IDataRepositoryFactory.cs" />
     <Compile Include="Repositories\Interfaces\IStripeEventLogRepository.cs" />
@@ -277,12 +281,12 @@
     <Compile Include="Mappers\TenantMapper.cs" />
     <Compile Include="Mappers\UserMapper.cs" />
     <Compile Include="Architecture\MEF\MEFLoader.cs" />
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repositories\StripeEventLogRepository.cs" />
     <Compile Include="Repositories\SubscriptionPlanRepository.cs" />
     <Compile Include="Repositories\GlobalTenantRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\TenantRepository.cs" />
+    <Compile Include="Utils\MessageUtil.cs" />
     <Compile Include="Utils\ErrorUtil.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="DAL\ApplicationDbContext.cs" />
@@ -293,6 +297,7 @@
     <Compile Include="Utils\JsonStatus.cs" />
     <Compile Include="ViewModels\BillingViewModel.cs" />
     <Compile Include="ViewModels\SubscriptionViewModel.cs" />
+	<Compile Include="ViewModels\TenantViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -392,11 +397,13 @@
     <none Include="Web.Release.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </none>
+<none Include="Web.Debug.local.2014.config">
+      <DependentUpon>Web.template.config</DependentUpon>
+    </none>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
-    <Folder Include="Fluent\DOM\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -414,13 +421,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App_GlobalResources\lang.resx">
-      <Generator>PublicResourceProxyGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>lang.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App_GlobalResources\lang.fr.resx">
-      <Generator>PublicResourceProxyGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>lang.fr.designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
@@ -444,6 +451,9 @@
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug.local.2014|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

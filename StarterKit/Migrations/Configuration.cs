@@ -1,4 +1,4 @@
-namespace StarterKit.Migrations
+﻿namespace StarterKit.Migrations
 {
     using Microsoft.AspNet.Identity;
     using DOM;

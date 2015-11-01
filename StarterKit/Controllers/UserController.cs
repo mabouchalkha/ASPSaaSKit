@@ -31,7 +31,7 @@ namespace StarterKit.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            return success(string.Empty, new { entities = _userRepository.Index(u => u.Roles, u=> u.Tenant).ToList().MapToIndexUserViewModels() });
+            return success(string.Empty, new { entities = _userRepository.Index(u => u.Roles).ToList().MapToViewModels() });
         }
 
         [HttpPut]
@@ -39,20 +39,9 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = _userRepository.Read(userToUpdate.Id);
-
-                if (user != null)
-                {
-                    ApplicationUser updatedUser = userToUpdate.MapToApplicationUser(user);
-                    updatedUser = _userRepository.Update(updatedUser);
-
-                    return success("User successfully updated");
+                _userRepository.Update(userToUpdate.MapFromViewModel());
+                return success(MessageUtil.GenerateUpdateSuccessfull(App_GlobalResources.lang.user));
                 }
-                else
-                {
-                    return unsuccess(string.Format("Cannot find user with Id : {0}", userToUpdate.Id));
-                }
-            }
 
             return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));
         }
@@ -62,18 +51,8 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = UserHelper.GetCurrentUser();
-
-                if (currentUser.Id != id)
-                {
                     _userRepository.Delete(id);
-
-                    return success("User successfully deleted");
-                }
-                else
-                {
-                    return unsuccess("You cannot delete your own user");
-                }
+                return success(App_GlobalResources.lang.userDeleted);
             }
 
             return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));
@@ -88,11 +67,11 @@ namespace StarterKit.Controllers
 
                 if (user != null)
                 {
-                    return success(string.Empty, user.MapToDetailUserViewModel());
+                    return success(string.Empty, user.MapToViewModel());
                 }
                 else
                 {
-                    return unsuccess(string.Format("Cannot retrieve user with id {0}", id));
+                    return unsuccess(string.Format(App_GlobalResources.lang.userCantRead, id));
                 }
             }
 
@@ -104,7 +83,7 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = newUser.MapToApplicationUser();
+                ApplicationUser user = newUser.MapFromViewModel();
 
                 var result = await _userRepository.ValidateUser(user);
 
@@ -112,7 +91,7 @@ namespace StarterKit.Controllers
                 {
                     user = _userRepository.Create(user);
 
-                    return success("User created successfully", null, new { id = user.Id });
+                    return success(App_GlobalResources.lang.userCreated, null, new { id = user.Id });
                 }
 
                 return unsuccess(ErrorUtil.JoinErrors(result.Errors));
@@ -132,14 +111,14 @@ namespace StarterKit.Controllers
                 {
                     if (!_userRepository.EmailExit(email))
                     {
-                        _userRepository.Create(new ApplicationUser() { Email = email, UserName = email });
+                        _userRepository.Create(new ApplicationUser() { Email = email, UserName = email, FirstName = email, LastName = email });
                     }
                 }
 
-                return success("Users has been invited. They will receive an email to confirm their account");
+                return success(App_GlobalResources.lang.inviteSuccess);
             }
 
-            return unsuccess("You need to put some emails adresses");
+            return unsuccess(App_GlobalResources.lang.inviteNoEmail);
         }
     }
 }

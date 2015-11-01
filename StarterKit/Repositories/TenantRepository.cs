@@ -1,6 +1,5 @@
-﻿using EntityFramework.DynamicFilters;
-using StarterKit.Architecture.Abstract;
-using StarterKit.Architecture.Interfaces;
+﻿using StarterKit.Architecture.Abstract;
+using StarterKit.Architecture.Exceptions;
 using StarterKit.DAL;
 using StarterKit.DOM;
 using StarterKit.Helpers;
@@ -16,6 +15,18 @@ namespace StarterKit.Repositories
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class TenantRepository : GenericTenantableRepository<Tenant, ApplicationDbContext, Guid>, ITenantRepository
     {
+        public object IdentityHelper { get; private set; }
+
+        protected override void ValidateTenant(Tenant entity)
+        {
+            Guid currentTenantId = TenantHelper.GetCurrentTenantId();
+
+            if (entity.Id != currentTenantId)
+            {
+                throw new TenantViolationException();
+            }
+        }
+
         protected override DbSet<Tenant> DbSet(ApplicationDbContext entityContext)
         {
             return entityContext.Tenants;
