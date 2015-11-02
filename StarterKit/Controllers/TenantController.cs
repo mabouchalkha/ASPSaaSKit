@@ -41,7 +41,7 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                _tenantRepository.Update(tenant.MapFromViewModel());
+                _tenantRepository.Update(tenant.MapFromViewModel(_tenantRepository.Read(tenant.Id)));
                 return success(MessageUtil.GenerateUpdateSuccessfull(App_GlobalResources.lang.tenant));
             }
 
