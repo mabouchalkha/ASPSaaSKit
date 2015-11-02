@@ -41,17 +41,17 @@ namespace StarterKit.Controllers
             {
                 _userRepository.Update(userToUpdate.MapFromViewModel());
                 return success(MessageUtil.GenerateUpdateSuccessfull(App_GlobalResources.lang.user));
-                }
+            }
 
             return unsuccess(ErrorUtil.GenerateModelStateError(ModelState));
         }
 
         [HttpDelete]
-        public JsonResult Delete (string id)
+        public JsonResult Delete(string id)
         {
             if (ModelState.IsValid)
             {
-                    _userRepository.Delete(id);
+                _userRepository.Delete(id);
                 return success(App_GlobalResources.lang.userDeleted);
             }
 
@@ -59,7 +59,7 @@ namespace StarterKit.Controllers
         }
 
         [HttpGet]
-        public JsonResult Read (string id)
+        public JsonResult Read(string id)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace StarterKit.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Create (DetailUserViewModel newUser)
+        public async Task<JsonResult> Create(DetailUserViewModel newUser)
         {
             if (ModelState.IsValid)
             {
@@ -101,7 +101,7 @@ namespace StarterKit.Controllers
         }
 
         [HttpPost]
-        public JsonResult Invite (string emails)
+        public JsonResult Invite(string emails)
         {
             if (!string.IsNullOrEmpty(emails))
             {

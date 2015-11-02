@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StarterKit.DOM
 {
-    public class Tenant : IIdentifiableEntity<Guid>
+    public class Tenant : IIdentifiableEntity<Guid>, IModificationHistory
     {
         public Tenant() { }
 
@@ -32,5 +32,10 @@ namespace StarterKit.DOM
             get { return Id; }
             set { Id = value; }
         }
+
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string UpdatedBy { get; set; }
+        public DateTime UpdateDate { get; set; }
     }
 }

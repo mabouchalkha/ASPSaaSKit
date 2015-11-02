@@ -11,7 +11,9 @@ namespace StarterKit.Architecture.Exceptions
     {
         private string logFilePath = @"C:\sasLog\TenantViolationError.txt";
 
-        public TenantViolationException() : base (App_GlobalResources.lang.importantException)
+
+
+        public TenantViolationException() : base(App_GlobalResources.lang.importantException)
         {
             // this need to be adressed immediatly as it should never occur
             using (StreamWriter writer = new StreamWriter(this.logFilePath, true))

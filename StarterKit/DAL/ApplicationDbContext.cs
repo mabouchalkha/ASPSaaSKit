@@ -55,6 +55,20 @@ namespace StarterKit.DAL
             {
                 Guid currentTenantId = TenantHelper.GetCurrentTenantId();
 
+                foreach (var history in changeSet.Where(e => e.Entity is IModificationHistory && (e.State == EntityState.Added ||
+                           e.State == EntityState.Modified))
+                    .Select(e => e.Entity as IModificationHistory)
+                   )
+                {
+                    history.UpdateDate = DateTime.Now;
+                    //history.UpdatedBy = 
+                    if (history.CreatedDate == DateTime.MinValue)
+                    {
+                        //history.CreatedBy = 
+                        history.CreatedDate = DateTime.Now;
+                    }
+                }
+
                 foreach (var entry in changeSet.Where(c => c.State == EntityState.Added || c.State == EntityState.Modified))
                 {
                     bool isTenantable = entry.Entity.GetType().GetInterface("ITenantable") != null;

@@ -26,32 +26,40 @@ namespace StarterKit.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
-            ISubscriptionEngine subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
-
-            SubscriptionViewModel subscription = null;
-            var user = userRepository.Read(User.Identity.GetUserId(), u => u.Tenant);
-            if (user != null)
+            return GetHttpResponse(() => 
             {
-                subscription = AutoMapper.Mapper.Map<SubscriptionViewModel>(subscriptionEngine.GetSubscriptionsTenant(user.Tenant));
-            }
+                ITenantRepository tenantRepository = _DataRepositoryFactory.GetDataRepository<ITenantRepository>();
+                ISubscriptionEngine subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
 
-            return success(string.Empty, subscription);
+                SubscriptionViewModel subscription = null;
+                var userId = User.Identity.GetUserId();
+                var tenant = tenantRepository.FindBy(t => t.OwnerId == userId);
+                if (tenant != null)
+                {
+                    var stripeSubscription = subscriptionEngine.GetSubscriptionsTenant(tenant);
+                    subscription = AutoMapper.Mapper.Map<SubscriptionViewModel>(stripeSubscription);
+                }
+
+                return success(string.Empty, subscription);
+            });
         }
 
         [HttpPost]
         public JsonResult Billing(BillingViewModel billingViewModel)
         {
-            IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
-            ISubscriptionEngine subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
-
-            var user = userRepository.Read(User.Identity.GetUserId(), u => u.Tenant);
-            if (user != null)
+            return GetHttpResponse(() =>
             {
-                subscriptionEngine.SubscribeTenant(user.Tenant, billingViewModel.SubscriptionPlanId, billingViewModel.StripeTokenId);
-            }
+                IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
+                ISubscriptionEngine subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
 
-            return success(string.Empty);
+                var user = userRepository.Read(User.Identity.GetUserId(), u => u.Tenant);
+                if (user != null)
+                {
+                    subscriptionEngine.SubscribeTenant(user.Tenant, billingViewModel.SubscriptionPlanId, billingViewModel.StripeTokenId);
+                }
+
+                return success(string.Empty);
+            });
         }
     }
 }

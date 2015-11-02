@@ -82,6 +82,7 @@ namespace StarterKit.Business_Engine
                     StripeCustomer stripeCustomer = StripeCustomerService.Create(customer);
 
                     tenant.StripeCustomerId = stripeCustomer.Id;
+                    tenant.StripeSubscriptionId = stripeCustomer.StripeSubscriptionList.Data.SingleOrDefault().Id;
                     tenant.ActiveUntil = DateTime.Now.AddDays((double)plan.TrialPeriodDays);
                     tenantRepository.Update(tenant);
                 }
@@ -101,7 +102,7 @@ namespace StarterKit.Business_Engine
             }
             catch (StripeException stripeException)
             {
-                //ModelState.AddModelError("", stripeException);
+                throw;
             }
 
             return tenant;

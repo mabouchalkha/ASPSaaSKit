@@ -19,12 +19,12 @@ namespace StarterKit.Repositories
 
         protected override void ValidateTenant(Tenant entity)
         {
-            Guid currentTenantId = TenantHelper.GetCurrentTenantId();
+            //Guid currentTenantId = TenantHelper.GetCurrentTenantId();
 
-            if (entity.Id != currentTenantId)
-            {
-                throw new TenantViolationException();
-            }
+            //if (entity.Id != currentTenantId)
+            //{
+            //    throw new TenantViolationException();
+            //}
         }
 
         protected override DbSet<Tenant> DbSet(ApplicationDbContext entityContext)

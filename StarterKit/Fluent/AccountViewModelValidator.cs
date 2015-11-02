@@ -16,13 +16,13 @@ namespace StarterKit.Fluent.ViewModels
     {
         public RegisterViewModelValidator()
         {
-            RuleFor(vm => vm.Password)
-                .Length(2, 6).WithLocalizedMessage(() => App_GlobalResources.lang.passwordLength)
-                .NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.passwordRequired);
-            RuleFor(vm => vm.Email).EmailAddress().NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.emailRequired);
-            RuleFor(vm => vm.FirstName).NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.firstNameRequired);
-            RuleFor(vm => vm.LastName).NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.lastNameRequired);
-            RuleFor(vm => vm.ConfirmPassword).Equal(x => x.Password).WithLocalizedMessage(() => App_GlobalResources.lang.passwordMatch);
+            //RuleFor(vm => vm.Password)
+            //    .Length(2, 6).WithLocalizedMessage(() => App_GlobalResources.lang.passwordLength)
+            //    .NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.passwordRequired);
+            //RuleFor(vm => vm.Email).EmailAddress().NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.emailRequired);
+            //RuleFor(vm => vm.FirstName).NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.firstNameRequired);
+            //RuleFor(vm => vm.LastName).NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.lastNameRequired);
+            //RuleFor(vm => vm.ConfirmPassword).Equal(x => x.Password).WithLocalizedMessage(() => App_GlobalResources.lang.passwordMatch);
         }
     }
 

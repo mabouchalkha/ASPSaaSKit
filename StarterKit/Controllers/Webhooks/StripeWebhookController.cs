@@ -29,7 +29,7 @@ namespace StarterKit.Controllers.Webhooks
 
         private IBusinessEngineFactory _BusinessEngineFactory;
         private IDataRepositoryFactory _DataRepositoryFactory;
-        
+
         private IStripeEventLogRepository _StripeEventLogRepository;
 
         private StripeCustomerService _stripeCustomerSerive;
@@ -50,6 +50,7 @@ namespace StarterKit.Controllers.Webhooks
         {
             IGlobalTenantRepository tenantRepository;
             ISubscriptionPlanRepository subscriptionPlanRepository;
+            StripeSubscription stripeSubscription;
 
             _StripeEventLogRepository = _DataRepositoryFactory.GetDataRepository<IStripeEventLogRepository>();
 
@@ -86,7 +87,7 @@ namespace StarterKit.Controllers.Webhooks
                         AmountInCents = planStripe.Amount,
                         Currency = planStripe.Currency,
                         Description = planStripe.StatementDescriptor,
-                        DisplayOrder = 1,
+                        DisplayOrder = subscriptionPlanRepository.Index().Max(p => p.DisplayOrder),
                         ExternalId = planStripe.Id,
                         Interval = planStripe.Interval,
                         IsActive = true,
@@ -106,7 +107,6 @@ namespace StarterKit.Controllers.Webhooks
                         plan.AmountInCents = planStripe.Amount;
                         plan.Currency = planStripe.Currency;
                         plan.Description = planStripe.StatementDescriptor;
-                        plan.DisplayOrder = 1;
                         plan.ExternalId = planStripe.Id;
                         plan.Interval = planStripe.Interval;
                         plan.IsActive = true;
@@ -130,13 +130,22 @@ namespace StarterKit.Controllers.Webhooks
                     StripeCustomer stripeCustomer = Mapper<StripeCustomer>.MapFromJson(stripeEvent.Data.Object.ToString());
 
                     break;
-                case StripeEvents.CustomerSubscriptionCreated:
-                    StripeSubscription stripeSubscription = Mapper<StripeSubscription>.MapFromJson(stripeEvent.Data.Object.ToString());
-                    tenantRepository = _DataRepositoryFactory.GetDataRepository<IGlobalTenantRepository>();
+                //case StripeEvents.CustomerSubscriptionCreated:
+                //    StripeSubscription stripeSubscription = Mapper<StripeSubscription>.MapFromJson(stripeEvent.Data.Object.ToString());
+                //    tenantRepository = _DataRepositoryFactory.GetDataRepository<IGlobalTenantRepository>();
 
-                    Tenant tenant = tenantRepository.FindBy(t => t.StripeCustomerId == stripeSubscription.CustomerId);
-                    tenant.StripeSubscriptionId = stripeSubscription.Id;
-                    tenantRepository.Update(tenant);
+                //    Tenant tenant = tenantRepository.FindBy(t => t.StripeCustomerId == stripeSubscription.CustomerId);
+                //    tenant.StripeSubscriptionId = stripeSubscription.Id;
+                //    tenantRepository.Update(tenant);
+                //    break;
+                case StripeEvents.CustomerSubscriptionUpdated:
+                    stripeSubscription = Mapper<StripeSubscription>.MapFromJson(stripeEvent.Data.Object.ToString());
+
+                    if (stripeSubscription.Status == "active")
+                    {
+                       
+                    }
+
                     break;
                 case StripeEvents.InvoiceCreated:
                     StripeInvoice invoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
@@ -151,17 +160,18 @@ namespace StarterKit.Controllers.Webhooks
                     StripeCustomer customer = StripeCustomerService.Get(stripeInvoice.CustomerId);
 
                     tenantRepository = _DataRepositoryFactory.GetDataRepository<IGlobalTenantRepository>();
-                         
-                    tenant = tenantRepository.FindBy(t => t.OwnerEmail == customer.Email);
 
-                    if(!string.IsNullOrWhiteSpace(tenant.StripeSubscriptionId))
+                    var tenant = tenantRepository.FindBy(t => t.OwnerEmail == customer.Email);
+
+                    if (!string.IsNullOrWhiteSpace(tenant.StripeSubscriptionId))
                     {
                         var subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
 
                         var subscription = subscriptionEngine.GetSubscriptionsTenant(tenant);
-                        if(subscription.Status == "active")
+                        if (subscription.Status == "active")
                         {
-                            tenant.ActiveUntil = tenant.ActiveUntil.AddMonths(1);
+                            tenant.ActiveUntil = subscription.PeriodEnd.Value;//tenant.ActiveUntil.AddMonths(1);
+                            tenant.IsTrial = false;
                             tenantRepository.Update(tenant);
                         }
                     }
