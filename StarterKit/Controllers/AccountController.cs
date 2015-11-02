@@ -229,7 +229,7 @@ namespace StarterKit.Controllers
 
                 if (userIsValid.Succeeded == true)
                 {
-                    ITenantRepository tenantRepository = _DataRepositoryFactory.GetDataRepository<ITenantRepository>();
+                    IGlobalTenantRepository tenantRepository = _DataRepositoryFactory.GetDataRepository<IGlobalTenantRepository>();
 
                     using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                     {

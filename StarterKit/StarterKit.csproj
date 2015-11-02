@@ -278,9 +278,7 @@
     </Compile>
     <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="Helpers\TenantHelper.cs" />
-    <Compile Include="Mappers\SimpleMapper.cs" />
-    <Compile Include="Mappers\TenantMapper.cs" />
-    <Compile Include="Mappers\UserMapper.cs" />
+    <Compile Include="Mappers\Mapper.cs" />
     <Compile Include="Architecture\MEF\MEFLoader.cs" />
     <Compile Include="Repositories\StripeEventLogRepository.cs" />
     <Compile Include="Repositories\SubscriptionPlanRepository.cs" />
