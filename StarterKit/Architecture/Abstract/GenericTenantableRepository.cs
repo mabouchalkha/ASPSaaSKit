@@ -1,4 +1,5 @@
 ﻿using EntityFramework.DynamicFilters;
+using StarterKit.Architecture.Exceptions;
 using StarterKit.Architecture.Interfaces;
 using StarterKit.DAL;
 using StarterKit.Extentions;
@@ -12,10 +13,18 @@ using System.Linq.Expressions;
 namespace StarterKit.Architecture.Abstract
 {
     public abstract class GenericTenantableRepository<T, U, TKey> : BaseRepository<T, U, TKey>, IBaseRepository<T, TKey>
-        where T : class, IIdentifiableEntity<TKey>, new()
+        where T : class, IIdentifiableTenantableEntity<TKey>, new()
         where U : DbContext, new()
     {
-        protected abstract void ValidateTenant(T entity);
+        public void ValidateTenant(T entity)
+        {
+            var currentTenantId = TenantHelper.GetCurrentTenantId();
+
+            if (currentTenantId == entity.TenantId)
+            {
+                throw new TenantViolationException();
+            }
+        }
 
         protected U GetContext()
         {

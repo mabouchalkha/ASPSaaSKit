@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StarterKit.Repositories.Interfaces
 {
-    public interface IRoleRepository : IBaseRepository<ApplicationRole, Guid>
+    public interface IRoleRepository : IBaseRepository<ApplicationRole, string>
     {
     }
 }

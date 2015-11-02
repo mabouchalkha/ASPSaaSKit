@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace StarterKit.DOM
 {
-    public class ApplicationUser : IdentityUser, IIdentifiableEntity<string>, ITenantable
+    public class ApplicationUser : IdentityUser, IIdentifiableTenantableEntity<string>, ITenantable
     {
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

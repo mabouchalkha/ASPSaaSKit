@@ -28,16 +28,6 @@ namespace StarterKit.Repositories
             private set { _userManager = value; }
         }
 
-        protected override void ValidateTenant(ApplicationUser entity)
-        {
-            Guid currentTenantId = TenantHelper.GetCurrentTenantId();
-
-            if (entity.TenantId != currentTenantId)
-            {
-                throw new TenantViolationException();
-            }
-        }
-
         protected override DbSet<ApplicationUser> DbSet(ApplicationDbContext entityContext)
         {
             return (DbSet<ApplicationUser>)entityContext.Users;
@@ -124,6 +114,8 @@ namespace StarterKit.Repositories
                 {
                     throw new ApplicationException(App_GlobalResources.lang.userDeleteSelf);
                 }
+
+                UserManager.RemoveFromRoles(entity.Id, UserManager.GetRoles(entity.Id).ToArray());
 
                 base.DeleteGeneric(entityContext, entity);
             }

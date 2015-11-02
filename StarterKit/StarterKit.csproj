@@ -230,6 +230,7 @@
     <Compile Include="Authorize\AuthorizeSubscriber.cs" />
     <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\SubscriptionPlanController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\Webhooks\StripeWebhookController.cs" />
     <Compile Include="DAL\Mapping\ApplicationRoleMap.cs" />
     <Compile Include="DAL\Mapping\ApplicationUserMap.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Fluent\AccountViewModelValidator.cs" />
     <Compile Include="Fluent\TenantViewModelValidator.cs" />
     <Compile Include="Fluent\DetailUserViewModelValidator.cs" />
+    <Compile Include="Mappers\RoleMapper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repositories\DataRepositoryFactory.cs" />
     <Compile Include="Repositories\Interfaces\IDataRepositoryFactory.cs" />
@@ -277,7 +279,7 @@
     <Compile Include="Repositories\StripeEventLogRepository.cs" />
     <Compile Include="Repositories\SubscriptionRepository.cs" />
     <Compile Include="Repositories\SubscriptionPlanRepository.cs" />
-    <Compile Include="Repositories\RolesRepository.cs" />
+    <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\TenantRepository.cs" />
     <Compile Include="Utils\MessageUtil.cs" />
@@ -289,6 +291,7 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\JsonStatus.cs" />
+    <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\TenantViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
@@ -385,7 +388,7 @@
     <none Include="Web.Release.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </none>
-<none Include="Web.Debug.local.2014.config">
+    <none Include="Web.Debug.local.2014.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </none>
   </ItemGroup>

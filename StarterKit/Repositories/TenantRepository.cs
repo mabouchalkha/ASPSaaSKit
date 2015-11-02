@@ -17,16 +17,6 @@ namespace StarterKit.Repositories
     {
         public object IdentityHelper { get; private set; }
 
-        protected override void ValidateTenant(Tenant entity)
-        {
-            Guid currentTenantId = TenantHelper.GetCurrentTenantId();
-
-            if (entity.Id != currentTenantId)
-            {
-                throw new TenantViolationException();
-            }
-        }
-
         protected override DbSet<Tenant> DbSet(ApplicationDbContext entityContext)
         {
             return entityContext.Tenants;
@@ -34,7 +24,7 @@ namespace StarterKit.Repositories
 
         protected override Expression<Func<Tenant, bool>> IdentifierPredicate(ApplicationDbContext entityContext, Guid id)
         {
-            return (e => e.Id == id);
+            return (e => e.TenantId == id);
         }
     }
 }

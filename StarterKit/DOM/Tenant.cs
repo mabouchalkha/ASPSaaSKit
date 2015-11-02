@@ -9,11 +9,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StarterKit.DOM
 {
-    public class Tenant : IIdentifiableEntity<Guid>
+    public class Tenant : IIdentifiableTenantableEntity<Guid>
     {
-        public Tenant() { }
-
-        public Guid Id { get; set; }
+        public Guid TenantId { get; set; }
         public string Name { get; set; }
 
         public string StripeCustomerId { get; set; }
@@ -23,8 +21,8 @@ namespace StarterKit.DOM
         
         public Guid EntityId
         {
-            get { return Id; }
-            set { Id = value; }
+            get { return TenantId; }
+            set { TenantId = value; }
         }
     }
 }

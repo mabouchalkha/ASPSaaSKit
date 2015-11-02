@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace StarterKit.DOM
 {
-    public class ApplicationRole : IdentityRole, IIdentifiableEntity<string>, ITenantable
+    public class ApplicationRole : IdentityRole, IIdentifiableTenantableEntity<string>, ITenantable
     {
         public Tenant Tenant { get; set; }
         public Guid TenantId { get; set; }
         public string Description { get; set; }
+        public bool IsSystem { get; set; }
 
         public ApplicationRole() : base() { }
         public ApplicationRole(string name) : base(name) { }

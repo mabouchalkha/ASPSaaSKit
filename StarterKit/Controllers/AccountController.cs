@@ -225,7 +225,7 @@ namespace StarterKit.Controllers
                     };
                           
                     _tenantRepository.Create(newTenant);
-                    user.TenantId = newTenant.Id;
+                    user.TenantId = newTenant.TenantId;
 
                     IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

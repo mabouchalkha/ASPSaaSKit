@@ -14,10 +14,10 @@ namespace StarterKit.DAL.Mapping
         public TenantMap()
         {
             // Primary Key
-            HasKey(t => t.Id);
+            HasKey(t => t.TenantId);
 
             // Set Id as GUID
-            Property(t => t.Id)
+            Property(t => t.TenantId)
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity)
                 .IsRequired();

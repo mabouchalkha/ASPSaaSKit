@@ -14,31 +14,17 @@ namespace StarterKit.Mappers
         {
             return new TenantViewModel()
             {
-                Id = tenant.Id,
+                Id = tenant.TenantId,
                 IsTrial = tenant.IsTrial,
                 Name = tenant.Name
             };
         }
 
-        public static Tenant MapFromViewModel(this TenantViewModel tenant)
+        public static Tenant MapFromViewModel(this TenantViewModel tenant, Tenant databaseTenant)
         {
-            return new Tenant()
-            {
-                Id = tenant.Id,
-                Name = tenant.Name
-            };
-            //Tenant databaseTenant = _repo.Read(tenant.Id);
+            databaseTenant.Name = tenant.Name;
 
-            //if (databaseTenant != null)
-            //{
-            //    databaseTenant.Name = tenant.Name;
-            //}
-            //else
-            //{
-            //    throw new InvalidOperationException(string.Format(App_GlobalResources.lang.entityNotFound, tenant.Id));
-            //}
-
-            //return databaseTenant;
+            return databaseTenant;
         }
     }
 }
