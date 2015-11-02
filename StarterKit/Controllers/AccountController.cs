@@ -2,15 +2,19 @@
 using Microsoft.AspNet.Identity.Owin;
 using StarterKit.Architecture.Bases;
 using StarterKit.Architecture.Interfaces;
+using StarterKit.Authorize;
+using StarterKit.Business_Engine.Interfaces;
 using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Repositories;
 using StarterKit.Repositories.Interfaces;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
+using System;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -21,15 +25,16 @@ namespace StarterKit.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        private ITenantRepository _tenantRepository;
-
         private ApplicationUserManager _userManager;
         private ApplicationSignInManager _signInManager;
+        private IBusinessEngineFactory _BusinessEngineFactory;
+        private IDataRepositoryFactory _DataRepositoryFactory;
 
         [ImportingConstructor]
-        public AccountController(ITenantRepository tenantRepository)
+        public AccountController(IDataRepositoryFactory dataRepositoryFactory, IBusinessEngineFactory businessEngineFactory)
         {
-            _tenantRepository = tenantRepository;
+            _BusinessEngineFactory = businessEngineFactory;
+            _DataRepositoryFactory = dataRepositoryFactory;
         }
 
         public ApplicationUserManager UserManager
@@ -63,7 +68,7 @@ namespace StarterKit.Controllers
                     if (result == SignInStatus.Success)
                     {
                         var user = await UserManager.FindByIdAsync(await SignInManager.GetVerifiedUserIdAsync());
-                        return success(string.Empty , user);
+                        return success(string.Empty, user);
                     }
                     else
                     {
@@ -121,7 +126,7 @@ namespace StarterKit.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public JsonResult GetCurrentUser ()
+        public JsonResult GetCurrentUser()
         {
             ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
             
@@ -130,7 +135,7 @@ namespace StarterKit.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<JsonResult> ResendTwoFactor ()
+        public async Task<JsonResult> ResendTwoFactor()
         {
             if (await SignInManager.HasBeenVerifiedAsync())
             {
@@ -179,7 +184,7 @@ namespace StarterKit.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<JsonResult> ConfirmEmail (ConfirmEmail model)
+        public async Task<JsonResult> ConfirmEmail(ConfirmEmail model)
         {
             if (ModelState.IsValid)
             {
@@ -208,20 +213,32 @@ namespace StarterKit.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<JsonResult> register (RegisterViewModel model)
+        public async Task<JsonResult> register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
+                ApplicationUser user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
+                };
                 
                 IdentityResult userIsValid = await UserManager.UserValidator.ValidateAsync(user);
 
                 if (userIsValid.Succeeded == true)
                 {
+                    IGlobalTenantRepository tenantRepository = _DataRepositoryFactory.GetDataRepository<IGlobalTenantRepository>();
+
+                    using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                    {
                     Tenant newTenant = new DOM.Tenant()
                     {
                         IsTrial = true,
-                        ActiveUntil = System.DateTime.UtcNow.AddDays(15)
+                            ActiveUntil = DateTime.Now.AddDays(-1),
+                            OwnerEmail = user.Email,
+                            OwnerId = user.Id
                     };
                           
                     _tenantRepository.Create(newTenant);
@@ -232,10 +249,18 @@ namespace StarterKit.Controllers
                     if (!result.Succeeded) return unsuccess(ErrorUtil.JoinErrors(result.Errors));
 
                     UserManager.AddToRole(user.Id, "Owner");
-                    var currentUser = await UserManager.FindByEmailAsync(model.Email);
 
-                    if (currentUser != null)
+                        scope.Complete();
+                    }
+
+                    //var currentUser = await UserManager.FindByEmailAsync(model.Email);
+                    var tenant = tenantRepository.FindBy(t => t.OwnerEmail == user.Email);
+
+                    if (tenant != null)
                     {
+                        ISubscriptionEngine subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
+
+                        subscriptionEngine.SubscribeTenant(tenant, 3, string.Empty);
                         await UserHelper.SendEmailConfirmationAsync(UserManager, Request.UrlReferrer.ToString(), user.Id);
                         return success(App_GlobalResources.lang.accountCreated);
                     }

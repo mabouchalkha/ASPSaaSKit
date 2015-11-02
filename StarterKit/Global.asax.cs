@@ -15,6 +15,7 @@ using StarterKit.Architecture.MEF;
 using FluentValidation.Mvc;
 using System.Threading;
 using System.Globalization;
+using StarterKit.App_Start;
 
 namespace StarterKit
 {
@@ -28,6 +29,7 @@ namespace StarterKit
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             FluentValidationModelValidatorProvider.Configure();
+            AutoMapperConfig.RegisterMappings();
 
             StripeConfiguration.SetApiKey(ConfigurationManager.AppSettings["stripeSecretKey"]);
 

@@ -28,6 +28,16 @@ namespace StarterKit.Repositories
             private set { _userManager = value; }
         }
 
+        protected override void ValidateTenant(ApplicationUser entity)
+        {
+            //Guid currentTenantId = TenantHelper.GetCurrentTenantId();
+
+            //if (entity.TenantId != currentTenantId)
+            //{
+            //    throw new TenantViolationException();
+            //}
+        }
+
         protected override DbSet<ApplicationUser> DbSet(ApplicationDbContext entityContext)
         {
             return (DbSet<ApplicationUser>)entityContext.Users;

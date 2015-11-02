@@ -31,7 +31,7 @@ namespace StarterKit.Controllers
         public JsonResult Read()
         {
             Guid currentTenantId = TenantHelper.GetCurrentTenantId();
-            TenantViewModel currentTenant = _tenantRepository.Read(currentTenantId).MapToViewModel();
+            TenantViewModel currentTenant = Mapper.MapToViewModel<Tenant, TenantViewModel>(_tenantRepository.Read(currentTenantId));
 
             return success(string.Empty, currentTenant);
         }
@@ -41,7 +41,7 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                _tenantRepository.Update(tenant.MapFromViewModel(_tenantRepository.Read(tenant.Id)));
+                _tenantRepository.Update(Mapper.MapFromViewModel<Tenant, TenantViewModel>(tenant));
                 return success(MessageUtil.GenerateUpdateSuccessfull(App_GlobalResources.lang.tenant));
             }
 

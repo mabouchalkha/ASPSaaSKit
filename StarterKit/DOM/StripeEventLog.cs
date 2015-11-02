@@ -1,4 +1,5 @@
 ﻿using StarterKit.Architecture.Interfaces;
+using System;
 
 namespace StarterKit.DOM
 {
@@ -10,6 +11,7 @@ namespace StarterKit.DOM
         public string Type { get; set; }
         public string UserId { get; set; }
         public bool LiveMode { get; set; }
+        public DateTime EventDate { get; set; }
 
         public int EntityId
         {

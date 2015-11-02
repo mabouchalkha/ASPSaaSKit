@@ -22,7 +22,6 @@ namespace StarterKit.DAL
         public DbSet<Tenant> Tenants { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
         public DbSet<Feature> Features { get; set; }
-        public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<StripeEventLog> StripeEventLogs { get; set; }
         //public DbSet<ApplicationRole> Roles { get; set; }
 
@@ -58,6 +57,20 @@ namespace StarterKit.DAL
             if (changeSet != null)
             {
                 Guid currentTenantId = TenantHelper.GetCurrentTenantId();
+
+                foreach (var history in changeSet.Where(e => e.Entity is IModificationHistory && (e.State == EntityState.Added ||
+                           e.State == EntityState.Modified))
+                    .Select(e => e.Entity as IModificationHistory)
+                   )
+                {
+                    history.UpdateDate = DateTime.Now;
+                    //history.UpdatedBy = 
+                    if (history.CreatedDate == DateTime.MinValue)
+                    {
+                        //history.CreatedBy = 
+                        history.CreatedDate = DateTime.Now;
+                    }
+                }
 
                 foreach (var entry in changeSet.Where(c => c.State == EntityState.Added || c.State == EntityState.Modified))
                 {

@@ -1,9 +1,8 @@
 ﻿using StarterKit.Architecture.Bases;
-using StarterKit.Architecture.Interfaces;
+using StarterKit.Authorize;
 using StarterKit.DOM;
 using StarterKit.Helpers;
 using StarterKit.Mappers;
-using StarterKit.Repositories;
 using StarterKit.Repositories.Interfaces;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
@@ -18,6 +17,7 @@ namespace StarterKit.Controllers
     [Export]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     [Authorize]
+    [AuthorizeSubscriber]
     public class UserController : BaseController
     {
         private IUserRepository _userRepository;
@@ -31,7 +31,7 @@ namespace StarterKit.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            return success(string.Empty, new { entities = _userRepository.Index(u => u.Roles).ToList().MapToViewModels() });
+            return success(string.Empty, new { entities = Mapper.MapToViewModel<ApplicationUser, IndexUserViewModel>(_userRepository.Index(u => u.Roles).ToList()) });
         }
 
         [HttpPut]
@@ -39,7 +39,7 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                _userRepository.Update(userToUpdate.MapFromViewModel());
+                _userRepository.Update(Mapper.MapFromViewModel<ApplicationUser, DetailUserViewModel>(userToUpdate));
                 return success(MessageUtil.GenerateUpdateSuccessfull(App_GlobalResources.lang.user));
             }
 
@@ -47,7 +47,7 @@ namespace StarterKit.Controllers
         }
 
         [HttpDelete]
-        public JsonResult Delete (string id)
+        public JsonResult Delete(string id)
         {
             if (ModelState.IsValid)
             {
@@ -59,7 +59,7 @@ namespace StarterKit.Controllers
         }
 
         [HttpGet]
-        public JsonResult Read (string id)
+        public JsonResult Read(string id)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace StarterKit.Controllers
 
                 if (user != null)
                 {
-                    return success(string.Empty, user.MapToViewModel());
+                    return success(string.Empty, Mapper.MapToViewModel<ApplicationUser, DetailUserViewModel>(user));
                 }
                 else
                 {
@@ -79,11 +79,11 @@ namespace StarterKit.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Create (DetailUserViewModel newUser)
+        public async Task<JsonResult> Create(DetailUserViewModel newUser)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = newUser.MapFromViewModel();
+                ApplicationUser user = Mapper.MapFromViewModel<ApplicationUser, DetailUserViewModel>(newUser);
 
                 var result = await _userRepository.ValidateUser(user);
 
@@ -101,7 +101,7 @@ namespace StarterKit.Controllers
         }
 
         [HttpPost]
-        public JsonResult Invite (string emails)
+        public JsonResult Invite(string emails)
         {
             if (!string.IsNullOrEmpty(emails))
             {

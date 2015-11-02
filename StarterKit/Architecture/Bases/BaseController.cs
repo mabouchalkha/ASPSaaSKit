@@ -4,6 +4,9 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Text;
 using System;
+using Stripe;
+using System.Net;
+using StarterKit.Architecture.Exceptions;
 
 namespace StarterKit.Architecture.Bases
 {
@@ -16,7 +19,7 @@ namespace StarterKit.Architecture.Bases
             return this.CustomJson(new { success = true, type = "success", message = info, data = data, meta = meta }, jsonRequestBehavior);
         }
 
-        protected JsonResult unsuccess(string info, object data = null, object meta = null, JsonRequestBehavior jsonRequestBehavior = JsonRequestBehavior.AllowGet, JsonStatus status = JsonStatus.s_500)
+        protected JsonResult unsuccess(string info, object data = null, object meta = null, JsonRequestBehavior jsonRequestBehavior = JsonRequestBehavior.AllowGet, HttpStatusCode status = HttpStatusCode.InternalServerError)
         {
             Response.StatusCode = (int)status;
             return this.CustomJson(new { success = false, type = "error", message = info, data = data, meta = meta }, jsonRequestBehavior);
@@ -35,6 +38,30 @@ namespace StarterKit.Architecture.Bases
                 ContentType = "application/json",
                 JsonRequestBehavior = behavior,
             };
+        }
+
+        protected JsonResult GetHttpResponse(Func<JsonResult> codeToExecute)
+        {
+            JsonResult response = null;
+
+            try
+            {
+                response = codeToExecute.Invoke();
+            }
+            catch (StripeException ex)
+            {
+                response = unsuccess(ex.Message, HttpStatusCode.InternalServerError);
+            }
+            catch (TenantViolationException ex)
+            {
+                response = unsuccess(ex.Message, HttpStatusCode.InternalServerError);
+            }
+            catch (Exception ex)
+            {
+                response = unsuccess(ex.Message, HttpStatusCode.InternalServerError);
+            }
+
+            return response;
         }
 
         [Obsolete("Please use CustomJson instead")]
