@@ -16,7 +16,7 @@ namespace StarterKit.Architecture.Abstract
         where T : class, IIdentifiableTenantableEntity<TKey>, new()
         where U : DbContext, new()
     {
-        public void ValidateTenant(T entity)
+        protected void ValidateTenant(T entity)
         {
             var currentTenantId = TenantHelper.GetCurrentTenantId();
 

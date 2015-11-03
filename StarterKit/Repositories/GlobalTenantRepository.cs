@@ -25,7 +25,7 @@ namespace StarterKit.Repositories
 
         protected override Expression<Func<Tenant, bool>> IdentifierPredicate(ApplicationDbContext entityContext, Guid id)
         {
-            return (e => e.Id == id);
+            return (e => e.TenantId == id);
         }
     }
 }

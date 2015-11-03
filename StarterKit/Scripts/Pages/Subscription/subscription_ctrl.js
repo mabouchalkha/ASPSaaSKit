@@ -9,7 +9,7 @@
 
         vm.currentPlan = {};
 
-       billingViewModel = {
+        billingViewModel = {
             SubscriptionPlanId: 0,
             StripeTokenId: ''
         };
@@ -32,23 +32,21 @@
 
     vm.pay = function () {
         return stripe.card.createToken(vm.card)
-      .then(function (response) {
-          console.log('token created for card ending in ', response.card.last4);
-          billingViewModel.StripeTokenId = response.id;
+            .then(function (response) {
+                console.log('token created for card ending in ', response.card.last4);
+                billingViewModel.StripeTokenId = response.id;
           
-          return $http.post('/Subscription/billing', billingViewModel);
-      })
-      .then(function (subscription) {
-          $state.go('subscription.profile');
-      })
-      .catch(function (err) {
-          if (err.type && /^Stripe/.test(err.type)) {
-              console.log('Stripe error: ', err.message);
-          }
-          else {
-              console.log('Other error occurred, possibly with your API', err.message);
-          }
-      });
+                return $http.post('/Subscription/billing', billingViewModel);
+            }).then(function (subscription) {
+                  $state.go('subscription.profile');
+            }).catch(function (err) {
+                if (err.type && /^Stripe/.test(err.type)) {
+                    console.log('Stripe error: ', err.message);
+                }
+                else {
+                    console.log('Other error occurred, possibly with your API', err.message);
+                }
+            });
     };
     
     _init();

@@ -240,8 +240,8 @@ namespace StarterKit.Controllers
                             OwnerEmail = user.Email,
                             OwnerId = user.Id
                     };
-                          
-                    _tenantRepository.Create(newTenant);
+
+                    tenantRepository.Create(newTenant);
                     user.TenantId = newTenant.TenantId;
 
                     IdentityResult result = await UserManager.CreateAsync(user, model.Password);

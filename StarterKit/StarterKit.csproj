@@ -227,6 +227,7 @@
     <Compile Include="Architecture\Abstract\BaseRepository.cs" />
     <Compile Include="Architecture\Abstract\GenericRepository.cs" />
     <Compile Include="Architecture\Abstract\GenericTenantableRepository.cs" />
+    <Compile Include="Architecture\Bases\BaseViewModel.cs" />
     <Compile Include="Architecture\Exceptions\TenantViolationException.cs" />
     <Compile Include="Architecture\Interfaces\IBaseRepository.cs" />
     <Compile Include="Architecture\Interfaces\IBusinessEngine.cs" />
@@ -255,10 +256,10 @@
     <Compile Include="Fluent\AccountViewModelValidator.cs" />
     <Compile Include="Fluent\TenantViewModelValidator.cs" />
     <Compile Include="Fluent\DetailUserViewModelValidator.cs" />
-    <Compile Include="Mappers\RoleMapper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repositories\DataRepositoryFactory.cs" />
     <Compile Include="Repositories\Interfaces\IDataRepositoryFactory.cs" />
+    <Compile Include="Repositories\Interfaces\IGlobalTenantRepository.cs" />
     <Compile Include="Repositories\Interfaces\IStripeEventLogRepository.cs" />
     <Compile Include="Repositories\Interfaces\ISubscriptionPlanRepository.cs" />
     <Compile Include="Repositories\Interfaces\IRoleRepository.cs" />
@@ -282,7 +283,6 @@
     </Compile>
     <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="Helpers\TenantHelper.cs" />
-    <Compile Include="Mappers\Mapper.cs" />
     <Compile Include="Architecture\MEF\MEFLoader.cs" />
     <Compile Include="Repositories\StripeEventLogRepository.cs" />
     <Compile Include="Repositories\SubscriptionPlanRepository.cs" />
@@ -300,6 +300,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\JsonStatus.cs" />
     <Compile Include="ViewModels\BillingViewModel.cs" />
+    <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\SubscriptionViewModel.cs" />
     <Compile Include="ViewModels\TenantViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
@@ -401,13 +402,14 @@
     <none Include="Web.Release.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </none>
-<none Include="Web.Debug.local.2014.config">
+    <none Include="Web.Debug.local.2014.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </none>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
+    <Folder Include="Mappers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

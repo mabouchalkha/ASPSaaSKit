@@ -42,7 +42,6 @@ namespace StarterKit.DAL
             modelBuilder.Configurations.Add(new TenantMap());
             modelBuilder.Configurations.Add(new ApplicationUserMap());
             modelBuilder.Configurations.Add(new ApplicationRoleMap());
-            modelBuilder.Configurations.Add(new SubscriptionMap());
             modelBuilder.Configurations.Add(new SubscriptionPlanMap());
             modelBuilder.Configurations.Add(new FeatureMap());
             modelBuilder.Configurations.Add(new StripeEventLogMap());

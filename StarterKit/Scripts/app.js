@@ -70,8 +70,7 @@ angular.module('starterKit')
                 subscriptions: ['subscriptionResource', function (subscriptionResource) {
                     return subscriptionResource.index().$promise.then();
                 }]
-            }
-        })
+            }})
             .state('subscription.profile', {
                 url: '/profile',
                 templateUrl: '/Scripts/Pages/Subscription/profile.html',

@@ -28,16 +28,6 @@ namespace StarterKit.Repositories
             private set { _userManager = value; }
         }
 
-        protected override void ValidateTenant(ApplicationUser entity)
-        {
-            //Guid currentTenantId = TenantHelper.GetCurrentTenantId();
-
-            //if (entity.TenantId != currentTenantId)
-            //{
-            //    throw new TenantViolationException();
-            //}
-        }
-
         protected override DbSet<ApplicationUser> DbSet(ApplicationDbContext entityContext)
         {
             return (DbSet<ApplicationUser>)entityContext.Users;
@@ -87,6 +77,8 @@ namespace StarterKit.Repositories
         {
             using (ApplicationDbContext entityContext = this.GetContext())
             {
+                this.ValidateTenant(entity);
+
                 ApplicationUser databaseUser = this.Read(entity.Id);
 
                 if (databaseUser == null)

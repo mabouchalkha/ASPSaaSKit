@@ -19,20 +19,20 @@
 
         protected override void Seed(StarterKit.DAL.ApplicationDbContext context)
         {
-            //ApplicationUserManager manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
-            //var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            ApplicationUserManager manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
 
-            //Tenant newTenant = null;
+            Tenant newTenant = null;
 
-            ////add tenant for dom/mohamed
-            //if (context.Tenants.Count() == 0)
-            //{
-            //    newTenant = context.Tenants.Add(new Tenant() { IsTrial = false, ActiveUntil = DateTime.Now.AddDays(15) });
-            //}
-            //else
-            //{
-            //    newTenant = context.Tenants.First();
-            //}
+            //add tenant for dom/mohamed
+            if (context.Tenants.Count() == 0)
+            {
+                newTenant = context.Tenants.Add(new Tenant() { IsTrial = false, ActiveUntil = DateTime.Now.AddDays(15) });
+            }
+            else
+            {
+                newTenant = context.Tenants.First();
+            }
 
             // check if roles are present
             if (roleManager.Roles.Count() == 0)
@@ -61,13 +61,13 @@
                     LastName = "Lap"
                 };
 
-            //    var result = manager.Create(user, "!Q2w3e4r");
+                var result = manager.Create(user, "!Q2w3e4r");
 
-            //    if (result.Succeeded)
-            //    {
-            //        manager.AddToRole(user.Id, "Admin");
-            //    }
-            //}
+                if (result.Succeeded)
+                {
+                    manager.AddToRole(user.Id, "Admin");
+                }
+            }
 
             // check if mohamed's user is present
             if (manager.Users.FirstOrDefault(u => u.Email == "mabouchalkha@gmail.com") == null)
@@ -83,13 +83,13 @@
                     LastName = "Bou"
                 };
 
-            //    var result = manager.Create(user, "!Q2w3e4r");
+                var result = manager.Create(user, "!Q2w3e4r");
 
-            //    if (result.Succeeded)
-            //    {
-            //        manager.AddToRole(user.Id, "Admin");
-            //    }
-            //}
+                if (result.Succeeded)
+                {
+                    manager.AddToRole(user.Id, "Admin");
+                }
+            }
         }
     }
 }
