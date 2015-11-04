@@ -37,10 +37,14 @@
             // check if roles are present
             if (roleManager.Roles.Count() == 0)
             {
-                roleManager.Create(new IdentityRole("Admin"));
-                roleManager.Create(new IdentityRole("Owner"));
-                roleManager.Create(new IdentityRole("User"));
-                roleManager.Create(new IdentityRole("Reader"));
+                roleManager.Create(new ApplicationRole("Admin", newTenant.TenantId));
+                roleManager.Create(new ApplicationRole("Owner", newTenant.TenantId));
+                roleManager.Create(new ApplicationRole("User", newTenant.TenantId));
+                roleManager.Create(new ApplicationRole("Reader", newTenant.TenantId));
+                roleManager.Create(new ApplicationRole("Admin", Guid.Parse("f61dd53e-f67e-e511-beba-2c44fd392fe1")));
+                roleManager.Create(new ApplicationRole("Owner", Guid.Parse("f61dd53e-f67e-e511-beba-2c44fd392fe1")));
+                roleManager.Create(new ApplicationRole("User", Guid.Parse("f61dd53e-f67e-e511-beba-2c44fd392fe1")));
+                roleManager.Create(new ApplicationRole("Reader", Guid.Parse("f61dd53e-f67e-e511-beba-2c44fd392fe1")));
             }
 
             // check if dom' user is present
@@ -51,7 +55,7 @@
                     Email = "dom.dlapointe@gmail.com",
                     UserName = "dom.dlapointe@gmail.com",
                     EmailConfirmed = true,
-                    TenantId = newTenant.Id,
+                    TenantId = newTenant.TenantId,
                     Tenant = newTenant,
                     FirstName = "Dom",
                     LastName = "Lap"
@@ -73,7 +77,7 @@
                     Email = "mabouchalkha@gmail.com",
                     UserName = "mabouchalkha@gmail.com",
                     EmailConfirmed = true,
-                    TenantId = newTenant.Id,
+                    TenantId = newTenant.TenantId,
                     Tenant = newTenant,
                     FirstName = "Moh",
                     LastName = "Bou"

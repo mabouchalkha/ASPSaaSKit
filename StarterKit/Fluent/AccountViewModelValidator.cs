@@ -17,7 +17,7 @@ namespace StarterKit.Fluent.ViewModels
         public RegisterViewModelValidator()
         {
             RuleFor(vm => vm.Password)
-                .Length(2, 6).WithLocalizedMessage(() => App_GlobalResources.lang.passwordLength)
+                .Length(3, 25).WithLocalizedMessage(() => App_GlobalResources.lang.passwordLength)
                 .NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.passwordRequired);
             RuleFor(vm => vm.Email).EmailAddress().NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.emailRequired);
             RuleFor(vm => vm.FirstName).NotEmpty().WithLocalizedMessage(() => App_GlobalResources.lang.firstNameRequired);

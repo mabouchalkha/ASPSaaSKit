@@ -15,4 +15,9 @@ namespace StarterKit.Architecture.Interfaces
     {
         TKey EntityId { get; set; }
     }
+
+    public interface IIdentifiableTenantableEntity<TKey> : IIdentifiableEntity<TKey>
+    {
+        Guid TenantId { get; set; }
+    }
 }

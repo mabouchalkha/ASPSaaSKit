@@ -12,6 +12,7 @@ using StarterKit.DOM;
 using StarterKit.Architecture.Bases;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
+using StarterKit.Business_Engine.Interfaces;
 
 namespace StarterKit.Controllers.Webhooks
 {
@@ -19,14 +20,16 @@ namespace StarterKit.Controllers.Webhooks
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class StripeWebhookController : BaseController
     {
-
         [ImportingConstructor]
-        public StripeWebhookController(IDataRepositoryFactory dataRepositoryFactory)
+        public StripeWebhookController(IBusinessEngineFactory businessEngineFactory, IDataRepositoryFactory dataRepositoryFactory)
         {
+            _BusinessEngineFactory = businessEngineFactory;
             _DataRepositoryFactory = dataRepositoryFactory;
         }
 
+        private IBusinessEngineFactory _BusinessEngineFactory;
         private IDataRepositoryFactory _DataRepositoryFactory;
+
         private IStripeEventLogRepository _StripeEventLogRepository;
 
         private StripeCustomerService _stripeCustomerSerive;
@@ -45,6 +48,10 @@ namespace StarterKit.Controllers.Webhooks
         [HttpPost]
         public ActionResult Index()
         {
+            IGlobalTenantRepository tenantRepository;
+            ISubscriptionPlanRepository subscriptionPlanRepository;
+            StripeSubscription stripeSubscription;
+
             _StripeEventLogRepository = _DataRepositoryFactory.GetDataRepository<IStripeEventLogRepository>();
 
             Stream request = Request.InputStream;
@@ -73,13 +80,14 @@ namespace StarterKit.Controllers.Webhooks
             {
                 case StripeEvents.PlanCreated:
                     StripePlan planStripe = Mapper<StripePlan>.MapFromJson(stripeEvent.Data.Object.ToString());
+                    subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
 
                     SubscriptionPlan subscriptionPlan = new SubscriptionPlan
                     {
                         AmountInCents = planStripe.Amount,
                         Currency = planStripe.Currency,
                         Description = planStripe.StatementDescriptor,
-                        DisplayOrder = 1,
+                        DisplayOrder = subscriptionPlanRepository.Index().Max(p => p.DisplayOrder),
                         ExternalId = planStripe.Id,
                         Interval = planStripe.Interval,
                         IsActive = true,
@@ -87,20 +95,18 @@ namespace StarterKit.Controllers.Webhooks
                         TrialPeriodDays = planStripe.TrialPeriodDays
                     };
 
-                    ISubscriptionPlanRepository subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
                     subscriptionPlanRepository.Create(subscriptionPlan);
                     break;
                 case StripeEvents.PlanUpdated:
                     planStripe = Mapper<StripePlan>.MapFromJson(stripeEvent.Data.Object.ToString());
-
                     subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
+
                     SubscriptionPlan plan = subscriptionPlanRepository.FindBy(sp => sp.ExternalId == planStripe.Id);
                     if (plan != null)
                     {
                         plan.AmountInCents = planStripe.Amount;
                         plan.Currency = planStripe.Currency;
                         plan.Description = planStripe.StatementDescriptor;
-                        plan.DisplayOrder = 1;
                         plan.ExternalId = planStripe.Id;
                         plan.Interval = planStripe.Interval;
                         plan.IsActive = true;
@@ -112,34 +118,69 @@ namespace StarterKit.Controllers.Webhooks
                     break;
                 case StripeEvents.PlanDeleted:
                     planStripe = Mapper<StripePlan>.MapFromJson(stripeEvent.Data.Object.ToString());
-
                     subscriptionPlanRepository = _DataRepositoryFactory.GetDataRepository<ISubscriptionPlanRepository>();
+
                     subscriptionPlanRepository.DeleteBy(sp => sp.ExternalId == planStripe.Id);
                     break;
                 case StripeEvents.CustomerSubscriptionTrialWillEnd:
                     StripeSubscription subscriptionTrialWillEnd = Mapper<StripeSubscription>.MapFromJson(stripeEvent.Data.Object.ToString());
                     // emailService.SendCustomerSubscriptionTrialWillEndEmail(charge);
                     break;
+                case StripeEvents.CustomerCreated:
+                    StripeCustomer stripeCustomer = Mapper<StripeCustomer>.MapFromJson(stripeEvent.Data.Object.ToString());
+
+                    break;
+                //case StripeEvents.CustomerSubscriptionCreated:
+                //    StripeSubscription stripeSubscription = Mapper<StripeSubscription>.MapFromJson(stripeEvent.Data.Object.ToString());
+                //    tenantRepository = _DataRepositoryFactory.GetDataRepository<IGlobalTenantRepository>();
+
+                //    Tenant tenant = tenantRepository.FindBy(t => t.StripeCustomerId == stripeSubscription.CustomerId);
+                //    tenant.StripeSubscriptionId = stripeSubscription.Id;
+                //    tenantRepository.Update(tenant);
+                //    break;
+                case StripeEvents.CustomerSubscriptionUpdated:
+                    stripeSubscription = Mapper<StripeSubscription>.MapFromJson(stripeEvent.Data.Object.ToString());
+
+                    if (stripeSubscription.Status == "active")
+                    {
+                       
+                    }
+
+                    break;
+                case StripeEvents.InvoiceCreated:
+                    StripeInvoice invoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
+
+                    break;
+                case StripeEvents.ChargeSucceeded:
+                    StripeCharge stripeCharge = Mapper<StripeCharge>.MapFromJson(stripeEvent.Data.Object.ToString());
+
+                    break;
                 case StripeEvents.InvoicePaymentSucceeded:
                     StripeInvoice stripeInvoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
                     StripeCustomer customer = StripeCustomerService.Get(stripeInvoice.CustomerId);
 
-                    IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
-                    ApplicationUser user = userRepository.UserManager.FindByEmail(customer.Email);
+                    tenantRepository = _DataRepositoryFactory.GetDataRepository<IGlobalTenantRepository>();
 
-                    user.Tenant.ActiveUntil = user.Tenant.ActiveUntil.AddMonths(1); 
-                    userRepository.Update(user);
+                    var tenant = tenantRepository.FindBy(t => t.OwnerEmail == customer.Email);
+
+                    if (!string.IsNullOrWhiteSpace(tenant.StripeSubscriptionId))
+                    {
+                        var subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
+
+                        var subscription = subscriptionEngine.GetSubscriptionsTenant(tenant);
+                        if (subscription.Status == "active")
+                        {
+                            tenant.ActiveUntil = subscription.PeriodEnd.Value;//tenant.ActiveUntil.AddMonths(1);
+                            tenant.IsTrial = false;
+                            tenantRepository.Update(tenant);
+                        }
+                    }
 
                     // emailService.SendInvoicePaymentSucceededEmail(invoice, customer);
-
                     break;
                 case StripeEvents.InvoicePaymentFailed:
                     stripeInvoice = Mapper<StripeInvoice>.MapFromJson(stripeEvent.Data.Object.ToString());
                     // emailService.SendInvoicePaymentFailedEmail(invoice, customer);
-                    break;
-                case StripeEvents.ChargeRefunded:
-                    StripeCharge charge = Mapper<StripeCharge>.MapFromJson(stripeEvent.Data.Object.ToString());
-                    // emailService.SendEmail(charge);
                     break;
                 default:
                     break;
@@ -153,7 +194,8 @@ namespace StarterKit.Controllers.Webhooks
                     Request = stripeEvent.Request,
                     Type = stripeEvent.Type,
                     LiveMode = stripeEvent.LiveMode,
-                    UserId = stripeEvent.UserId
+                    UserId = stripeEvent.UserId,
+                    EventDate = DateTime.Now
                 });
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
@@ -161,9 +203,8 @@ namespace StarterKit.Controllers.Webhooks
 
         private bool HasEventBeenProcessedPreviously(StripeEvent stripeEvent)
         {
-            // Lookup in table StripeEvent log  by eventId
-            // if eventid exists return true otherwise return false
             bool eventProcessed = false;
+
             StripeEventLog stripeEventLog = _StripeEventLogRepository.FindBy(sev => sev.stripeEventId == stripeEvent.Id);
             if (stripeEventLog != null)
             {

@@ -1,9 +1,11 @@
 ﻿using FluentValidation.Attributes;
+using StarterKit.Architecture.Bases;
+using StarterKit.DOM;
 using StarterKit.Fluent.ViewModels;
 
 namespace StarterKit.ViewModels
 {
-    public class IndexUserViewModel
+    public class IndexUserViewModel : BaseViewModel<IndexUserViewModel>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -13,7 +15,7 @@ namespace StarterKit.ViewModels
     }
 
     [Validator(typeof(DetailUserViewModelValidator))]
-    public class DetailUserViewModel 
+    public class DetailUserViewModel : BaseViewModel<DetailUserViewModel>
     {       
         public string FirstName { get; set; }
         public string LastName { get; set; }

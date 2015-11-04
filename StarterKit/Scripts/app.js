@@ -24,7 +24,8 @@
     }],
 });
 
-angular.module('starterKit').config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'stripeProvider', '$injector', function ($stateProvider, $urlRouterProvider, $httpProvider, stripeProvider, $injector) {
+angular.module('starterKit')
+    .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'stripeProvider', '$injector', function ($stateProvider, $urlRouterProvider, $httpProvider, stripeProvider, $injector) {
     $stateProvider
         .state('dashboard', {
             url: '/',
@@ -58,15 +59,30 @@ angular.module('starterKit').config(['$stateProvider', '$urlRouterProvider', '$h
             resolve: $injector.get('accountResolver').resolve
         })
         .state('subscription', {
+            abstract: true,
             url: '/subscription',
             templateUrl: '/Scripts/Pages/Subscription/subscription.html',
             controller: 'subscriptionController as vm',
             resolve: {
                 plans: ['planResource', function (planResource) {
                     return planResource.index().$promise.then();
+                }],
+                subscriptions: ['subscriptionResource', function (subscriptionResource) {
+                    return subscriptionResource.index().$promise.then();
                 }]
-            }
-        })
+            }})
+            .state('subscription.profile', {
+                url: '/profile',
+                templateUrl: '/Scripts/Pages/Subscription/profile.html',
+            })
+            .state('subscription.plan', {
+                url: '/plan',
+                templateUrl: '/Scripts/Pages/Subscription/plan.html',
+            })
+            .state('subscription.billing', {
+                url: '/billing',
+                templateUrl: '/Scripts/Pages/Subscription/billing.html',
+            })
         .state('user', {
             abstract: true,
             url: '/user',

@@ -1,10 +1,5 @@
 ﻿using StarterKit.DOM;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StarterKit.DAL.Mapping
 {
@@ -15,21 +10,17 @@ namespace StarterKit.DAL.Mapping
             // Primary Key
             HasKey<string>(t => t.Id);
 
+            //HasRequired(t => t.Tenant).WithMany().WillCascadeOnDelete(false);
+
             // Properties
             Property(t => t.FirstName)
-                .IsRequired()
                 .HasMaxLength(100);
 
             Property(t => t.LastName)
-                .IsRequired()
                 .HasMaxLength(100);
 
             Ignore(t => t.FullName);
             Ignore(t => t.EntityId);
-            // Table & Column Mappings
-
-            // Relationships
-
         }
     }
 }

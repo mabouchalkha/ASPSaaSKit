@@ -1,16 +1,11 @@
 ﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using StarterKit.Architecture.Bases;
-using StarterKit.DOM;
+using StarterKit.Business_Engine.Interfaces;
+using StarterKit.Mappers;
 using StarterKit.Repositories.Interfaces;
+using StarterKit.ViewModels;
 using Stripe;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace StarterKit.Controllers
@@ -20,101 +15,53 @@ namespace StarterKit.Controllers
     public class SubscriptionController : BaseController
     {
         [ImportingConstructor]
-        public SubscriptionController(ISubscriptionPlanRepository subscriptionPlanRepository,
-                                      ISubscriptionRepository subscriptionRepository,
-                                      IUserRepository userRepository)
+        public SubscriptionController(IBusinessEngineFactory businessEngineFactory,
+                                       IDataRepositoryFactory dataRepositoryFactory)
         {
-            _UserRepository = userRepository;
-            _SubscriptionPlanRepository = subscriptionPlanRepository;
-            _SubscriptionRepository = subscriptionRepository;
+            _BusinessEngineFactory = businessEngineFactory;
+            _DataRepositoryFactory = dataRepositoryFactory;
         }
 
-        private IUserRepository _UserRepository;
-        private ISubscriptionRepository _SubscriptionRepository;
-        private ISubscriptionPlanRepository _SubscriptionPlanRepository;
-
-        private StripeCustomerService _stripeCustomerSerive;
-        public StripeCustomerService StripeCustomerService
-        {
-            get
-            {
-                return _stripeCustomerSerive ?? new StripeCustomerService();
-            }
-            set
-            {
-                _stripeCustomerSerive = value;
-            }
-        }
-
-        private StripeSubscriptionService _stripeSubscriptionService;
-        public StripeSubscriptionService StripeSubscriptionService
-        {
-            get
-            {
-                return _stripeSubscriptionService ?? new StripeSubscriptionService();
-            }
-            private set
-            {
-                _stripeSubscriptionService = value;
-            }
-        }
+        private IBusinessEngineFactory _BusinessEngineFactory;
+        private IDataRepositoryFactory _DataRepositoryFactory;
 
         [HttpGet]
         public JsonResult Index()
         {
-            return success(string.Empty, new { });
+            return GetHttpResponse(() => 
+            {
+                ITenantRepository tenantRepository = _DataRepositoryFactory.GetDataRepository<ITenantRepository>();
+                ISubscriptionEngine subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
+
+                SubscriptionViewModel subscription = null;
+                var userId = User.Identity.GetUserId();
+                var tenant = tenantRepository.FindBy(t => t.OwnerId == userId);
+                if (tenant != null)
+                {
+                    var stripeSubscription = subscriptionEngine.GetSubscriptionsTenant(tenant);
+                    subscription = Mapper.MapToViewModel<StripeSubscription, SubscriptionViewModel>(stripeSubscription);
+                }
+
+                return success(string.Empty, subscription);
+            });
         }
 
         [HttpPost]
-        public async Task<JsonResult> Billing(SubscriptionPlan subscriptionPlan, string userId, string stripeTokenId)
+        public JsonResult Billing(BillingViewModel billingViewModel)
         {
-            SubscriptionPlan plan = _SubscriptionPlanRepository.Read(subscriptionPlan.Id);
-            try
+            return GetHttpResponse(() =>
             {
-                // I need username with Tenant, Plan, StripeToken
-                // ApplicationUserManager UserManager
-                // StripeCustomerService to create customer
-                // StripeSubscriptionService to create a subscription
-                
-                var user = await _UserRepository.UserManager.FindByNameAsync(User.Identity.Name);
+                IUserRepository userRepository = _DataRepositoryFactory.GetDataRepository<IUserRepository>();
+                ISubscriptionEngine subscriptionEngine = _BusinessEngineFactory.GetBusinessEngine<ISubscriptionEngine>();
 
-                if (String.IsNullOrWhiteSpace(user.Tenant.StripeCustomerId))
+                var user = userRepository.Read(User.Identity.GetUserId(), u => u.Tenant);
+                if (user != null)
                 {
-                    // create a customer which will create subscription if plan is set and cc info via stripetoken
-                    var customer = new StripeCustomerCreateOptions
-                    {
-                        Email = user.Email,
-                        Source = new StripeSourceOptions() { TokenId = stripeTokenId },
-                        PlanId = plan.ExternalId
-                    };
-
-                    StripeCustomer stripeCustomer = StripeCustomerService.Create(customer);
-
-                    // update user tenant
-                    // store stripeCustomer.id so you can add or/and update a subscriptions on the same user tenant
-                    // set activeuntildate
-
-                    user.Tenant.StripeCustomerId = stripeCustomer.Id;
-                    user.Tenant.ActiveUntil = DateTime.Now.AddDays((double)plan.TrialPeriodDays);
-                    _UserRepository.Update(user);
+                    subscriptionEngine.SubscribeTenant(user.Tenant, billingViewModel.SubscriptionPlanId, billingViewModel.StripeTokenId);
                 }
-                else
-                {
-                    // customer tenant already exists, add subscription to customer
-                    // update user
-                    // set activeuntildate
 
-                    StripeSubscription stripeSubscription = StripeSubscriptionService.Create(user.Tenant.StripeCustomerId, plan.ExternalId);
-                    user.Tenant.ActiveUntil = DateTime.Now.AddDays((double)plan.TrialPeriodDays);
-                    _UserRepository.Update(user);
-                }
-                //_SubscriptionRepository.Create()
-            }
-            catch (StripeException stripeException)
-            {
-                //ModelState.AddModelError("", stripeException);
-            }
-            return success(string.Empty, new { });
+                return success(string.Empty);
+            });
         }
     }
 }

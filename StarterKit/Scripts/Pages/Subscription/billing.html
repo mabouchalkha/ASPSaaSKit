@@ -1,0 +1,70 @@
+﻿<div class="panel-body">
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Summary</h2>
+            <strong>Plan:</strong>: {{vm.currentPlan.Name}} <br />
+            <strong>Price:</strong>: <span class="text-navy">{{vm.currentPlan.AmountInDollars}}</span>
+
+            <p class="m-t">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <p>
+                Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat.
+            </p>
+        </div>
+        <div class="col-md-8">
+            <form role="form" id="payment-form" ng-submit="vm.pay()">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label>CARD NUMBER</label>
+                            <div class="input-group">
+                                <input ng-model="vm.card.number" type="text" class="form-control" name="Number" placeholder="Valid Card Number" required />
+                                <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3">
+                        <div class="form-group">
+                            <label>MONTH</label>
+                            <input ng-model="vm.card.exp_month"  type="text" class="form-control" name="ExpiryMonth" placeholder="MM" required />
+                        </div>
+                    </div>
+                    <div class="col-xs-3 col-md-3">
+                        <div class="form-group">
+                            <label>YEAR</label>
+                            <input ng-model="vm.card.exp_year" type="text" class="form-control" name="ExpiryYear" placeholder="MM" required />
+                        </div>
+                    </div>
+                    <div class="col-xs-3 col-md-3 pull-right">
+                        <div class="form-group">
+                            <label>CV CODE</label>
+                            <input ng-model="vm.card.cvc" type="text" class="form-control" name="CVC" placeholder="CVC" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label>NAME OF CARD</label>
+                            <input type="text" class="form-control" name="nameCard" placeholder="NAME AND SURNAME" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button class="btn btn-primary" type="submit">Make a payment!</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
