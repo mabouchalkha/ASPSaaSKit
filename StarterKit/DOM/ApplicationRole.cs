@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace StarterKit.DOM
 {
-    public class ApplicationRole : IdentityRole, IIdentifiableTenantableEntity<string>, ITenantable
+    public class ApplicationRole : IdentityRole, IIdentifiableTenantableEntity<string>, ITenantable, ICanMap
     {
         public Tenant Tenant { get; set; }
         public Guid TenantId { get; set; }

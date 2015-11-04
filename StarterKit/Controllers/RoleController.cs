@@ -1,16 +1,9 @@
 ﻿using StarterKit.Architecture.Bases;
-using StarterKit.Architecture.Interfaces;
-using StarterKit.DOM;
-using StarterKit.Helpers;
-using StarterKit.Mappers;
-using StarterKit.Repositories;
+using StarterKit.Architecture.Extensions;
 using StarterKit.Repositories.Interfaces;
-using StarterKit.Utils;
 using StarterKit.ViewModels;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace StarterKit.Controllers
@@ -31,7 +24,7 @@ namespace StarterKit.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            return success(string.Empty, new { entities = _roleRepository.Index().ToList().MapToViewModel() });
+            return success(string.Empty, new { entities = _roleRepository.Index().ToList().MapToViewModel<RoleViewModel>() });
         }
     }
 }

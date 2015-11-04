@@ -3,11 +3,8 @@ using StarterKit.DOM;
 using StarterKit.Repositories.Interfaces;
 using Stripe;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StarterKit.Business_Engine
 {

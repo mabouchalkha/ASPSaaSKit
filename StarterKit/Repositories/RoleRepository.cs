@@ -1,17 +1,12 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
+﻿using Microsoft.AspNet.Identity.Owin;
 using StarterKit.Architecture.Abstract;
-using StarterKit.Architecture.Exceptions;
 using StarterKit.DAL;
 using StarterKit.DOM;
-using StarterKit.Helpers;
 using StarterKit.Repositories.Interfaces;
 using System;
 using System.ComponentModel.Composition;
 using System.Data.Entity;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace StarterKit.Repositories

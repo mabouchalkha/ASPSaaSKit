@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StarterKit.DOM
 {
-    public class Tenant : IIdentifiableTenantableEntity<Guid>, IModificationHistory
+    public class Tenant : IIdentifiableTenantableEntity<Guid>, IModificationHistory, ICanMap
     {
         public Guid TenantId { get; set; }
         public string Name { get; set; }

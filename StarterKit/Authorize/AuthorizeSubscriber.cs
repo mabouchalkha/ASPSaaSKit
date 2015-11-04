@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using StarterKit.DOM;
 using StarterKit.Repositories;
 using StarterKit.Repositories.Interfaces;
 using System;
@@ -20,7 +18,7 @@ namespace StarterKit.Authorize
         public void OnAuthorization(AuthorizationContext filterContext)
         {
             ApplicationUserManager userManager = filterContext.HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var user = userManager.FindByName(filterContext.HttpContext.User.Identity.Name);
+            var user = userManager.FindById(filterContext.HttpContext.User.Identity.GetUserId());
 
             _tenantRepository = new TenantRepository();
             var tenant = _tenantRepository.FindBy(t => t.OwnerEmail == user.Email);

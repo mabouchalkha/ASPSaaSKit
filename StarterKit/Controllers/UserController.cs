@@ -1,8 +1,7 @@
 ﻿using StarterKit.Architecture.Bases;
+using StarterKit.Architecture.Extensions;
 using StarterKit.Authorize;
 using StarterKit.DOM;
-using StarterKit.Helpers;
-using StarterKit.Mappers;
 using StarterKit.Repositories.Interfaces;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
@@ -31,7 +30,7 @@ namespace StarterKit.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            return success(string.Empty, new { entities = IndexUserViewModel.MapToViewModel(_userRepository.Index(u => u.Roles).ToList()) });
+            return success(string.Empty, new { entities = _userRepository.Index(u => u.Roles).ToList().MapToViewModel<IndexUserViewModel>() });
         }
 
         [HttpPut]
@@ -67,7 +66,7 @@ namespace StarterKit.Controllers
 
                 if (user != null)
                 {
-                    return success(string.Empty, DetailUserViewModel.MapToViewModel(user));
+                    return success(string.Empty, user.MapToViewModel<DetailUserViewModel>());
                 }
                 else
                 {
@@ -83,7 +82,7 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = Mapper.MapFromViewModel<ApplicationUser, DetailUserViewModel>(newUser);
+                ApplicationUser user = newUser.MapFromViewModel<ApplicationUser>();
 
                 var result = await _userRepository.ValidateUser(user);
 

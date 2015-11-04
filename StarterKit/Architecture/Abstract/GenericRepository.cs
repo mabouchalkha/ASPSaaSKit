@@ -1,14 +1,9 @@
-﻿using EntityFramework.DynamicFilters;
-using StarterKit.Architecture.Interfaces;
-using StarterKit.DAL;
-using StarterKit.Helpers;
-using System.Data.Entity;
+﻿using StarterKit.Architecture.Interfaces;
+using StarterKit.Extentions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data.Entity;
 using System.Linq.Expressions;
-using StarterKit.Extentions;
-using StarterKit.Mappers;
 
 namespace StarterKit.Architecture.Abstract
 {

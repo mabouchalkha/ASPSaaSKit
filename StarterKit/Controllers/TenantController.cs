@@ -1,10 +1,7 @@
 ﻿using StarterKit.Architecture.Bases;
-using StarterKit.Architecture.Exceptions;
-using StarterKit.Architecture.Interfaces;
+using StarterKit.Architecture.Extensions;
 using StarterKit.DOM;
 using StarterKit.Helpers;
-using StarterKit.Mappers;
-using StarterKit.Repositories;
 using StarterKit.Repositories.Interfaces;
 using StarterKit.Utils;
 using StarterKit.ViewModels;
@@ -31,7 +28,7 @@ namespace StarterKit.Controllers
         public JsonResult Read()
         {
             Guid currentTenantId = TenantHelper.GetCurrentTenantId();
-            TenantViewModel currentTenant = Mapper.MapToViewModel<Tenant, TenantViewModel>(_tenantRepository.Read(currentTenantId));
+            TenantViewModel currentTenant = _tenantRepository.Read(currentTenantId).MapFromViewModel<TenantViewModel>();
 
             return success(string.Empty, currentTenant);
         }
@@ -41,7 +38,7 @@ namespace StarterKit.Controllers
         {
             if (ModelState.IsValid)
             {
-                _tenantRepository.Update(Mapper.MapFromViewModel<Tenant, TenantViewModel>(tenant));
+                _tenantRepository.Update(tenant.MapFromViewModel<Tenant>());
                 return success(MessageUtil.GenerateUpdateSuccessfull(App_GlobalResources.lang.tenant));
             }
 

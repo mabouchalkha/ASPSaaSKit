@@ -227,9 +227,10 @@
     <Compile Include="Architecture\Abstract\BaseRepository.cs" />
     <Compile Include="Architecture\Abstract\GenericRepository.cs" />
     <Compile Include="Architecture\Abstract\GenericTenantableRepository.cs" />
-    <Compile Include="Architecture\Bases\BaseViewModel.cs" />
     <Compile Include="Architecture\Exceptions\TenantViolationException.cs" />
+    <Compile Include="Architecture\Extensions\MapperExtension.cs" />
     <Compile Include="Architecture\Interfaces\IBaseRepository.cs" />
+    <Compile Include="Architecture\Interfaces\ICanMap.cs" />
     <Compile Include="Architecture\Interfaces\IBusinessEngine.cs" />
     <Compile Include="Architecture\Interfaces\IIdentifiableEntity.cs" />
     <Compile Include="Architecture\Interfaces\IModificationHistory.cs" />

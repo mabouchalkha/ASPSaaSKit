@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using StarterKit.Architecture.Bases;
 using StarterKit.Business_Engine.Interfaces;
-using StarterKit.Mappers;
 using StarterKit.Repositories.Interfaces;
 using StarterKit.ViewModels;
 using Stripe;
@@ -39,7 +38,7 @@ namespace StarterKit.Controllers
                 if (tenant != null)
                 {
                     var stripeSubscription = subscriptionEngine.GetSubscriptionsTenant(tenant);
-                    subscription = Mapper.MapToViewModel<StripeSubscription, SubscriptionViewModel>(stripeSubscription);
+                    subscription = AutoMapper.Mapper.Map<StripeSubscription, SubscriptionViewModel>(stripeSubscription);
                 }
 
                 return success(string.Empty, subscription);
